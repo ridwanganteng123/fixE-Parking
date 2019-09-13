@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">E-Parking</string>
+    <string name="syarat_dan_ketentuan_p1">Setiap syarat dan ketentuan yang berlaku
+         untuk subjek tunggal juga berlaku untuk subjek jamak dan sebaliknya,
+        kecuali diatur dan dijelaskan secara terpisah dalam syarat dan ketentuan ini
+    </string>
+    <string name="syarat_dan_ketentuan_p2">judul dan keterangan hanya digunakan untuk membantu memperjelas syarat dan ketentuan ini sehingga tidak seharusnya mempengaruhi pengertia dari
+    syarat dan ketentuan ini </string>
+    <string name="syarat_dan_ketentuan_p3">Setiap syarat dan ketentuan yang berlaku untuk suatu individu, kecuali dicatat dan dijelaskan lain, juga akan berlaku
+    untuk pewaris, wali, dan perwakilan resmi dari individu tersebut. Demikian pula, setiap syarat dan ketentuan yang berlaku untuk suatu entitas hukum
+    misalnya Opatan Corporation. Kecuali dicatat dan dijelaskan lain, juga akan berlaku untuk rekanan, pewaris, dan perwakilan resmi dari entitas tersebut,
+    Syarat &amp; Dan Ketentuan Berlaku</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

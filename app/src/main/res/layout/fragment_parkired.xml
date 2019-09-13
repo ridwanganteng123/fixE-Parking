@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ParkiredFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/gambar"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="152dp"
+            android:src="@drawable/telahparkir"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.197" />
+
+        <TextView
+            android:id="@+id/txt_selamat_datang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Selamat Datang, Vioriza"
+            android:textSize="27sp"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gambar" />
+
+        <TextView
+            android:id="@+id/txt_pastikan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Psstikan motor anda terkunci"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_selamat_datang" />
+
+        <TextView
+            android:id="@+id/txt_pesan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Segala bentuk kehilangan bukan tanggung jawab kami"
+            android:textAlignment="center"
+            app:layout_constraintHorizontal_bias="0.492"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_pastikan" />
+
+        <TextView
+            android:id="@+id/txt_pesan2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:text='"Sakola sing rajin meh pinter"'
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_pesan" />
+
+        <TextView
+        android:id="@+id/txt_salam_botak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/txt_pesan2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Salam Botak" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
