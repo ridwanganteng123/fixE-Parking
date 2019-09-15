@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 
 /**
@@ -14,6 +18,7 @@ import androidx.fragment.app.Fragment;
  */
 public class DashboardFragment extends Fragment {
 
+    private FrameLayout frameLayout;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -27,4 +32,21 @@ public class DashboardFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        frameLayout = view.findViewById(R.id.dashboardLongClick);
+
+        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.add(R.id.dashboardLongClick, new ParkiredFragment(), "NewFragmentTag");
+                ft.commit();
+                return true;
+            }
+        });
+
+    }
 }

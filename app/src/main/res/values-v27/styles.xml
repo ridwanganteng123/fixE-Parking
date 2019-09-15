@@ -24,14 +24,73 @@
     </style>
 
     <style name="SettingsStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:subtitleTextColor">#000000</item>
+        <item name="actionButtonStyle">@style/backButton</item>
+        <item name="drawerArrowStyle">@style/warnaBackArrow</item>
+        <item name="android:titleTextColor">#000000</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="toolbarNavigationButtonStyle">@style/backButton</item>
+    </style>
+
+    <style name="warnaBackArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="android:colorAccent">#000000</item>
+        <item name="color">#000000</item>
+    </style>
+
+    <style name="backButton" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:color">#000000</item>
+        <item name="android:colorAccent">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:navigationBarDividerColor">#000000</item>
+    </style>
+
+    <style name="splashScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:orientation">vertical</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/startColor</item>
+        <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">#FAFAFA</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="onBoardingStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="noActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">#FAFAFA</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="loginStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
 </resources>

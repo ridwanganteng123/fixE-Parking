@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pkke_parking">
 
@@ -11,33 +12,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ProfileActivity" android:theme="@style/ProfileStyle" />
+
+        <activity android:name=".ProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ProfileStyle" />
+
         <activity
             android:name=".OnBoardingActivity"
-            android:theme="@style/noActionBar"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/onBoardingStyle"
+            android:screenOrientation="portrait" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".SettingActivity"
-            android:theme="@style/SettingsStyle" />
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsStyle"
+            android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
+
         <activity
             android:name=".SplashScreen"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreen">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

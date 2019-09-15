@@ -67,23 +67,6 @@ public class HistoryFragment extends Fragment {
                         "06 : 55"
                 ));
 
-//        dataHistoryParkirList.add(
-//                new DataHistoryParkir(
-//                        "Rabu, 4 September 2019",
-//                        "06 : 40"
-//                ));
-//
-//        dataHistoryParkirList.add(
-//                new DataHistoryParkir(
-//                        "Kamis, 5 September 2019",
-//                        "06 : 35"
-//                ));
-//
-//        dataHistoryParkirList.add(
-//                new DataHistoryParkir(
-//                        "Jumat, 6 September 2019",
-//                        "06 : 00"
-//                ));
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
