@@ -182,7 +182,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/profile"
+        android:id="@+id/detail_siswa"
         android:layout_width="match_parent"
         android:padding="8dp"
         android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textColor="@color/Black"
-                    android:text="Profile" />
+                    android:text="Detail Siswa" />
 
                 <TextView
                     android:id="@+id/deskripsi3"
@@ -227,7 +227,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:text="lihat data, perbaharui data" />
+                    android:text="Lihat Tampilan Detail Siswa" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

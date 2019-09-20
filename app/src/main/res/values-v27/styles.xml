@@ -93,4 +93,16 @@
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
+    <style name="CollapsingToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
 </resources>

@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -36,6 +38,14 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
         holder.nama.setText(dataDaftarSiswa.getNama());
         holder.nis.setText(dataDaftarSiswa.getNis());
         holder.profile.setImageDrawable(context.getResources().getDrawable(dataDaftarSiswa.getImage()));
+
+        holder.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     @Override
@@ -47,13 +57,15 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
 
         TextView nama, nis;
         ImageView profile;
+        LinearLayout linearLayoutPencet;
 
         public AdapterDaftarSiswaView(@NonNull View itemView) {
             super(itemView);
 
+            linearLayoutPencet = (LinearLayout) itemView.findViewById(R.id.linearPencet);
             nama = (TextView) itemView.findViewById(R.id.nama_data_siswa);
             nis = (TextView) itemView.findViewById(R.id.nis_data_siswa);
-            profile = (ImageView) itemView.findViewById(R.id.profile_data_siswa);
+            profile = itemView.findViewById(R.id.profile_data_siswa);
 
         }
     }

@@ -114,6 +114,14 @@ public class DaftarSiswaFragment extends Fragment{
                 )
         );
 
+        dataDaftarSiswaList.add(
+                new DataDaftarSiswa(
+                        R.drawable.iman_profil,
+                        "Iman Nurrohman",
+                        "1718117643"
+                )
+        );
+
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterDaftarSiswa);

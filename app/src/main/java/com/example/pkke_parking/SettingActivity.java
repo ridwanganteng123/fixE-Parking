@@ -45,6 +45,15 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        LinearLayout detailSiswa = (LinearLayout) findViewById(R.id.detail_siswa);
+
+        detailSiswa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DetailSiswa.class));
+            }
+        });
+
         LinearLayout logout = findViewById(R.id.signout);
 
         logout.setOnClickListener(new View.OnClickListener() {
