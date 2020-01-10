@@ -127,6 +127,6 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 return;
         }
-    }
+     }
 }
 
