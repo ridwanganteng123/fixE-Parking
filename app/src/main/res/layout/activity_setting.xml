@@ -11,7 +11,6 @@
         layout="@layout/toolbar"
         android:id="@+id/include_toolbar">
     </include>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -236,9 +235,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/akun"
+        android:id="@+id/scan"
         android:layout_width="match_parent"
         android:padding="8dp"
+        android:onClick="launchCustomViewFinderScannerActivity"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:orientation="horizontal" >
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textColor="@color/Black"
-                    android:text="Akun" />
+                    android:text="Scan Now" />
 
                 <TextView
                     android:id="@+id/deskripsi4"

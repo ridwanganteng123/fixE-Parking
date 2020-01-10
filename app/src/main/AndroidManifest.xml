@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pkke_parking">
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+
+        <activity android:name=".CustomViewFinderScanner"/>
         <activity android:name=".DetailSiswa"
             android:theme="@style/CollapsingToolbar"
             android:screenOrientation="portrait"
