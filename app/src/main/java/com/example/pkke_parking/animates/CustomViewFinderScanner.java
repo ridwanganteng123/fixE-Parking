@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.animates;
 
 import androidx.appcompat.app.AppCompatActivity;
 

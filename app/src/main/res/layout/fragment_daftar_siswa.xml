@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="60dp"
-    tools:context=".DaftarSiswaFragment">
+    tools:context=".fragments.DaftarSiswaFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

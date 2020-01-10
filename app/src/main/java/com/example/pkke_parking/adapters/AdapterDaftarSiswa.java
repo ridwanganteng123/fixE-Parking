@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pkke_parking.R;
+import com.example.pkke_parking.datas.model.DataDaftarSiswa;
 
 import java.util.List;
 

@@ -1,20 +1,13 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.pkke_parking.animates.CustomViewFinderScanner;
+import com.example.pkke_parking.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SettingActivity extends AppCompatActivity {
@@ -56,7 +51,7 @@ public class SettingActivity extends AppCompatActivity {
         detailSiswa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), DetailSiswa.class));
+                startActivity(new Intent(getApplicationContext(), DetailSiswaActivity.class));
             }
         });
 

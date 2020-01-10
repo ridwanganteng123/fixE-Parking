@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.pkke_parking.R;
 
 
 /**

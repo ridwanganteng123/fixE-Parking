@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.pkke_parking.R;
 
 
 /**

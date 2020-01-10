@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.animates;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.pkke_parking.activities.MainActivity;
 
 public class AnimationProgressBar extends Animation {
 

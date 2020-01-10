@@ -1,19 +1,18 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class SplashScreen extends AppCompatActivity {
+import com.example.pkke_parking.R;
+import com.example.pkke_parking.animates.AnimationProgressBar;
+
+public class SplashScreenActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private TextView textView;

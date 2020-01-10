@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pkke_parking.R;
 
 public class LoginActivity extends AppCompatActivity {
 

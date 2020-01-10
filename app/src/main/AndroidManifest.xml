@@ -14,30 +14,30 @@
         tools:ignore="GoogleAppIndexingWarning">
 
 
-        <activity android:name=".CustomViewFinderScanner"/>
-        <activity android:name=".DetailSiswa"
+        <activity android:name=".animates.CustomViewFinderScanner"/>
+        <activity android:name=".activities.DetailSiswaActivity"
             android:theme="@style/CollapsingToolbar"
             android:screenOrientation="portrait"
-            android:parentActivityName=".SettingActivity" />
+            android:parentActivityName=".activities.SettingActivity" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProfileStyle" />
         <activity
-            android:name=".OnBoardingActivity"
+            android:name=".activities.OnBoardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/onBoardingStyle" />
         <activity
-            android:name=".SettingActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.SettingActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsStyle" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreen">
@@ -50,7 +50,7 @@
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 

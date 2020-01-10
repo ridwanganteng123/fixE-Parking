@@ -1,32 +1,32 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pkke_parking.R;
+import com.example.pkke_parking.fragments.DaftarSiswaFragment;
+import com.example.pkke_parking.fragments.DashboardFragment;
+import com.example.pkke_parking.fragments.HistoryFragment;
+import com.example.pkke_parking.animates.Helper;
+import com.example.pkke_parking.dialogs.DialogAboutApp;
+import com.example.pkke_parking.dialogs.DialogSyaratDanKetentuan;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.shrikanthravi.e_parking2.data.MenuItem;
 import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;

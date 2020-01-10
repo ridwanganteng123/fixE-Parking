@@ -1,15 +1,11 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,10 +19,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.pkke_parking.adapters.AdapterDaftarSiswa;
+import com.example.pkke_parking.R;
+import com.example.pkke_parking.datas.model.DataDaftarSiswa;
+import com.example.pkke_parking.dialogs.DialogTambahData;
 
 import java.util.ArrayList;
 import java.util.List;

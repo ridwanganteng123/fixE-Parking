@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pkke_parking.adapters.AdapterHistoryParkir;
+import com.example.pkke_parking.R;
+import com.example.pkke_parking.datas.model.DataHistoryParkir;
 
 import java.util.ArrayList;
 import java.util.List;

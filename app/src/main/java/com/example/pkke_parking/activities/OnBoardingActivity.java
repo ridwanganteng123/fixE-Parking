@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.pkke_parking.R;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;

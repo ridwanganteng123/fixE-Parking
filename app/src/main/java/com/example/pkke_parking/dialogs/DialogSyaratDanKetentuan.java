@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.pkke_parking.R;
 
 public class DialogSyaratDanKetentuan extends DialogFragment {
 

@@ -1,4 +1,4 @@
-package com.example.pkke_parking;
+package com.example.pkke_parking.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,9 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.pkke_parking.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-public class DetailSiswa extends AppCompatActivity {
+public class DetailSiswaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
