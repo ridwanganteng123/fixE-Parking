@@ -39,7 +39,6 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
         final DataDaftarSiswa dataDaftarSiswa = dataDaftarSiswaList.get(position);
         holder.nama.setText(dataDaftarSiswa.getNama());
         holder.nis.setText(dataDaftarSiswa.getNis());
-        holder.profile.setImageDrawable(context.getResources().getDrawable(dataDaftarSiswa.getImage()));
 
         holder.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package com.example.pkke_parking.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,15 +12,19 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.pkke_parking.activities.MainActivity;
 import com.example.pkke_parking.adapters.AdapterDaftarSiswa;
 import com.example.pkke_parking.R;
 import com.example.pkke_parking.datas.model.DataDaftarSiswa;
@@ -27,6 +32,12 @@ import com.example.pkke_parking.dialogs.DialogTambahData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class DaftarSiswaFragment extends Fragment{
@@ -36,9 +47,8 @@ public class DaftarSiswaFragment extends Fragment{
     private AdapterDaftarSiswa adapterDaftarSiswa;
     private List<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
-    private TextView textViewUsername;
-    private TextView textViewPassword;
-    private Button button;
+
+    List<DataDaftarSiswa> dataDaftarSiswa;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +58,6 @@ public class DaftarSiswaFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_daftar_siswa, null);
         return view;
     }
@@ -74,55 +83,26 @@ public class DaftarSiswaFragment extends Fragment{
         dataDaftarSiswaList = new ArrayList<>();
         adapterDaftarSiswa = new AdapterDaftarSiswa(getContext(), dataDaftarSiswaList);
 
-
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
         }
 
         dataDaftarSiswaList.add(
                 new DataDaftarSiswa(
-                        R.drawable.ic_launcher_foreground,
-                        "Angga Gemilang",
-                        "1718117111"
-                )
-        );
-
-        dataDaftarSiswaList.add(
-                new DataDaftarSiswa(
-                        R.drawable.ic_launcher_foreground,
-                        "Emir Othman",
-                        "1718117232"
-                )
-        );
-
-        dataDaftarSiswaList.add(
-                new DataDaftarSiswa(
-                        R.drawable.ic_launcher_foreground,
-                        "Vioriza Qiyaski",
-                        "1718117123"
-                )
-        );
-
-        dataDaftarSiswaList.add(
-                new DataDaftarSiswa(
-                        R.drawable.ic_launcher_foreground,
-                        "Ridwan Mutamasiqin",
-                        "1718117643"
-                )
-        );
-
-        dataDaftarSiswaList.add(
-                new DataDaftarSiswa(
-                        R.drawable.iman_profil,
+                        "1",
                         "Iman Nurrohman",
-                        "1718117643"
+                        "1718117643",
+                        "asdasdasd",
+                        "asdasdasdsd",
+                        "asdasdad@gmail.com",
+                        "1232323231231232323",
+                        "1718117111"
                 )
         );
 
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterDaftarSiswa);
-
     }
 
     public void openDialog() {
