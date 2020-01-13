@@ -3,6 +3,7 @@ package com.example.pkke_parking.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,6 +38,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         progressBar.setMax(99);
         progressBar.setScaleY(2f);
         progressBarSplashScreen();
+
 
     }
 
