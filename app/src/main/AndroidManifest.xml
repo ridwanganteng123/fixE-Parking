@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pkke_parking">
-    <uses-permission android:name="android.permission.CAMERA"/>
 
+
+
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- this line adds the required permission request -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,13 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-
-        <activity android:name=".animates.CustomViewFinderScanner"/>
-        <activity android:name=".activities.DetailSiswaActivity"
-            android:theme="@style/CollapsingToolbar"
+        <activity android:name=".animates.CustomViewFinderScanner" />
+        <activity
+            android:name=".activities.DetailSiswaActivity"
+            android:parentActivityName=".activities.SettingActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".activities.SettingActivity" />
+            android:theme="@style/CollapsingToolbar" />
         <activity
             android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait"
@@ -37,21 +38,26 @@
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
         <activity
+            android:name=".activities.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/loginStyle" />
+
+        <activity
             android:name=".activities.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

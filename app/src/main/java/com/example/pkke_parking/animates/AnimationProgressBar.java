@@ -7,7 +7,9 @@ import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.pkke_parking.activities.LoginActivity;
 import com.example.pkke_parking.activities.MainActivity;
+import com.example.pkke_parking.activities.RegisterActivity;
 
 public class AnimationProgressBar extends Animation {
 
@@ -32,7 +34,7 @@ public class AnimationProgressBar extends Animation {
         progressBar.setProgress((int)value);
         textView.setText((int)value + "%");
         if (value == 99){
-            context.startActivity(new Intent(context, MainActivity.class));
+            context.startActivity(new Intent(context, LoginActivity.class));
         }
     }
 }
