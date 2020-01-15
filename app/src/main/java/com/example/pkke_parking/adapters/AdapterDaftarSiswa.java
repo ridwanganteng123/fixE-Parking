@@ -46,7 +46,6 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
 
             }
         });
-
     }
 
     @Override

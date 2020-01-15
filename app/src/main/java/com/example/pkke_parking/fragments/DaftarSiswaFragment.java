@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,18 +38,14 @@ import java.util.List;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
 
 public class DaftarSiswaFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private ProgressBar progressBar;
     private AdapterDaftarSiswa adapterDaftarSiswa;
     private List<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
@@ -73,6 +70,7 @@ public class DaftarSiswaFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recycler_data_siswa);
+        progressBar = view.findViewById(R.id.progress_circular);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
@@ -125,6 +123,7 @@ public class DaftarSiswaFragment extends Fragment{
             }
         });
     }
+
 
     @Override
     public void onStart() {
