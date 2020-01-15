@@ -36,7 +36,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
     SNavigationDrawer sNavigationDrawer;
     int color1 = 0;
     Class fragmentClass;
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView appBarTitleTV;
     private ImageButton optionMenu, ketentuan;
     private Button settings, logout;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull android.view.MenuItem item) {

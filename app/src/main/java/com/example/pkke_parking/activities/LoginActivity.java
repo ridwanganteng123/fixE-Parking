@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
     private void loginUserAccount() {
 
 
@@ -101,10 +100,6 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeUI() {
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
-
         loginBtn = findViewById(R.id.login);
-
     }
-
-
 }

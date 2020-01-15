@@ -8,6 +8,11 @@
     android:paddingBottom="60dp"
     tools:context=".fragments.DaftarSiswaFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

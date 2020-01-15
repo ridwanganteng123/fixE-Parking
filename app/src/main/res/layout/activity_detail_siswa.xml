@@ -80,12 +80,14 @@ app:layout_behavior="@string/appbar_scrolling_view_behavior">
                 android:orientation="vertical" >
 
                 <TextView
+                    android:id="@+id/get_nama"
                     android:textSize="20sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Iman Nurrohman" />
 
                 <TextView
+                    android:id="@+id/get_nis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="17sp"

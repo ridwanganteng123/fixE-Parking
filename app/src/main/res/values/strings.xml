@@ -1,4 +1,51 @@
 <resources>
+    <string-array name="kelas_items">
+        <item>Pilih Kelas</item>
+        <item>X - RPL 1</item>
+        <item>X - RPL 2</item>
+        <item>X - RPL 3</item>
+        <item>X - MM</item>
+        <item>X - TKJ 1</item>
+        <item>X - TKJ 2</item>
+        <item>X - AV 1</item>
+        <item>X - AV 2</item>
+        <item>X - AV 3</item>
+        <item>X - AV 4</item>
+        <item>X - TITL 1</item>
+        <item>X - TITL 2</item>
+        <item>X - TOI 1</item>
+        <item>X - TOI 2</item>
+
+        <item>XI - RPL 1</item>
+        <item>XI - RPL 2</item>
+        <item>XI - RPL 3</item>
+        <item>XI - MM</item>
+        <item>XI - TKJ 1</item>
+        <item>XI - TKJ 2</item>
+        <item>XI - AV 1</item>
+        <item>XI - AV 2</item>
+        <item>XI - AV 3</item>
+        <item>XI - AV 4</item>
+        <item>XI - TITL 1</item>
+        <item>XI - TITL 2</item>
+        <item>XI - TOI 1</item>
+        <item>XI - TOI 2</item>
+
+        <item>XII - RPL 1</item>
+        <item>XII - RPL 2</item>
+        <item>XII - RPL 3</item>
+        <item>XII - MM</item>
+        <item>XII - TKJ 1</item>
+        <item>XII - TKJ 2</item>
+        <item>XII - AV 1</item>
+        <item>XII - AV 2</item>
+        <item>XII - AV 3</item>
+        <item>XII - AV 4</item>
+        <item>XII - TITL 1</item>
+        <item>XII - TITL 2</item>
+        <item>XII - TOI 1</item>
+        <item>XII - TOI 2</item>
+    </string-array>
     <string name="app_name">E-Parking</string>
     <string name="syarat_dan_ketentuan_p1">Setiap syarat dan ketentuan yang berlaku
          untuk subjek tunggal juga berlaku untuk subjek jamak dan sebaliknya,
@@ -6,7 +53,7 @@
     </string>
     <string name="syarat_dan_ketentuan_p2">judul dan keterangan hanya digunakan untuk membantu memperjelas syarat dan ketentuan ini sehingga tidak seharusnya mempengaruhi pengertia dari
     syarat dan ketentuan ini </string>
-    <string name="syarat_dan_ketentuan_p3">Setiap syarat dan ketentuan yang berlaku untuk suatu individu, kecuali dicatat dan dijelaskan lain, juga akan berlaku
+     <string name="syarat_dan_ketentuan_p3">Setiap syarat dan ketentuan yang berlaku untuk suatu individu, kecuali dicatat dan dijelaskan lain, juga akan berlaku
     untuk pewaris, wali, dan perwakilan resmi dari individu tersebut. Demikian pula, setiap syarat dan ketentuan yang berlaku untuk suatu entitas hukum
     misalnya Opatan Corporation. Kecuali dicatat dan dijelaskan lain, juga akan berlaku untuk rekanan, pewaris, dan perwakilan resmi dari entitas tersebut,
     Syarat &amp; Dan Ketentuan Berlaku</string>
