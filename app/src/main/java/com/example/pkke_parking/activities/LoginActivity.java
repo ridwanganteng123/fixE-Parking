@@ -15,26 +15,35 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pkke_parking.R;
+import com.example.pkke_parking.datas.model.DataDaftarSiswa;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText emailTV, passwordTV;
+    private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
-    private FirebaseAuth mAuth;
+
+    DatabaseReference databaseparkir;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+        databaseparkir = FirebaseDatabase.getInstance().getReference("siswa");
 
         initializeUI();
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 loginUserAccount();
             }
         });
@@ -51,12 +60,13 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUserAccount() {
 
 
-        String email, password;
+        String email, password, nis;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
+        nis = nisTv.getText().toString();
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email...", Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(nis)) {
+            Toast.makeText(getApplicationContext(), "Please enter nis...", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {
@@ -64,23 +74,29 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
+        DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
+//        databaseReference.addValueEventListener(new ValueEventListener(){
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                DataDaftarSiswa dataDaftarSiswa = dataSnapshot.getValue(DataDaftarSiswa.class);
+//                int userType = (userProfile.getUsertype());
+//
+//                switch (userType) {
+//                    case 0:
+//                        startActivity(new Intent(Login.this, DoctorActivity.class));
+//                        break;
+//                    case 1:
+//                        startActivity(new Intent(Login.this, MainActivity.class));
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext(), "Login failed! Please try again later", Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                });
     }
     private void initializeUI() {
         emailTV = findViewById(R.id.email);

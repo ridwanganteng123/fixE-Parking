@@ -4,8 +4,10 @@
     package="com.example.pkke_parking">
 
 
-
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- this line adds the required permission request -->
+    <!-- this line adds the required permission request -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
