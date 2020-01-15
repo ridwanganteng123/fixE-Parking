@@ -54,11 +54,11 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
         return dataDaftarSiswaList.size();
     }
 
-    public class AdapterDaftarSiswaView extends RecyclerView.ViewHolder{
+    public static class AdapterDaftarSiswaView extends RecyclerView.ViewHolder{
 
-        TextView nama, nis;
-        ImageView profile;
-        LinearLayout linearLayoutPencet;
+        public TextView nama, nis;
+        public ImageView profile;
+        public LinearLayout linearLayoutPencet;
 
         public AdapterDaftarSiswaView(@NonNull View itemView) {
             super(itemView);

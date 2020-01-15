@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pkke_parking.activities.DetailSiswaActivity;
 import com.example.pkke_parking.activities.MainActivity;
 import com.example.pkke_parking.adapters.AdapterDaftarSiswa;
 import com.example.pkke_parking.R;
@@ -33,10 +35,13 @@ import com.example.pkke_parking.dialogs.DialogTambahData;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -47,8 +52,9 @@ public class DaftarSiswaFragment extends Fragment{
     private AdapterDaftarSiswa adapterDaftarSiswa;
     private List<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
-
-    List<DataDaftarSiswa> dataDaftarSiswa;
+    private FirebaseRecyclerOptions<DataDaftarSiswa> options;
+    private FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView> adapter;
+    private DatabaseReference databaseReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +69,48 @@ public class DaftarSiswaFragment extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.recycler_data_siswa);
+
+        if (recyclerView != null) {
+            recyclerView.setHasFixedSize(true);
+        }
+
+        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        dataDaftarSiswaList = new ArrayList<DataDaftarSiswa>();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("siswa");
+        options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(databaseReference, DataDaftarSiswa.class).build();
+        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
+                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
+                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
+                adapterDaftarSiswaView.profile.getResources().getDrawable(R.drawable.iman_profil);
+
+                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("nama", dataDaftarSiswa.getNama());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
+            }
+        };
+
+        recyclerView.setAdapter(adapter);
 
         frameLayout_data_siswa = (FrameLayout) view.findViewById(R.id.frameLayout_data_siswa);
         ImageButton floatingActionButton = (ImageButton) view.findViewById(R.id.fab);
@@ -78,31 +124,18 @@ public class DaftarSiswaFragment extends Fragment{
                 openDialog();
             }
         });
+    }
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_data_siswa);
-        dataDaftarSiswaList = new ArrayList<>();
-        adapterDaftarSiswa = new AdapterDaftarSiswa(getContext(), dataDaftarSiswaList);
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
 
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-        }
-
-        dataDaftarSiswaList.add(
-                new DataDaftarSiswa(
-                        "1",
-                        "Iman Nurrohman",
-                        "1718117643",
-                        "asdasdasd",
-                        "asdasdasdsd",
-                        "asdasdad@gmail.com",
-                        "1232323231231232323",
-                        "1718117111"
-                )
-        );
-
-        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapterDaftarSiswa);
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     public void openDialog() {

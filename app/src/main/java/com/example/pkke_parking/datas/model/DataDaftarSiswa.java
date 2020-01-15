@@ -4,6 +4,10 @@ public class DataDaftarSiswa {
 
     private String nama, siswaId, tgl_lahir, no_pol, pwd, email, no_sim, nis;
 
+    public DataDaftarSiswa() {
+
+    }
+
     public DataDaftarSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd, String email, String no_sim, String nis) {
         this.siswaId = siswaId;
         this.nama = nama;

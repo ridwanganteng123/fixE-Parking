@@ -108,6 +108,7 @@ public class DialogTambahData extends DialogFragment {
             DataDaftarSiswa daftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis);
             databaseReference.child(id).setValue(daftarSiswa);
             Toast.makeText(getActivity(), "Data ditambahkan", Toast.LENGTH_SHORT).show();
+            dismiss();
         } else {
             Toast.makeText(getActivity(), "Masukkan data", Toast.LENGTH_SHORT).show();
         }

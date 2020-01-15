@@ -3,11 +3,10 @@ package com.example.pkke_parking.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pkke_parking.R;
@@ -15,10 +14,21 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
+    private TextView nama, nis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_siswa);
+
+        nama = findViewById(R.id.get_nama);
+        nis = findViewById(R.id.get_nis);
+
+        String nama_val = getIntent().getStringExtra("nama");
+        String nis_val = getIntent().getStringExtra("nis");
+
+        nama.setText(nama_val);
+        nis.setText(nis_val);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -26,7 +36,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle("Iman Nurrohman");
+        collapsingToolbarLayout.setTitle(nama_val);
 
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
@@ -35,19 +45,13 @@ public class DetailSiswaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.tambah) {
             Toast.makeText(getApplicationContext(), "Tambah clicked", Toast.LENGTH_LONG).show();
             return true;
