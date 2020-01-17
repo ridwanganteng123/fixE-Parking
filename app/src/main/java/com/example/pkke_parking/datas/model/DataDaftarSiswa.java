@@ -2,13 +2,13 @@ package com.example.pkke_parking.datas.model;
 
 public class DataDaftarSiswa {
 
-    private String nama, siswaId, tgl_lahir, no_pol, pwd, email, no_sim, nis, level;
+    private String nama, siswaId, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL;
 
     public DataDaftarSiswa() {
 
     }
 
-    public DataDaftarSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd, String email, String no_sim, String nis, String level) {
+    public DataDaftarSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd, String email, String no_sim, String nis, String level, String imageURL) {
         this.siswaId = siswaId;
         this.nama = nama;
         this.tgl_lahir = tgl_lahir;
@@ -18,6 +18,15 @@ public class DataDaftarSiswa {
         this.no_sim = no_sim;
         this.nis = nis;
         this.level = level;
+        this.imageURL = imageURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getLevel() {

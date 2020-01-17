@@ -100,7 +100,7 @@
                 android:id="@+id/tgl_lahir_txt"
                 android:inputType="none|date"
                 android:clickable="true"
-                android:focusable="true"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tanggal Lahir" />
@@ -196,16 +196,20 @@
 
             <Button
                 android:id="@+id/btn_upload"
-                android:layout_width="300dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Upload Gambar"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="10dp" />
 
             <ImageView
                 android:id="@+id/tampil_gambar"
-                android:layout_width="60dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
+                android:layout_marginRight="16dp"
                 android:contentDescription="preview"
+                android:src="@drawable/ic_person_black_24dp"
                 android:layout_height="match_parent" />
 
         </LinearLayout>
