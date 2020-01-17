@@ -30,14 +30,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
 
-    DatabaseReference databaseparkir;
+
     FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        databaseparkir = FirebaseDatabase.getInstance().getReference("siswa");
+        firebaseAuth = FirebaseAuth.getInstance();
 
         initializeUI();
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         String email, password, nis;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
-        nis = nisTv.getText().toString();
 
-        if (TextUtils.isEmpty(nis)) {
+
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Please enter nis...", Toast.LENGTH_LONG).show();
             return;
         }
@@ -72,8 +72,25 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
             return;
         }
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
 
-        DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Login failed! Please try again later", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                });
+
+        //DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
 //        databaseReference.addValueEventListener(new ValueEventListener(){
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -106,6 +106,12 @@ public class DaftarSiswaFragment extends Fragment{
             public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
             }
+
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                closeProgress();
+            }
         };
 
         recyclerView.setAdapter(adapter);
@@ -124,6 +130,20 @@ public class DaftarSiswaFragment extends Fragment{
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void showProgress()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void closeProgress()
+    {
+        progressBar.setVisibility(View.GONE);
+    }
 
     @Override
     public void onStart() {
