@@ -4,12 +4,16 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,15 +30,24 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.pkke_parking.R;
 import com.example.pkke_parking.datas.model.DataDaftarSiswa;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import dmax.dialog.SpotsDialog;
+
 public class DialogTambahData extends DialogFragment {
 
+    private static final int PICK_IMAGE_CODE = 1000;
     private EditText nis_txt;
     private EditText namalengkap_txt;
     private EditText tgl_lahir_txt;
@@ -42,10 +56,13 @@ public class DialogTambahData extends DialogFragment {
     private EditText pwd_txt;
     private EditText email_txt;
     private EditText level_txt;
+    private ImageView tampil_img;
+    private Button btnUpload;
     private Button btnSubmit;
     private Button batal;
     private Calendar c;
 
+    StorageReference storageReference;
     DatabaseReference databaseReference;
 
     @Nullable
@@ -64,6 +81,7 @@ public class DialogTambahData extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("siswa");
+        storageReference = FirebaseStorage.getInstance().getReference("img_siswa");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -75,6 +93,8 @@ public class DialogTambahData extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.format_dialog_tambah_data_siswa, null);
 
+        tampil_img = view.findViewById(R.id.tampil_gambar);
+        btnUpload = view.findViewById(R.id.btn_upload);
         email_txt = view.findViewById(R.id.email_txt);
         nopol_txt = view.findViewById(R.id.nopol_txt);
         nosim_txt = view.findViewById(R.id.nosim_txt);
@@ -87,7 +107,6 @@ public class DialogTambahData extends DialogFragment {
         batal = view.findViewById(R.id.batal);
 
         tgl_lahir_txt.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (v == tgl_lahir_txt) {
@@ -125,8 +144,46 @@ public class DialogTambahData extends DialogFragment {
             }
         });
 
+        btnUpload.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Masukkan Gambar"), PICK_IMAGE_CODE);
+            }
+        });
+
         builder.setView(view);
         return builder.create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_CODE)
+        {
+            final UploadTask uploadTask = storageReference.putFile(data.getData());
+            Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful())
+                    {
+                        Toast.makeText(getContext().getApplicationContext(), "Upload Gambar Gagal", Toast.LENGTH_SHORT).show();
+                    }
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful())
+                    {
+                        String url = task.getResult().toString();
+                        Log.d("DIRECTLINK", url);
+                    }
+                }
+            });
+        }
     }
 
     public void addSiswa(){
@@ -140,7 +197,7 @@ public class DialogTambahData extends DialogFragment {
         String level = level_txt.getText().toString().trim();
 
         if (!TextUtils.isEmpty(name)){
-            String id = databaseReference.push().getKey();
+            String id = databaseReference.child("siswa").push().getKey();
             DataDaftarSiswa daftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level);
             databaseReference.child(id).setValue(daftarSiswa);
             Toast.makeText(getActivity(), "Data ditambahkan", Toast.LENGTH_SHORT).show();
