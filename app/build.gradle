@@ -44,7 +44,7 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
-
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
 ext.versions = [
         compile_sdk   : 28,

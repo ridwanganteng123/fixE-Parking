@@ -1,8 +1,10 @@
 package com.example.pkke_parking.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ import com.example.pkke_parking.R;
 import com.example.pkke_parking.datas.model.DataDaftarSiswa;
 import com.example.pkke_parking.dialogs.DialogTambahData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +45,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class DaftarSiswaFragment extends Fragment{
 
@@ -88,7 +94,8 @@ public class DaftarSiswaFragment extends Fragment{
             protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
                 adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
                 adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
-                adapterDaftarSiswaView.profile.getResources().getDrawable(R.drawable.iman_profil);
+                String imageUri = dataDaftarSiswa.getImageURL();
+                Picasso.get().load(imageUri).into(adapterDaftarSiswaView.profile);
 
                 adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,6 +140,7 @@ public class DaftarSiswaFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        showProgress();
     }
 
     public void showProgress()

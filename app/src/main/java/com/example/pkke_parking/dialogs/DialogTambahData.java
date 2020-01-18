@@ -71,19 +71,17 @@ public class DialogTambahData extends DialogFragment {
     public String name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level;
     private Calendar c;
 
-    // Folder path for Firebase Storage.
-    String Storage_Path = "All_Image_Uploads/";
+    public ProgressDialog progressDialog;
 
-    // Root Database Name for Firebase Database.
+    String Storage_Path = "profil_siswa/";
+
     String Database_Path = "siswa";
 
-    // Creating URI.
     Uri FilePathUri;
 
     StorageReference storageReference;
     DatabaseReference databaseReference;
 
-    // Image request code for onActivityResult() .
     int Image_Request_Code = 7;
 
     @Nullable
@@ -188,6 +186,7 @@ public class DialogTambahData extends DialogFragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), FilePathUri);
                 tampil_img.setImageBitmap(bitmap);
                 btnUpload.setText("Gambar Dipilih");
+                Log.d("LINKPREVIEW", String.valueOf(data.getData()));
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -195,12 +194,10 @@ public class DialogTambahData extends DialogFragment {
         }
     }
 
-    // Creating Method to get the selected image file Extension from File Path URI.
     public String GetFileExtension(Uri uri) {
         ContentResolver contentResolver = getActivity().getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
-
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     public void addSiswa(){
@@ -215,17 +212,21 @@ public class DialogTambahData extends DialogFragment {
 
         if (!TextUtils.isEmpty(name)){
             if (FilePathUri != null) {
+                progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage("Loading ...");
+                progressDialog.setIndeterminate(false);
+                progressDialog.show();
                 final StorageReference storageReference2nd = storageReference.child(Storage_Path + System.currentTimeMillis() + "." + GetFileExtension(FilePathUri));
                 storageReference2nd.putFile(FilePathUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 String imageURL = storageReference2nd.getDownloadUrl().toString();
-                                String id = databaseReference.child("siswa").push().getKey();
+                                Log.d("LINKIMAGE", imageURL);
+                                String id = databaseReference.child(Database_Path).push().getKey();
                                 DataDaftarSiswa daftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL );
                                 databaseReference.child(id).setValue(daftarSiswa);
-                                String ImageUploadId = databaseReference.push().getKey();
-                                databaseReference.child(ImageUploadId).setValue(imageURL);
+                                progressDialog.dismiss();
                                 Toast.makeText(getContext().getApplicationContext(), "Tambah Data Berhasil", Toast.LENGTH_LONG).show();
                                 dismiss();
                             }
