@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/refresh_trigger"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout_data_siswa"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="60dp"
     tools:context=".fragments.DaftarSiswaFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ProgressBar
-            android:visibility="visible"
-            android:id="@+id/progress_circular"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/progress_theme"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/frameLayout_data_siswa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:paddingBottom="60dp">
 
-        <SearchView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_data_siswa"
-            android:scrollbars="vertical"
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/container_shimmer"
+                android:layout_width="match_parent"
+                android:paddingTop="20dp"
+                android:layout_height="wrap_content"
+                app:shimmer_duration="1000">
+
+                <LinearLayout android:id="@+id/linearPencet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
+
+                    <include layout="@layout/format_shimmer_data_siswa" />
+
+                    <include layout="@layout/format_shimmer_data_siswa" />
+
+                    <include layout="@layout/format_shimmer_data_siswa" />
+
+                    <include layout="@layout/format_shimmer_data_siswa" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_data_siswa"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:paddingTop="20dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/fab"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_margin="20dp"
+                android:contextClickable="true"
+                android:background="@drawable/buttontambah"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:focusable="true" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:id="@+id/fab"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_margin="20dp"
-            android:contextClickable="true"
-            android:background="@drawable/buttontambah"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:focusable="true" />
+    </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

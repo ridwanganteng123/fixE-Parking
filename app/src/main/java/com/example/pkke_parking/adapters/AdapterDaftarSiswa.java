@@ -25,8 +25,6 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
 
     private Context context;
     private List<DataDaftarSiswa> dataDaftarSiswaList;
-    boolean showShimmer = true;
-    int SHIMMER_ITEM = 5;
 
     public AdapterDaftarSiswa(Context context, List<DataDaftarSiswa> dataDaftarSiswaList) {
         this.dataDaftarSiswaList = dataDaftarSiswaList;
@@ -43,21 +41,15 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
 
     @Override
     public void onBindViewHolder(@NonNull AdapterDaftarSiswaView holder, int position) {
-        final DataDaftarSiswa dataDaftarSiswa = dataDaftarSiswaList.get(position);
-        if (showShimmer)
-        {
-
-        }
     }
 
     @Override
     public int getItemCount() {
-        return showShimmer?SHIMMER_ITEM:dataDaftarSiswaList.size();
+        return dataDaftarSiswaList.size();
     }
 
     public static class AdapterDaftarSiswaView extends RecyclerView.ViewHolder{
 
-        public ShimmerFrameLayout shimmerFrameLayout;
         public TextView nama, nis;
         public ImageView profile;
         public LinearLayout linearLayoutPencet;
@@ -65,7 +57,6 @@ public class AdapterDaftarSiswa extends RecyclerView.Adapter<AdapterDaftarSiswa.
         public AdapterDaftarSiswaView(@NonNull View itemView) {
             super(itemView);
 
-            shimmerFrameLayout = itemView.findViewById(R.id.shimmer_layout);
             linearLayoutPencet = itemView.findViewById(R.id.linearPencet);
             nama = itemView.findViewById(R.id.nama_data_siswa);
             nis = itemView.findViewById(R.id.nis_data_siswa);
