@@ -25,6 +25,7 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
         <ImageView
+            android:id="@+id/gambar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -65,7 +66,7 @@ app:layout_behavior="@string/appbar_scrolling_view_behavior">
         app:cardCornerRadius="4dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true" >
 
         <LinearLayout
             android:layout_width="match_parent"
