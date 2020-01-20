@@ -14,4 +14,6 @@
     <color name="onboarding2">#2093F2</color>
     <color name="onboarding3">#F99401</color>
     <color name="shimmer_bg">#DDDDDD</color>
+    <color name="CodeBlackColor">#000</color>
+    <color name="CodeWhiteColor">#ffffff</color>
 </resources>

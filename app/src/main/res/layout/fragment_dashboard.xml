@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/dashboardLongClick"
@@ -15,8 +15,8 @@
             android:id="@+id/txt_your_qr_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            android:text="Your QR Code"
+            android:layout_marginTop="175dp"
+            android:text="   Your QR Code   "
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -37,6 +37,7 @@
             app:layout_constraintVertical_bias="0.259">
 
             <ImageView
+                android:id="@+id/img_brcd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
@@ -45,5 +46,26 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/editText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="Masukan teks disini "
+        android:background="#ffffff"
+        android:gravity="center"
+        android:layout_marginTop="50dp"/>
+    <Button
+        android:layout_width="300px"
+        android:layout_height="50dp"
+        android:textSize="10sp"
+        android:text="GENERATE KODE"
+        android:id="@+id/button"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:background="@color/colorAccent"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true" />
 
-</FrameLayout>
+</RelativeLayout>
