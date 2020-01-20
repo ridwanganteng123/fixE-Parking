@@ -45,6 +45,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -215,14 +216,16 @@ public class DialogTambahData extends DialogFragment {
                 progressDialog = new ProgressDialog(getContext());
                 progressDialog.setMessage("Loading ...");
                 progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 final StorageReference storageReference2nd = storageReference.child(Storage_Path + System.currentTimeMillis() + "." + GetFileExtension(FilePathUri));
                 storageReference2nd.putFile(FilePathUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String imageURL = storageReference2nd.getDownloadUrl().toString();
-                                Log.d("LINKIMAGE", imageURL);
+                                String imageURL = FilePathUri.toString();
+                                Log.d("LINKIMAGE", String.valueOf(FilePathUri));
                                 String id = databaseReference.child(Database_Path).push().getKey();
                                 DataDaftarSiswa daftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL );
                                 databaseReference.child(id).setValue(daftarSiswa);

@@ -6,15 +6,18 @@ import androidx.core.content.ContextCompat;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.pkke_parking.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
     private TextView nama, nis;
+    private ImageView gambar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +26,15 @@ public class DetailSiswaActivity extends AppCompatActivity {
 
         nama = findViewById(R.id.get_nama);
         nis = findViewById(R.id.get_nis);
+        gambar = findViewById(R.id.gambar);
 
+        String image_url = getIntent().getStringExtra("img");
         String nama_val = getIntent().getStringExtra("nama");
         String nis_val = getIntent().getStringExtra("nis");
 
         nama.setText(nama_val);
         nis.setText(nis_val);
+        Glide.with(getApplicationContext()).load(image_url).into(gambar);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,17 +58,11 @@ public class DetailSiswaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.tambah) {
-            Toast.makeText(getApplicationContext(), "Tambah clicked", Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         if (id == R.id.edit) {
             Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_LONG).show();
             return true;
-        }
-
-        if (id == R.id.hapus) {
+        } else if (id == R.id.hapus) {
             Toast.makeText(getApplicationContext(), "Hapus clicked", Toast.LENGTH_LONG).show();
             return true;
         }
