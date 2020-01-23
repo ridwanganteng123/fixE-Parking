@@ -38,17 +38,7 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        frameLayout = view.findViewById(R.id.dashboardLongClick);
 
-        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.add(R.id.dashboardLongClick, new ParkiredFragment(), "NewFragmentTag");
-                ft.commit();
-                return true;
-            }
-        });
 
     }
 }

@@ -1,5 +1,7 @@
 package com.example.pkke_parking.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,14 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.module.AppGlideModule;
@@ -208,5 +208,45 @@ public class DaftarSiswaFragment extends Fragment {
             exampleDialog.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
         exampleDialog.show(getFragmentManager(), "Dialog Tambah Data");
+    }
+
+    public static void showIn(final View v) {
+        v.setVisibility(View.VISIBLE);
+        v.setAlpha(0f);
+        v.setTranslationY(v.getHeight());
+        v.animate()
+                .setDuration(200)
+                .translationY(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                    }
+                })
+                .alpha(1f)
+                .start();
+    }
+
+    public static void showOut(final View v) {
+        v.setVisibility(View.VISIBLE);
+        v.setAlpha(1f);
+        v.setTranslationY(0);
+        v.animate()
+                .setDuration(200)
+                .translationY(v.getHeight())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        v.setVisibility(View.GONE);
+                        super.onAnimationEnd(animation);
+                    }
+                }).alpha(0f)
+                .start();
+    }
+
+    public static void init(final View v) {
+        v.setVisibility(View.GONE);
+        v.setTranslationY(v.getHeight());
+        v.setAlpha(0f);
     }
 }
