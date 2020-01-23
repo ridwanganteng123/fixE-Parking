@@ -17,12 +17,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.module.AppGlideModule;
@@ -38,9 +40,12 @@ import java.util.List;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.internal.NavigationMenu;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class DaftarSiswaFragment extends Fragment {
 
@@ -54,6 +59,7 @@ public class DaftarSiswaFragment extends Fragment {
     private SwipeRefreshLayout refreshLayout;
     private DatabaseReference databaseReference;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private FabSpeedDial fabSpeedDial;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,13 +173,23 @@ public class DaftarSiswaFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
         frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
-        ImageButton floatingActionButton = view.findViewById(R.id.fab);
+        fabSpeedDial = (FabSpeedDial) view.findViewById(R.id.fabs);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        floatingActionButton.bringToFront();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
-            public void onClick(View view) {
-                openDialog();
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                return false;
+            }
+
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                Toast.makeText(getContext().getApplicationContext(), menuItem.getTitle() + " clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public void onMenuClosed() {
+
             }
         });
     }
