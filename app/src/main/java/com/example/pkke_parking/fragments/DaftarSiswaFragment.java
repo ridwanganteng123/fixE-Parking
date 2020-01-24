@@ -40,6 +40,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.internal.NavigationMenu;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 
@@ -50,6 +51,7 @@ public class DaftarSiswaFragment extends Fragment {
     private AdapterDaftarSiswa adapterDaftarSiswa;
     private List<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
     private FirebaseRecyclerOptions<DataDaftarSiswa> options;
     private FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView> adapter;
     private SwipeRefreshLayout refreshLayout;
@@ -78,7 +80,7 @@ public class DaftarSiswaFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.refresh_trigger);
         fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
         frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
-
+        slidingUpPanelLayout = view.findViewById(R.id.sliding_up_panel_layout);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
@@ -131,37 +133,6 @@ public class DaftarSiswaFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override public void run() {
                         refreshLayout.setRefreshing(false);
-                        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
-                            @Override
-                            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
-                                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
-                                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
-                                String imageUri = dataDaftarSiswa.getImageURL();
-
-                                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
-                                        intent.putExtra("nama", dataDaftarSiswa.getNama());
-                                        intent.putExtra("nis", dataDaftarSiswa.getNis());
-                                        startActivity(intent);
-                                    }
-                                });
-                            }
-
-                            @NonNull
-                            @Override
-                            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
-                            }
-
-                            @Override
-                            public void onDataChanged() {
-                                super.onDataChanged();
-                                shimmerFrameLayout.stopShimmer();
-                                shimmerFrameLayout.setVisibility(View.GONE);
-                            }
-                        };
                     }
                 }, 3000);
             }
@@ -175,7 +146,7 @@ public class DaftarSiswaFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 if (menuItem.getItemId()==R.id.filter){
-                    Toast.makeText(getContext().getApplicationContext(), "Filter Clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext().getApplicationContext(), "asdasd", Toast.LENGTH_SHORT).show();
                 } else if (menuItem.getItemId()==R.id.showDialog)
                 {
                     openDialog();
