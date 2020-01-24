@@ -22,12 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.module.AppGlideModule;
 import com.example.pkke_parking.activities.DetailSiswaActivity;
 import com.example.pkke_parking.adapters.AdapterDaftarSiswa;
 import com.example.pkke_parking.R;
@@ -43,7 +40,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.internal.NavigationMenu;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 
@@ -80,20 +76,20 @@ public class DaftarSiswaFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_data_siswa);
         shimmerFrameLayout = view.findViewById(R.id.container_shimmer);
         refreshLayout = view.findViewById(R.id.refresh_trigger);
+        fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
+        frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
+
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
         }
 
-        refreshLayout.setColorSchemeResources(R.color.startColor,R.color.endColor,R.color.colorPrimaryDark,R.color.colorPrimary);
 
+        refreshLayout.setColorSchemeResources(R.color.startColor,R.color.endColor,R.color.colorPrimaryDark,R.color.colorPrimary);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-
         dataDaftarSiswaList = new ArrayList<DataDaftarSiswa>();
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("siswa");
-
         options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(databaseReference, DataDaftarSiswa.class).build();
         adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
             @Override
@@ -171,27 +167,29 @@ public class DaftarSiswaFragment extends Fragment {
             }
         });
 
-        recyclerView.setAdapter(adapter);
-        frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
-        fabSpeedDial = (FabSpeedDial) view.findViewById(R.id.fabs);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
         fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                return false;
-            }
-
-            @Override
-            public boolean onMenuItemSelected(MenuItem menuItem) {
-                Toast.makeText(getContext().getApplicationContext(), menuItem.getTitle() + " clicked", Toast.LENGTH_SHORT).show();
                 return true;
             }
-
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                if (menuItem.getItemId()==R.id.filter){
+                    Toast.makeText(getContext().getApplicationContext(), "Filter Clicked", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId()==R.id.showDialog)
+                {
+                    openDialog();
+                }
+                return false;
+            }
             @Override
             public void onMenuClosed() {
 
             }
         });
+
+        recyclerView.setAdapter(adapter);
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
     }
 
     @Override
@@ -224,45 +222,5 @@ public class DaftarSiswaFragment extends Fragment {
             exampleDialog.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
         exampleDialog.show(getFragmentManager(), "Dialog Tambah Data");
-    }
-
-    public static void showIn(final View v) {
-        v.setVisibility(View.VISIBLE);
-        v.setAlpha(0f);
-        v.setTranslationY(v.getHeight());
-        v.animate()
-                .setDuration(200)
-                .translationY(0)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                    }
-                })
-                .alpha(1f)
-                .start();
-    }
-
-    public static void showOut(final View v) {
-        v.setVisibility(View.VISIBLE);
-        v.setAlpha(1f);
-        v.setTranslationY(0);
-        v.animate()
-                .setDuration(200)
-                .translationY(v.getHeight())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        v.setVisibility(View.GONE);
-                        super.onAnimationEnd(animation);
-                    }
-                }).alpha(0f)
-                .start();
-    }
-
-    public static void init(final View v) {
-        v.setVisibility(View.GONE);
-        v.setTranslationY(v.getHeight());
-        v.setAlpha(0f);
     }
 }
