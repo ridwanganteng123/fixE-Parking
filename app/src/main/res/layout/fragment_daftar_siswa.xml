@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    android:id="@+id/sliding_up_panel_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/refresh_trigger"
+    android:layout_alignParentBottom="true"
+    android:gravity="bottom"
+    sothree:umanoClipPanel="false"
+    sothree:umanoFadeColor="@android:color/transparent"
+    sothree:umanoOverlay="true"
+    app:umanoInitialState="hidden"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".fragments.DaftarSiswaFragment">
-
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        android:id="@+id/sliding_up_panel_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom"
-        sothree:umanoClipPanel="false"
-        sothree:umanoFadeColor="@android:color/transparent"
-        sothree:umanoOverlay="true" >
+    xmlns:sothree="http://schemas.android.com/tools">
 
     <FrameLayout
         android:id="@+id/frameLayout_data_siswa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="60dp">
+        android:paddingBottom="58dp"
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +51,6 @@
                 android:id="@+id/recycler_data_siswa"
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:paddingTop="20dp"
                 android:layout_height="match_parent" />
 
         </LinearLayout>
@@ -71,6 +62,9 @@
             android:layout_gravity="bottom|end"
             app:fabGravity="bottom_end"
             app:fabMenu="@menu/menu_main"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            app:fabBackgroundTint="@color/startColor"
             app:miniFabBackgroundTint="@android:color/white"
             app:miniFabDrawableTint="?attr/colorPrimaryDark"
             app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
@@ -81,12 +75,53 @@
             android:layout_width="match_parent"
             android:layout_height="350dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sliding " />
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Filter Siswa"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    android:layout_marginVertical="17dp"
+                    android:textAlignment="center" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_height="wrap_content" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cari_siswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Cari Siswa" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/format_spinner"
+                    android:layout_marginTop="15dp"
+                    android:paddingVertical="13dp"
+                    android:entries="@array/gender"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/format_spinner"
+                    android:layout_marginTop="15dp"
+                    android:paddingVertical="13dp"
+                    android:entries="@array/kelas_items" />
+
+            </LinearLayout>
+
         </FrameLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

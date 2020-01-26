@@ -16,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -38,8 +41,12 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.internal.NavigationMenu;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -49,15 +56,15 @@ public class DaftarSiswaFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdapterDaftarSiswa adapterDaftarSiswa;
-    private List<DataDaftarSiswa> dataDaftarSiswaList;
+    private ArrayList<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private FirebaseRecyclerOptions<DataDaftarSiswa> options;
     private FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView> adapter;
-    private SwipeRefreshLayout refreshLayout;
     private DatabaseReference databaseReference;
     private ShimmerFrameLayout shimmerFrameLayout;
     private FabSpeedDial fabSpeedDial;
+    private EditText cari_siswa;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,17 +84,15 @@ public class DaftarSiswaFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_data_siswa);
         shimmerFrameLayout = view.findViewById(R.id.container_shimmer);
-        refreshLayout = view.findViewById(R.id.refresh_trigger);
         fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
         frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
         slidingUpPanelLayout = view.findViewById(R.id.sliding_up_panel_layout);
+        cari_siswa = view.findViewById(R.id.cari_siswa);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
         }
 
-
-        refreshLayout.setColorSchemeResources(R.color.startColor,R.color.endColor,R.color.colorPrimaryDark,R.color.colorPrimary);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         dataDaftarSiswaList = new ArrayList<DataDaftarSiswa>();
@@ -127,17 +132,6 @@ public class DaftarSiswaFragment extends Fragment {
             }
         };
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
-            }
-        });
-
         fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
@@ -145,8 +139,9 @@ public class DaftarSiswaFragment extends Fragment {
             }
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
-                if (menuItem.getItemId()==R.id.filter){
-                    Toast.makeText(getContext().getApplicationContext(), "asdasd", Toast.LENGTH_SHORT).show();
+                if (menuItem.getItemId()==R.id.filter)
+                {
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 } else if (menuItem.getItemId()==R.id.showDialog)
                 {
                     openDialog();
@@ -159,8 +154,61 @@ public class DaftarSiswaFragment extends Fragment {
             }
         });
 
+        cari_siswa.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().isEmpty())
+                {
+                    search(editable.toString());
+                } else {
+                    search("");
+                }
+            }
+        });
+
         recyclerView.setAdapter(adapter);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
+    }
+
+    public void search(String editable)
+    {
+        Query query = databaseReference.orderByChild("nama").startAt(editable).endAt(editable+"\uf0ff");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren())
+                {
+                    dataDaftarSiswaList.clear();
+                    for(DataSnapshot dss: dataSnapshot.getChildren())
+                    {
+                        final DataDaftarSiswa dataDaftarSiswa = dss.getValue(DataDaftarSiswa.class);
+                        dataDaftarSiswaList.add(dataDaftarSiswa);
+
+                        AdapterDaftarSiswa adapterDaftarSiswa = new AdapterDaftarSiswa(getContext(), dataDaftarSiswaList);
+                        recyclerView.setAdapter(adapterDaftarSiswa);
+                        adapterDaftarSiswa.notifyDataSetChanged();
+                    }
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
