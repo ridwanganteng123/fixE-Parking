@@ -65,6 +65,7 @@ public class DaftarSiswaFragment extends Fragment {
     private ShimmerFrameLayout shimmerFrameLayout;
     private FabSpeedDial fabSpeedDial;
     private EditText cari_siswa;
+    private FragmentTransaction ft;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class DaftarSiswaFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ft = getFragmentManager().beginTransaction();
         recyclerView = view.findViewById(R.id.recycler_data_siswa);
         shimmerFrameLayout = view.findViewById(R.id.container_shimmer);
         fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
@@ -154,6 +156,8 @@ public class DaftarSiswaFragment extends Fragment {
             }
         });
 
+        recyclerView.setAdapter(adapter);
+
         cari_siswa.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -167,48 +171,49 @@ public class DaftarSiswaFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!editable.toString().isEmpty())
+                if(!editable.toString().isEmpty())
                 {
                     search(editable.toString());
                 } else {
-                    search("");
+
                 }
             }
         });
-
-        recyclerView.setAdapter(adapter);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
     }
 
     public void search(String editable)
     {
-        Query query = databaseReference.orderByChild("nama").startAt(editable).endAt(editable+"\uf0ff");
-
-        query.addValueEventListener(new ValueEventListener() {
+        Query firebaseSearchQuery = databaseReference.orderByChild("nama").startAt(editable).endAt(editable+"\uf8ff");
+        options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(firebaseSearchQuery, DataDaftarSiswa.class).build();
+        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
+            @NonNull
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren())
-                {
-                    dataDaftarSiswaList.clear();
-                    for(DataSnapshot dss: dataSnapshot.getChildren())
-                    {
-                        final DataDaftarSiswa dataDaftarSiswa = dss.getValue(DataDaftarSiswa.class);
-                        dataDaftarSiswaList.add(dataDaftarSiswa);
+            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
+            }
 
-                        AdapterDaftarSiswa adapterDaftarSiswa = new AdapterDaftarSiswa(getContext(), dataDaftarSiswaList);
-                        recyclerView.setAdapter(adapterDaftarSiswa);
-                        adapterDaftarSiswa.notifyDataSetChanged();
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
+                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
+                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
+                String imageUri = dataDaftarSiswa.getImageURL();
+                Glide.with(getContext()).load(imageUri).into(adapterDaftarSiswaView.profile);
+
+                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("nama", dataDaftarSiswa.getNama());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        startActivity(intent);
                     }
-                } else {
-
-                }
+                });
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        };
+        adapter.startListening();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
