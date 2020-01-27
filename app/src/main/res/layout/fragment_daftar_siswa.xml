@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.sothree.slidinguppanel.SlidingUpPanelLayout
     android:id="@+id/sliding_up_panel_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
-    android:gravity="bottom"
-    sothree:umanoClipPanel="false"
-    sothree:umanoFadeColor="@android:color/transparent"
-    sothree:umanoOverlay="true"
-    app:umanoInitialState="hidden"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:sothree="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:background="@color/transparant"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="0dp"
+    sothree:umanoShadowHeight="0dp" >
 
     <FrameLayout
         android:id="@+id/frameLayout_data_siswa"
@@ -72,8 +71,9 @@
     </FrameLayout>
 
         <FrameLayout
+            android:background="@drawable/rounded_frame"
             android:layout_width="match_parent"
-            android:layout_height="350dp">
+            android:layout_height="280dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,7 +86,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Filter Siswa"
-                    android:textSize="23sp"
+                    android:textSize="21sp"
+                    android:textColor="#000000"
                     android:textStyle="bold"
                     android:layout_marginVertical="17dp"
                     android:textAlignment="center" />
@@ -104,21 +105,32 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/format_spinner"
-                    android:layout_marginTop="15dp"
-                    android:paddingVertical="13dp"
-                    android:entries="@array/gender"/>
+                    android:orientation="horizontal" >
 
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/format_spinner"
-                    android:layout_marginTop="15dp"
-                    android:paddingVertical="13dp"
-                    android:entries="@array/kelas_items" />
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/format_spinner"
+                        android:layout_marginTop="15dp"
+                        android:paddingVertical="13dp"
+                        android:layout_marginRight="3.5dp"
+                        android:entries="@array/gender"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3.5dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/format_spinner"
+                        android:layout_marginTop="15dp"
+                        android:paddingVertical="13dp"
+                        android:entries="@array/kelas_items" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
