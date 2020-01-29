@@ -21,8 +21,8 @@
                 android:visibility="visible"
                 android:layout_marginTop="10dp"
                 app:cardElevation="10dp"
-                android:id="@+id/backgroundCV"
-                >
+                android:id="@+id/backgroundCV" >
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"

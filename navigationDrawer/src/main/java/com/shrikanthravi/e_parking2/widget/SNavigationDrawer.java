@@ -32,7 +32,6 @@ import static android.content.ContentValues.TAG;
 
 public class SNavigationDrawer extends RelativeLayout{
 
-
     //Context
     protected Context mContext;
     protected LayoutInflater mLayoutInflater;

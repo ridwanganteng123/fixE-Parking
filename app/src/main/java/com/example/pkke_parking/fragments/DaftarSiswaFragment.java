@@ -140,6 +140,7 @@ public class DaftarSiswaFragment extends Fragment {
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
                 return true;
             }
+
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 if (menuItem.getItemId()==R.id.filter)
@@ -175,7 +176,6 @@ public class DaftarSiswaFragment extends Fragment {
                 if(!editable.toString().isEmpty())
                 {
                     search(editable.toString());
-                } else {
 
                 }
             }
