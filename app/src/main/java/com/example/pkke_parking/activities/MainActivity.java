@@ -26,8 +26,10 @@ import com.example.pkke_parking.fragments.HistoryFragment;
 import com.example.pkke_parking.animates.Helper;
 import com.example.pkke_parking.dialogs.DialogAboutApp;
 import com.example.pkke_parking.dialogs.DialogSyaratDanKetentuan;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.e_parking2.data.MenuItem;
 import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static Fragment fragment;
     private TextView appBarTitleTV;
     private ImageButton optionMenu, ketentuan;
+    private GoogleApiClient mGoogleApiClient;
     private Button settings, logout;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -77,16 +80,6 @@ public class MainActivity extends AppCompatActivity {
         logout = (Button) findViewById(R.id.iconLogOut);
         settings = (Button) findViewById(R.id.iconSetting);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        if (fab != null)
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast toast = Toast.makeText(MainActivity.this, "asdasd", Toast.LENGTH_SHORT);
-//                toast.show();
-//            }
-//        });
-
         optionMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,12 +102,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                Snackbar snackbar = Snackbar.make(findViewById(R.id.frameLayout), "Yes diklik", Snackbar.LENGTH_SHORT );
-                                snackbar.show();
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(MainActivity.this, "Logout Berhasil", Toast.LENGTH_SHORT).show();
                                 break;
-
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Toast.makeText(MainActivity.this, "No ditekan", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Logout Gagal", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
