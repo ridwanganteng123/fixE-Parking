@@ -112,6 +112,7 @@ public class DaftarSiswaFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("id",dataDaftarSiswa.getSiswaId());
                         intent.putExtra("nama", dataDaftarSiswa.getNama());
                         intent.putExtra("nis", dataDaftarSiswa.getNis());
                         intent.putExtra("img", dataDaftarSiswa.getImageURL());

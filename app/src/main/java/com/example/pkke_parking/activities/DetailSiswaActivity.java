@@ -3,7 +3,12 @@ package com.example.pkke_parking.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -12,21 +17,32 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pkke_parking.R;
+import com.example.pkke_parking.fragments.DaftarSiswaFragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
     private TextView nama, nis;
     private ImageView gambar;
+    private RecyclerView.LayoutManager mlayoutManager;
+    private DatabaseReference databaseReference;
+    String Database_Path = "siswa";
+    Bundle bundle;
+    public static Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_siswa);
 
+        bundle = getIntent().getExtras();
+
         nama = findViewById(R.id.get_nama);
         nis = findViewById(R.id.get_nis);
         gambar = findViewById(R.id.gambar);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("siswa");
 
         String image_url = getIntent().getStringExtra("img");
         String nama_val = getIntent().getStringExtra("nama");
@@ -58,16 +74,26 @@ public class DetailSiswaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        bundle = getIntent().getExtras();
 
         if (id == R.id.edit) {
             Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.hapus) {
-            Toast.makeText(getApplicationContext(), "Hapus clicked", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            deleteSiswa(bundle.getString("id"));
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+    private void deleteSiswa(String siswaId) {
+        DatabaseReference siswa = FirebaseDatabase.getInstance().getReference().child("siswa").child(siswaId);
+        siswa.removeValue();
+        Toast.makeText(this,"Data Berhasil dihapus",Toast.LENGTH_LONG).show();
+
+
+   }
 
 }
