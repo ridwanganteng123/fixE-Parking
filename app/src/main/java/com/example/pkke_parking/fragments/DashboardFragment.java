@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +21,7 @@ import com.example.pkke_parking.R;
  */
 public class DashboardFragment extends Fragment {
 
-    private FrameLayout frameLayout;
+    private RelativeLayout frameLayout;
 
     public DashboardFragment() {
         // Required empty public constructor

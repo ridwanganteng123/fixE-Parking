@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "218005679627-lstbgeuihtrsikmonrfrj2nrnllichum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pkke_parking",
+            "certificate_hash": "fca53226151fd77c64fe9152fb8b3cbec107f0de"
+          }
+        },
+        {
           "client_id": "218005679627-hc045f5obql67mgku1s8rbk5vhcjm6np.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
