@@ -1,4 +1,10 @@
 <resources>
+    <string-array name="gender">
+        <item>Pilih Gender</item>
+        <item>Laki - Laki</item>
+        <item>Perempuan</item>
+    </string-array>
+
     <string-array name="kelas_items">
         <item>Pilih Kelas</item>
         <item>X - RPL 1</item>
@@ -46,6 +52,7 @@
         <item>XII - TOI 1</item>
         <item>XII - TOI 2</item>
     </string-array>
+
     <string name="app_name">E-Parking</string>
     <string name="syarat_dan_ketentuan_p1">Setiap syarat dan ketentuan yang berlaku
          untuk subjek tunggal juga berlaku untuk subjek jamak dan sebaliknya,

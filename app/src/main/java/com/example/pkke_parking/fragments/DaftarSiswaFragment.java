@@ -1,5 +1,7 @@
 package com.example.pkke_parking.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,17 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.module.AppGlideModule;
 import com.example.pkke_parking.activities.DetailSiswaActivity;
 import com.example.pkke_parking.adapters.AdapterDaftarSiswa;
 import com.example.pkke_parking.R;
@@ -38,22 +40,32 @@ import java.util.List;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.internal.NavigationMenu;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class DaftarSiswaFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdapterDaftarSiswa adapterDaftarSiswa;
-    private List<DataDaftarSiswa> dataDaftarSiswaList;
+    private ArrayList<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
     private FirebaseRecyclerOptions<DataDaftarSiswa> options;
     private FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView> adapter;
-    private SwipeRefreshLayout refreshLayout;
     private DatabaseReference databaseReference;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private FabSpeedDial fabSpeedDial;
+    private EditText cari_siswa;
+    private FragmentTransaction ft;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,23 +83,22 @@ public class DaftarSiswaFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ft = getFragmentManager().beginTransaction();
         recyclerView = view.findViewById(R.id.recycler_data_siswa);
         shimmerFrameLayout = view.findViewById(R.id.container_shimmer);
-        refreshLayout = view.findViewById(R.id.refresh_trigger);
+        fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
+        frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
+        slidingUpPanelLayout = view.findViewById(R.id.sliding_up_panel_layout);
+        cari_siswa = view.findViewById(R.id.cari_siswa);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
         }
 
-        refreshLayout.setColorSchemeResources(R.color.startColor,R.color.endColor,R.color.colorPrimaryDark,R.color.colorPrimary);
-
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-
         dataDaftarSiswaList = new ArrayList<DataDaftarSiswa>();
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("siswa");
-
         options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(databaseReference, DataDaftarSiswa.class).build();
         adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
             @Override
@@ -101,6 +112,7 @@ public class DaftarSiswaFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("id",dataDaftarSiswa.getSiswaId());
                         intent.putExtra("nama", dataDaftarSiswa.getNama());
                         intent.putExtra("nis", dataDaftarSiswa.getNis());
                         intent.putExtra("img", dataDaftarSiswa.getImageURL());
@@ -123,59 +135,86 @@ public class DaftarSiswaFragment extends Fragment {
             }
         };
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        refreshLayout.setRefreshing(false);
-                        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
-                            @Override
-                            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
-                                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
-                                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
-                                String imageUri = dataDaftarSiswa.getImageURL();
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                return true;
+            }
 
-                                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
-                                        intent.putExtra("nama", dataDaftarSiswa.getNama());
-                                        intent.putExtra("nis", dataDaftarSiswa.getNis());
-                                        startActivity(intent);
-                                    }
-                                });
-                            }
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                if (menuItem.getItemId()==R.id.filter)
+                {
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                } else if (menuItem.getItemId()==R.id.showDialog)
+                {
+                    openDialog();
+                }
+                return false;
+            }
+            @Override
+            public void onMenuClosed() {
 
-                            @NonNull
-                            @Override
-                            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
-                            }
-
-                            @Override
-                            public void onDataChanged() {
-                                super.onDataChanged();
-                                shimmerFrameLayout.stopShimmer();
-                                shimmerFrameLayout.setVisibility(View.GONE);
-                            }
-                        };
-                    }
-                }, 3000);
             }
         });
 
         recyclerView.setAdapter(adapter);
-        frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
-        ImageButton floatingActionButton = view.findViewById(R.id.fab);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        floatingActionButton.bringToFront();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+
+        cari_siswa.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                openDialog();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!editable.toString().isEmpty())
+                {
+                    search(editable.toString());
+
+                }
             }
         });
+    }
+
+    public void search(String editable)
+    {
+        Query firebaseSearchQuery = databaseReference.orderByChild("nama").startAt(editable).endAt(editable+"\uf8ff");
+        options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(firebaseSearchQuery, DataDaftarSiswa.class).build();
+        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
+            @NonNull
+            @Override
+            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
+                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
+                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
+                String imageUri = dataDaftarSiswa.getImageURL();
+                Glide.with(getContext()).load(imageUri).into(adapterDaftarSiswaView.profile);
+
+                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("nama", dataDaftarSiswa.getNama());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+        adapter.startListening();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
