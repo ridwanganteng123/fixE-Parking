@@ -15,8 +15,8 @@
             android:id="@+id/txt_your_qr_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="175dp"
-            android:text="   Your QR Code   "
+            android:layout_marginTop="80dp"
+            android:text="Your QR Code"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -46,26 +46,5 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:id="@+id/editText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:hint="Masukan teks disini "
-        android:background="#ffffff"
-        android:gravity="center"
-        android:layout_marginTop="50dp"/>
-    <Button
-        android:layout_width="300px"
-        android:layout_height="50dp"
-        android:textSize="10sp"
-        android:text="GENERATE KODE"
-        android:id="@+id/button"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:background="@color/colorAccent"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

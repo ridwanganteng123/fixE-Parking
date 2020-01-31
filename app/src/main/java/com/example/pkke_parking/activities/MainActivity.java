@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     public static Fragment fragment;
     private TextView appBarTitleTV;
     private ImageButton optionMenu, ketentuan;
-    private GoogleApiClient mGoogleApiClient;
     private Button settings, logout;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager
                     .beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.frameLayout, fragment)
+                    .replace(R.id.frameLayoutMain, fragment)
                     .commit();
         }
 
@@ -229,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                             fragmentManager
                                     .beginTransaction()
                                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out).
-                                    replace(R.id.frameLayout, fragment)
+                                    replace(R.id.frameLayoutMain, fragment)
                                     .commit();
                         }
                     }
@@ -275,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.frameLayout, fragment)
+                    .replace(R.id.frameLayoutMain, fragment)
                     .commit();
             return true;
         }

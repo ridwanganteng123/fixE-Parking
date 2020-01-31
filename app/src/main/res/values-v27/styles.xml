@@ -87,10 +87,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:orientation">vertical</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:navigationBarColor">@color/Black</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionBarOverlay">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
     </style>
 
     <style name="CollapsingToolbar" parent="Theme.AppCompat.Light.NoActionBar">
