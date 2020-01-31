@@ -32,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
-    private ProgressBar loginProgress;
     private Intent DashboardFragment;
     FirebaseAuth firebaseAuth;
 
@@ -43,9 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         DashboardFragment = new Intent(this,com.example.pkke_parking.activities.MainActivity.class);
 
-
         initializeUI();
-        loginProgress.setVisibility(View.INVISIBLE);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,18 +80,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            loginProgress.setVisibility(View.INVISIBLE);
                             loginBtn.setVisibility(View.VISIBLE);
                             updateUI();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                startActivity(intent);
-
-//
                         }
                         else {
                             showMessage(task.getException().getMessage());
                             loginBtn.setVisibility(View.VISIBLE);
-                            loginProgress.setVisibility(View.INVISIBLE);
                         }
                     }
                 });

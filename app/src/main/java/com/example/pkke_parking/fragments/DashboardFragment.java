@@ -94,7 +94,6 @@ public class DashboardFragment extends Fragment {
         BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(Value,
-
                     BarcodeFormat.DATA_MATRIX.QR_CODE,QRcodeWidth, QRcodeWidth, null
             );
         } catch (IllegalArgumentException Illegalargumentexception) {
