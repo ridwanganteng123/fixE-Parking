@@ -212,7 +212,6 @@ public class DialogTambahData extends DialogFragment {
     public void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
-            //handle the already login user
         }
     }
 
@@ -238,13 +237,13 @@ public class DialogTambahData extends DialogFragment {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Pilih Gambar", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext().getApplicationContext(), "Success tambah", Toast.LENGTH_LONG).show();
                                 } else {
 
                                 }
                             }
                         });
-                        // after we created user account we need to update his profile picture and name
+
                         updateUserInfo( name , FilePathUri,mAuth.getCurrentUser());
                     }else{
                         showMessage("gagal" + task.getException().getMessage());
@@ -268,14 +267,11 @@ public class DialogTambahData extends DialogFragment {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                // image uploaded succesfully
-                // now we can get our image url
+
 
                 imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-
-                        // uri contain user image url
 
 
                         UserProfileChangeRequest profleUpdate = new UserProfileChangeRequest.Builder()
@@ -290,7 +286,6 @@ public class DialogTambahData extends DialogFragment {
                                     public void onComplete(@NonNull Task<Void> task) {
 
                                         if (task.isSuccessful()) {
-                                            // user info updated successfully
                                             showMessage("Register Complete");
                                             updateUI();
                                         }
@@ -354,8 +349,6 @@ public class DialogTambahData extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUESCODE && data != null ) {
 
-            // the user has successfully picked an image
-            // we need to save its reference to a Uri variable
            FilePathUri = data.getData() ;
             tampil_img.setImageURI(FilePathUri);
 
