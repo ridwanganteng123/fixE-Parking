@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,8 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
-
-
+    private ProgressBar loginProgress;
+    private Intent DashboardFragment;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -40,8 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        DashboardFragment = new Intent(this,com.example.pkke_parking.activities.MainActivity.class);
+
 
         initializeUI();
+        loginProgress.setVisibility(View.INVISIBLE);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,15 +83,18 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
-
-
+                            loginProgress.setVisibility(View.INVISIBLE);
+                            loginBtn.setVisibility(View.VISIBLE);
+                            updateUI();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                               startActivity(intent);
+
+//
                         }
                         else {
-                            Toast.makeText(getApplicationContext(), "Login failed! Please try again later", Toast.LENGTH_LONG).show();
-
+                            showMessage(task.getException().getMessage());
+                            loginBtn.setVisibility(View.VISIBLE);
+                            loginProgress.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -116,11 +123,11 @@ public class LoginActivity extends AppCompatActivity {
 //        });
 
     }
-    private void updateUI() {
+    public void  updateUI(){
 
-//        startActivity(DashboardFragment);
-        finish();
 
+        startActivity(DashboardFragment);
+            finish();
     }
 
     @Override
@@ -128,15 +135,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user != null) {
-            //user is already connected  so we need to redirect him to home page
             updateUI();
 
         }
+    }
+    private void showMessage(String text) {
+
+        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
     }
 
     private void initializeUI() {
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
         loginBtn = findViewById(R.id.login);
+
     }
 }

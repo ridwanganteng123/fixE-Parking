@@ -40,8 +40,8 @@
                 android:id="@+id/img_brcd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="30dp"
-                android:src="@drawable/barcode" />
+                android:layout_margin="30dp"/>
+
 
         </androidx.cardview.widget.CardView>
 
