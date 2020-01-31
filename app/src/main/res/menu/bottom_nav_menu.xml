@@ -11,7 +11,8 @@
         android:title="History" />
 
     <item
-        android:id="@+id/navigation_daftar_siswa"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="Siswa" />
+        android:id="@+id/navigation_analitik"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        android:title="Statistik" />
+
 </menu>

@@ -46,7 +46,6 @@ public class DashboardFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,37 +57,33 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        img_brcd = view.findViewById(R.id.img_brcd);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid = currentUser.getUid();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    nis = keyId.child(uid).child("siswaId").getValue(String.class);
-                    try {
-                        bitmap = TextToImageEncode(nis);
-                        img_brcd.setImageBitmap(bitmap);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        img_brcd = view.findViewById(R.id.img_brcd);
 //
-
+//        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        uid = currentUser.getUid();
+//
+//        databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot keyId : dataSnapshot.getChildren()){
+//                    nis = keyId.child(uid).child("siswaId").getValue(String.class);
+//                    try {
+//                        bitmap = TextToImageEncode(nis);
+//                        img_brcd.setImageBitmap(bitmap);
+//                    } catch (WriterException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
-
-
 
     Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;

@@ -8,8 +8,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pkke_parking.activities.LoginActivity;
-import com.example.pkke_parking.activities.MainActivity;
-import com.example.pkke_parking.activities.RegisterActivity;
 
 public class AnimationProgressBar extends Animation {
 

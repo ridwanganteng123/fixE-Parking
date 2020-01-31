@@ -20,15 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pkke_parking.R;
-import com.example.pkke_parking.fragments.DaftarSiswaFragment;
 import com.example.pkke_parking.fragments.DashboardFragment;
 import com.example.pkke_parking.fragments.HistoryFragment;
 import com.example.pkke_parking.animates.Helper;
 import com.example.pkke_parking.dialogs.DialogAboutApp;
 import com.example.pkke_parking.dialogs.DialogSyaratDanKetentuan;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.pkke_parking.fragments.StatistikFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.e_parking2.data.MenuItem;
 import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;
@@ -59,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new HistoryFragment();
                     appBarTitleTV.setText("History");
                     break;
-                case R.id.navigation_daftar_siswa:
-                    fragment = new DaftarSiswaFragment();
-                    appBarTitleTV.setText("Daftar Siswa");
+                case R.id.navigation_analitik:
+                    fragment = new StatistikFragment();
+                    appBarTitleTV.setText("Statistik");
                     break;
             }
             return loadFragment(fragment);
@@ -75,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final BottomNavigationView navView = findViewById(R.id.navView);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        optionMenu = (ImageButton)findViewById(R.id.ketentuan);
-        logout = (Button) findViewById(R.id.iconLogOut);
-        settings = (Button) findViewById(R.id.iconSetting);
+        optionMenu = findViewById(R.id.ketentuan);
+        logout = findViewById(R.id.iconLogOut);
+        settings = findViewById(R.id.iconSetting);
 
         optionMenu.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,28 +1,20 @@
 package com.example.pkke_parking.activities;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.example.pkke_parking.animates.CustomViewFinderScanner;
 import com.example.pkke_parking.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingActivity extends AppCompatActivity {
-    private static final int ZXING_CAMERA_PERMISSION = 1;
-    private Class<?> mClss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +38,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout detailSiswa = (LinearLayout) findViewById(R.id.detail_siswa);
+        LinearLayout detailSiswa = findViewById(R.id.detail_siswa);
 
         detailSiswa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +57,13 @@ public class SettingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                Snackbar snackbar = Snackbar.make(findViewById(R.id.frameLayout), "Yes diklik", Snackbar.LENGTH_SHORT );
-                                snackbar.show();
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(SettingActivity.this, "Logout Berhasil", Toast.LENGTH_SHORT).show();
                                 break;
-
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Toast.makeText(SettingActivity.this, "No ditekan", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SettingActivity.this, "Logout Gagal", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -83,45 +76,12 @@ public class SettingActivity extends AppCompatActivity {
                         .show();
             }
         });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Settings");
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
     }
-    public void launchCustomViewFinderScannerActivity(View v) {
-        launchActivity(CustomViewFinderScanner.class);
-    }
-    public void launchActivity(Class<?> clss) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            mClss = clss;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
-        } else {
-            Intent intent = new Intent(this, clss);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case ZXING_CAMERA_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(mClss != null) {
-                        Intent intent = new Intent(this, mClss);
-                        startActivity(intent);
-                    }
-                } else {
-                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
-                }
-                return;
-        }
-     }
 }
 
