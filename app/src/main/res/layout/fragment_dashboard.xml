@@ -11,39 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
-            android:id="@+id/txt_your_qr_code"
+        <Button
+            android:id="@+id/btn_scan"
+            android:onClick="launchCustom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:text="Your QR Code"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView_Format"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:cardElevation="10dp"
-            app:cardCornerRadius="40dp"
+            android:text="Scanner"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_your_qr_code"
-            app:layout_constraintVertical_bias="0.259">
-
-            <ImageView
-                android:id="@+id/img_brcd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="30dp"/>
-
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintLeft_toLeftOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

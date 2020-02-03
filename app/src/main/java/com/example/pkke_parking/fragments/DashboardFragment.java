@@ -1,18 +1,26 @@
 package com.example.pkke_parking.fragments;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.pkke_parking.R;
+import com.example.pkke_parking.animates.CustomViewFinderScanner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +42,8 @@ public class DashboardFragment extends Fragment {
     Bitmap bitmap;
     private RelativeLayout frameLayout;
     ImageView img_brcd;
+    private static final int ZXING_CAMERA_PERMISSION = 1;
+    private Class<?> mClss;
 
     public DashboardFragment() {
 
@@ -48,58 +58,42 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        img_brcd = view.findViewById(R.id.img_brcd);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid = currentUser.getUid();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Button btnScanner = view.findViewById(R.id.btn_scan);
+        btnScanner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    nis = keyId.child(uid).child("siswaId").getValue(String.class);
-                    try {
-                        bitmap = TextToImageEncode(nis);
-                        img_brcd.setImageBitmap(bitmap);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onClick(View view) {
+                launchCustomViewFinderScannerActivity();
             }
         });
     }
-
-    Bitmap TextToImageEncode(String Value) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(Value,
-                    BarcodeFormat.DATA_MATRIX.QR_CODE,QRcodeWidth, QRcodeWidth, null
-            );
-        } catch (IllegalArgumentException Illegalargumentexception) {
-            return null;
+    public void launchCustomViewFinderScannerActivity() {
+        launchActivity(CustomViewFinderScanner.class);
+    }
+    public void launchActivity(Class<?> clss) {
+        if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(),Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            mClss = clss;
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+        } else {
+            Intent intent = new Intent(getContext().getApplicationContext(), clss);
+            startActivity(intent);
         }
-        int bitMatrixWidth = bitMatrix.getWidth();
+    }
 
-        int bitMatrixHeight = bitMatrix.getHeight();
-        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-            for (int x = 0; x < bitMatrixWidth; x++) {
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.CodeBlackColor):getResources().getColor(R.color.CodeWhiteColor);
-            }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case ZXING_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(mClss != null) {
+                        Intent intent = new Intent(getContext().getApplicationContext(), mClss);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(getContext().getApplicationContext(), "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                }
+                return;
         }
-        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight,
-                Bitmap.Config.ARGB_4444);
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bitmap;
     }
 }

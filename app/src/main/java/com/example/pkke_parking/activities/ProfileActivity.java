@@ -38,10 +38,10 @@ DatabaseReference databaseReference;
         uid = currentUser.getUid();
 
 //        name = findViewById(R.id.nama);
-        nopol_txt = findViewById(R.id.nopol_txt);
-        nosim_txt = findViewById(R.id.nosim_txt);
-        tgl_lahir_txt = findViewById(R.id.tgl_lahir_txt);
-        nis_txt = findViewById(R.id.nis_txt);
+//        nopol_txt = findViewById(R.id.nopol_txt);
+//        nosim_txt = findViewById(R.id.nosim_txt);
+//        tgl_lahir_txt = findViewById(R.id.tgl_lahir_txt);
+//        nis_txt = findViewById(R.id.nis_txt);
 //        img_profile = findViewById(R.id.img_profile);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +50,7 @@ DatabaseReference databaseReference;
                 finish();
             }
         });
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
