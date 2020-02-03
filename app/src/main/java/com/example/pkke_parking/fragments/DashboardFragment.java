@@ -1,19 +1,16 @@
 package com.example.pkke_parking.fragments;
 
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pkke_parking.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +25,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DashboardFragment extends Fragment {
     public final static int QRcodeWidth = 500 ;
     FirebaseAuth mAuth;
@@ -43,14 +36,12 @@ public class DashboardFragment extends Fragment {
     ImageView img_brcd;
 
     public DashboardFragment() {
-        // Required empty public constructor
-    }
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -84,11 +75,7 @@ public class DashboardFragment extends Fragment {
 
             }
         });
-//
-
     }
-
-
 
     Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;

@@ -9,9 +9,4 @@
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_history_black_24dp"
         android:title="History" />
-
-    <item
-        android:id="@+id/navigation_daftar_siswa"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="Siswa" />
 </menu>

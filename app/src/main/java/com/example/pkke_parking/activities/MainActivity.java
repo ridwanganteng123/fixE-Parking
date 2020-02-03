@@ -20,15 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pkke_parking.R;
-import com.example.pkke_parking.fragments.DaftarSiswaFragment;
 import com.example.pkke_parking.fragments.DashboardFragment;
 import com.example.pkke_parking.fragments.HistoryFragment;
 import com.example.pkke_parking.animates.Helper;
 import com.example.pkke_parking.dialogs.DialogAboutApp;
 import com.example.pkke_parking.dialogs.DialogSyaratDanKetentuan;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.e_parking2.data.MenuItem;
 import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;
@@ -58,10 +55,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_history:
                     fragment = new HistoryFragment();
                     appBarTitleTV.setText("History");
-                    break;
-                case R.id.navigation_daftar_siswa:
-                    fragment = new DaftarSiswaFragment();
-                    appBarTitleTV.setText("Daftar Siswa");
                     break;
             }
             return loadFragment(fragment);
@@ -121,30 +114,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         logout.setTranslationY(-30);
-
-        // Option menu
-
-//        optionMenu.setOnClickListener(new View.OnClickListener() {
-//            @SuppressLint("RtlHardcoded")
-//            @TargetApi(Build.VERSION_CODES.M)
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View v) {
-//                final PopupMenu popupMenu = new PopupMenu(MainActivity.this, optionMenu);
-//                popupMenu.getMenuInflater().inflate(R.menu.sidebar_menu, popupMenu.getMenu());
-//                popupMenu.setGravity(Gravity.getAbsoluteGravity(10,1));
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(android.view.MenuItem item) {
-//                        Snackbar.make(findViewById(R.id.rootLayout), item.getTitle() + " Ditekan", Snackbar.LENGTH_SHORT).show();
-//                        return true;
-//                    }
-//                });
-//
-//                popupMenu.show();
-//
-//            }
-//        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

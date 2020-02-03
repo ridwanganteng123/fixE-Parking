@@ -19,11 +19,6 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".animates.CustomViewFinderScanner" />
         <activity
-            android:name=".activities.DetailSiswaActivity"
-            android:parentActivityName=".activities.SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CollapsingToolbar" />
-        <activity
             android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProfileStyle" />
@@ -38,10 +33,6 @@
             android:theme="@style/SettingsStyle" />
         <activity
             android:name=".activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/loginStyle" />
-        <activity
-            android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
 
