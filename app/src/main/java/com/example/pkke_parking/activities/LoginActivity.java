@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
         //DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
 //        databaseReference.addValueEventListener(new ValueEventListener(){
 //            @Override
