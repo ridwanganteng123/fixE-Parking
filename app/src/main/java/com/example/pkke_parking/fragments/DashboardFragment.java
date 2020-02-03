@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -28,19 +29,14 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DashboardFragment extends Fragment {
-    public final static int QRcodeWidth = 500 ;
-    FirebaseAuth mAuth;
+    public final static int QRcodeWidth = 175;
     FirebaseUser currentUser;
-    String uid,nis,EditTextCode;
+    String uid,nis;
     DatabaseReference databaseReference;
     Bitmap bitmap;
-    private RelativeLayout frameLayout;
     ImageView img_brcd;
+    ProgressBar progressBar;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -49,21 +45,17 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        progressBar = view.findViewById(R.id.progress_qr);
         img_brcd = view.findViewById(R.id.img_brcd);
-
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,6 +64,7 @@ public class DashboardFragment extends Fragment {
                     try {
                         bitmap = TextToImageEncode(nis);
                         img_brcd.setImageBitmap(bitmap);
+                        progressBar.setVisibility(View.GONE);
                     } catch (WriterException e) {
                         e.printStackTrace();
                     }
@@ -107,7 +100,7 @@ public class DashboardFragment extends Fragment {
         }
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight,
                 Bitmap.Config.ARGB_4444);
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        bitmap.setPixels(pixels, 0, 175, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
     }
 }
