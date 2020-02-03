@@ -292,7 +292,6 @@ public class DialogTambahData extends DialogFragment {
 
                                     }
                                 });
-
                     }
                 });
             }
@@ -307,9 +306,7 @@ public class DialogTambahData extends DialogFragment {
 
     }
     private void showMessage(String message) {
-
         Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
-
     }
 
     private void openGallery() {
