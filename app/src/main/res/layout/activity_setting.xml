@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 <LinearLayout
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <include
         layout="@layout/toolbar"
         android:id="@+id/include_toolbar">
     </include>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +31,7 @@
             app:cardCornerRadius="9999dp" >
 
             <ImageView
+                android:id="@+id/foto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/nanangsaripudin" />
@@ -55,8 +62,9 @@
                     android:id="@+id/nis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1718117111"
+                    android:text="Administrator"
                     android:textSize="15sp"
+                    android:layout_marginTop="5dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -404,5 +412,6 @@
 
     </LinearLayout>
 
-
 </LinearLayout>
+
+</ScrollView>

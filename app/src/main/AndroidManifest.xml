@@ -40,10 +40,6 @@
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
-        <activity
-            android:name=".activities.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/loginStyle" />
 
         <activity
             android:name=".activities.SplashScreenActivity"

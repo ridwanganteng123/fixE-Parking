@@ -9,23 +9,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.content.ContentResolver;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,39 +31,24 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pkke_parking.R;
-import com.example.pkke_parking.activities.LoginActivity;
 import com.example.pkke_parking.activities.MainActivity;
-import com.example.pkke_parking.activities.RegisterActivity;
 import com.example.pkke_parking.datas.model.DataDaftarSiswa;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
-
-import dmax.dialog.SpotsDialog;
 
 import static android.app.Activity.RESULT_OK;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class DialogTambahData extends DialogFragment {
     private EditText nis_txt;
@@ -125,7 +102,7 @@ public class DialogTambahData extends DialogFragment {
         databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
@@ -163,7 +140,6 @@ public class DialogTambahData extends DialogFragment {
 
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                             new DatePickerDialog.OnDateSetListener() {
-
                                 @Override
                                 public void onDateSet(DatePicker view, int year,
                                                       int monthOfYear, int dayOfMonth) {
@@ -174,36 +150,24 @@ public class DialogTambahData extends DialogFragment {
                 }
             }
         });
-
         batal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            CreateUserAccount();
+                CreateUserAccount();
             }
         });
-
-
-
-
         btnUpload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 openGallery();
-
             }
-
-
         });
-
-
         builder.setView(view);
         return builder.create();
     }
@@ -237,7 +201,10 @@ public class DialogTambahData extends DialogFragment {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Success tambah", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
+                                    dismiss();
+                                } else if(TextUtils.isEmpty(name)) {
+                                    Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
                                 } else {
 
                                 }
@@ -298,20 +265,16 @@ public class DialogTambahData extends DialogFragment {
         });
     }
 
-
     private void updateUI() {
-
         Intent homeActivity = new Intent(getActivity(),MainActivity.class);
         startActivity(homeActivity);
-
     }
+
     private void showMessage(String message) {
         Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
     }
 
     private void openGallery() {
-        //TODO: open gallery intent and wait for user to pick an image !
-
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent,REQUESCODE);
@@ -324,32 +287,25 @@ public class DialogTambahData extends DialogFragment {
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
                 Toast.makeText(getActivity().getApplicationContext(),"Please accept for required permission",Toast.LENGTH_SHORT).show();
-
             }
-
             else
             {
                 ActivityCompat.requestPermissions((Activity) getActivity().getApplicationContext(),
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         PReqCode);
             }
-
         }
         else
             openGallery();
 
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUESCODE && data != null ) {
-
            FilePathUri = data.getData() ;
-            tampil_img.setImageURI(FilePathUri);
-
-
+           tampil_img.setImageURI(FilePathUri);
         }
     }
 

@@ -22,13 +22,10 @@ import android.widget.Toast;
 import com.example.pkke_parking.R;
 import com.example.pkke_parking.fragments.DaftarSiswaFragment;
 import com.example.pkke_parking.fragments.DashboardFragment;
-import com.example.pkke_parking.fragments.HistoryFragment;
 import com.example.pkke_parking.animates.Helper;
 import com.example.pkke_parking.dialogs.DialogAboutApp;
 import com.example.pkke_parking.dialogs.DialogSyaratDanKetentuan;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.e_parking2.data.MenuItem;
 import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;
@@ -54,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     fragment = new DashboardFragment();
                     appBarTitleTV.setText("Dashboard");
-                    break;
-                case R.id.navigation_history:
-                    fragment = new HistoryFragment();
-                    appBarTitleTV.setText("History");
                     break;
                 case R.id.navigation_daftar_siswa:
                     fragment = new DaftarSiswaFragment();
