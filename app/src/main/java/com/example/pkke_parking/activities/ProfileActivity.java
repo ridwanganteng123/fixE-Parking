@@ -23,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
 FirebaseUser currentUser;
-String uid,nama,nis,tgl_lahir,no_pol,no_sim,imageUrl;
-TextView name,nopol_txt,nosim_txt,tgl_lahir_txt,nis_txt;
+String uid,nama,nis, no_pol,no_sim,imageUrl;
+TextView name,nopol_txt,nosim_txt, nis_txt;
 ImageView img_profile;
 
 DatabaseReference databaseReference;

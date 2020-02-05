@@ -62,9 +62,9 @@ public class DashboardFragment extends Fragment {
                 for (DataSnapshot keyId : dataSnapshot.getChildren()){
                     nis = keyId.child(uid).child("siswaId").getValue(String.class);
                     try {
+                        progressBar.setVisibility(View.GONE);
                         bitmap = TextToImageEncode(nis);
                         img_brcd.setImageBitmap(bitmap);
-                        progressBar.setVisibility(View.GONE);
                     } catch (WriterException e) {
                         e.printStackTrace();
                     }
