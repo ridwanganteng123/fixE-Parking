@@ -1,6 +1,4 @@
-package com.example.pkke_parking.animates;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.pkke_parking.activities;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,8 +12,17 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.pkke_parking.R;
+import com.example.pkke_parking.datas.model.DataScanner;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
@@ -28,7 +35,12 @@ public class CustomViewFinderScanner extends AppCompatActivity implements ZXingS
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.activity_custom_view_finder_scanner);
-        ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+        ViewGroup contentFrame = findViewById(R.id.content_frame);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Scan QR Code");
+
         mScannerView = new ZXingScannerView(this) {
             @Override
             protected IViewFinder createViewFinderView(Context context) {
@@ -55,18 +67,26 @@ public class CustomViewFinderScanner extends AppCompatActivity implements ZXingS
     public void handleResult(Result rawResult) {
         Toast.makeText(this, "Contents = " + rawResult.getText() +
                 ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+        SimpleDateFormat getDate = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat getTime = new SimpleDateFormat("HH:mm:ss");
+        Date date_now = new Date();
+        String date = getDate.format(date_now);
 
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("ScanHarian").child(date);
+
+        String siswaId = rawResult.getText();
+        String waktu_masuk = getTime.format(date_now);
+        DataScanner dataScanner = new DataScanner(siswaId, waktu_masuk);
+        ref.child(siswaId).setValue(dataScanner);
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mScannerView.resumeCameraPreview(CustomViewFinderScanner.this);
             }
-        }, 2000);
+        }, 3000);
     }
 
     private static class CustomViewFinderView extends ViewFinderView {

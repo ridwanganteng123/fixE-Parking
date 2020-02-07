@@ -16,9 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.pkke_parking.animates.CustomViewFinderScanner;
 import com.example.pkke_parking.R;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
@@ -56,12 +55,13 @@ public class SettingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                Snackbar snackbar = Snackbar.make(findViewById(R.id.frameLayout), "Yes diklik", Snackbar.LENGTH_SHORT );
-                                snackbar.show();
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(SettingActivity.this, "Logout Berhasil", Toast.LENGTH_SHORT).show();
                                 break;
-
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Toast.makeText(SettingActivity.this, "No ditekan", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SettingActivity.this, "Logout Gagal", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -75,13 +75,12 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Settings");
         toolbar.setTitleTextColor(Color.parseColor("#000000"));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
     public void launchCustomViewFinderScannerActivity(View v) {
@@ -114,5 +113,6 @@ public class SettingActivity extends AppCompatActivity {
                 return;
         }
      }
+
 }
 

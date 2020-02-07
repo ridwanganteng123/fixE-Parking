@@ -3,10 +3,13 @@ package com.example.pkke_parking.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Class fragmentClass;
     public static Fragment fragment;
     private TextView appBarTitleTV;
-    private ImageButton optionMenu, ketentuan;
+    private ImageButton ketentuan;
     private Button settings, logout;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -61,59 +64,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomNavigationView navView = findViewById(R.id.navView);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        optionMenu = (ImageButton)findViewById(R.id.ketentuan);
-        logout = (Button) findViewById(R.id.iconLogOut);
-        settings = (Button) findViewById(R.id.iconSetting);
-
-        optionMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialogKetentuan();
-            }
-        });
-
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialog();
-            }
-        });
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                FirebaseAuth.getInstance().signOut();
-                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                Toast.makeText(MainActivity.this, "Logout Berhasil", Toast.LENGTH_SHORT).show();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                Toast.makeText(MainActivity.this, "Logout Gagal", Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("Yakin Ingin Keluar?")
-                        .setPositiveButton("Ya", dialogClickListener)
-                        .setNegativeButton("Tidak", dialogClickListener)
-                        .show();
-            }
-        });
-        logout.setTranslationY(-30);
+        ketentuan = findViewById(R.id.ketentuan);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -124,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         menuItems.add(new MenuItem("Dashboard", R.drawable.news_bg));
         menuItems.add(new MenuItem("Profile", R.drawable.feed_bg));
         menuItems.add(new MenuItem("Settings", R.drawable.message_bg));
+        menuItems.add(new MenuItem("About App", R.drawable.message_bg));
+        menuItems.add(new MenuItem("Logout", R.drawable.message_bg));
         sNavigationDrawer.setMenuItemList(menuItems);
         fragmentClass = DashboardFragment.class;
         try {
@@ -152,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                     case 1:{
-
                         color1 = R.color.Black;
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         break;
@@ -162,6 +120,37 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, SettingActivity.class));
                         break;
                     }
+                    case 3: {
+                        color1 = R.color.Black;
+                        openDialogKetentuan();
+                        break;
+                    }
+                    case 4: {
+                        color1 = R.color.Black;
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        FirebaseAuth.getInstance().signOut();
+                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        Toast.makeText(MainActivity.this, "Logout Berhasil", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        Toast.makeText(MainActivity.this, "Logout Gagal", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("Yakin Ingin Keluar?")
+                                .setPositiveButton("Ya", dialogClickListener)
+                                .setNegativeButton("Tidak", dialogClickListener)
+                                .show();
+                        break;
+                    }
 
                 }
 
@@ -169,23 +158,15 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerOpened() {
-
                     }
 
                     @Override
                     public void onDrawerOpening() {
-
-                        Helper.slideDown(navView);
-                        settings = (Button) findViewById(R.id.iconSetting);
-                        logout = (Button) findViewById(R.id.iconLogOut);
-                        settings.setVisibility(View.VISIBLE);
-                        logout.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onDrawerClosing() {
                         System.out.println("Drawer closed");
-                        Helper.slideUp(navView);
                         try {
                             fragment = (Fragment) fragmentClass.newInstance();
                         } catch (Exception e) {
@@ -204,10 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerClosed() {
-                        settings = (Button) findViewById(R.id.iconSetting);
-                        logout = (Button) findViewById(R.id.iconLogOut);
-                        settings.setVisibility(View.GONE);
-                        logout.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -218,17 +195,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void openDialog() {
-        DialogAboutApp dialogAboutApp = new DialogAboutApp();
-        if (dialogAboutApp.getDialog() != null && dialogAboutApp.getDialog().getWindow() != null) {
-            dialogAboutApp.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialogAboutApp.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        }
-        dialogAboutApp.show(getSupportFragmentManager(), "Dialog Tambah Data");
-    }
-
-
     public void openDialogKetentuan() {
         DialogSyaratDanKetentuan exampleDialog = new DialogSyaratDanKetentuan();
         if (exampleDialog.getDialog() != null && exampleDialog.getDialog().getWindow() != null) {
@@ -249,5 +215,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
 }

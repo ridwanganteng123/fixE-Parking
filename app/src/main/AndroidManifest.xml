@@ -17,9 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".animates.CustomViewFinderScanner" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.CustomViewFinderScanner"
+            android:theme="@style/ScannerStyle"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProfileStyle" />
         <activity
@@ -35,7 +37,6 @@
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
-
         <activity
             android:name=".activities.SplashScreenActivity"
             android:noHistory="true"
