@@ -393,7 +393,6 @@ public class SNavigationDrawer extends RelativeLayout{
 
     //Opens Drawer
     public void openDrawer(){
-
         drawerOpening();
         navOpen=true;
         final int[] stateSet = {android.R.attr.state_checked * (navOpen ? 1 : -1)};

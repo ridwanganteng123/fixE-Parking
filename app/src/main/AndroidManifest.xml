@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.pkke_parking">
+    package="com.opatan.e_parking_petugas">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -18,27 +18,28 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activities.CustomViewFinderScanner"
+            android:name="com.opatan.e_parking_petugas.activities.CustomViewFinderScanner"
             android:theme="@style/ScannerStyle"
-            android:parentActivityName=".activities.MainActivity"/>
-        <activity android:name=".activities.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.opatan.e_parking_petugas.activities.MainActivity"/>
+        <activity android:name="com.opatan.e_parking_petugas.activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProfileStyle" />
         <activity
-            android:name=".activities.OnBoardingActivity"
+            android:name="com.opatan.e_parking_petugas.activities.OnBoardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/onBoardingStyle" />
         <activity
-            android:name=".activities.SettingActivity"
-            android:parentActivityName=".activities.MainActivity"
+            android:name="com.opatan.e_parking_petugas.activities.SettingActivity"
+            android:parentActivityName="com.opatan.e_parking_petugas.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsStyle" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.opatan.e_parking_petugas.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.opatan.e_parking_petugas.activities.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreen">
@@ -49,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.opatan.e_parking_petugas.activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 
