@@ -10,8 +10,6 @@ public class MenuItem {
         this.imageId = imageId;
     }
 
-
-
     public String getTitle() {
         return title;
     }

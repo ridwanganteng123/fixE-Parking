@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,30 +7,33 @@
         android:layout_height="match_parent"
         android:paddingBottom="60dp"
         tools:context=".fragments.HistoryFragment">
-
-        <!-- TODO: Update blank fragment layout -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/container_shimmer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:paddingTop="20dp"
+                android:layout_height="wrap_content"
+                app:shimmer_duration="1000">
 
-<!--                <TextView-->
-<!--                    app:layout_constraintRight_toRightOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    style="@style/TextAppearance.AppCompat.Title"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:layout_marginRight="20dp"-->
-<!--                    android:text="History Parkir"-->
-<!--                    android:textSize="25sp" />-->
+                <LinearLayout
+                    android:id="@+id/linearPencet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <include layout="@layout/format_shimmer_history" />
+                    <include layout="@layout/format_shimmer_history" />
+                    <include layout="@layout/format_shimmer_history" />
+                    <include layout="@layout/format_shimmer_history" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_history"
@@ -50,5 +48,3 @@
         </LinearLayout>
 
     </FrameLayout>
-
-</ScrollView>
