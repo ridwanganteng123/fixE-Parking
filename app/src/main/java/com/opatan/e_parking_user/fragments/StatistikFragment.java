@@ -148,8 +148,11 @@ public class StatistikFragment extends Fragment {
         mBuilder.setSmallIcon(R.drawable.message_bg);
         mBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         mBuilder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
+        mBuilder.setContentTitle("Selamat Datang");
+        mBuilder.setContentText("Selamat Datang Kembali");
         mBuilder.setOnlyAlertOnce(true);
         mBuilder.setStyle(bigText);
+        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
         mBuilder.setAutoCancel(true);
 
         mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -158,8 +161,7 @@ public class StatistikFragment extends Fragment {
             String channelId = "Your_channel_id";
             NotificationChannel channel = new NotificationChannel(
                     channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_HIGH);
+                    "Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId(channelId);
         }
