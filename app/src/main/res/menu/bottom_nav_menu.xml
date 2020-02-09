@@ -6,7 +6,18 @@
         android:title="Dashboard" />
 
     <item
+        android:id="@+id/navigation_aktivitas"
+        android:icon="@drawable/ic_swap_horiz_black_24dp"
+        android:title="Aktivitas" />
+
+    <item
         android:id="@+id/navigation_daftar_siswa"
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/ic_people_black_24dp"
         android:title="Siswa" />
+
+    <item
+        android:id="@+id/navigation_daftar_petugas"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Petugas" />
+
 </menu>

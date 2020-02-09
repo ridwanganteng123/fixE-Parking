@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.pkke_parking">
+    package="com.opatan.e_parking_admin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -17,32 +17,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".animates.CustomViewFinderScanner" />
+        <activity android:name="com.opatan.e_parking_admin.animates.CustomViewFinderScanner" />
         <activity
-            android:name=".activities.DetailSiswaActivity"
-            android:parentActivityName=".activities.SettingActivity"
+            android:name="com.opatan.e_parking_admin.activities.DetailSiswaActivity"
+            android:parentActivityName="com.opatan.e_parking_admin.activities.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CollapsingToolbar" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name="com.opatan.e_parking_admin.activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ProfileStyle" />
         <activity
-            android:name=".activities.OnBoardingActivity"
+            android:name="com.opatan.e_parking_admin.activities.OnBoardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/onBoardingStyle" />
         <activity
-            android:name=".activities.SettingActivity"
-            android:parentActivityName=".activities.MainActivity"
+            android:name="com.opatan.e_parking_admin.activities.SettingActivity"
+            android:parentActivityName="com.opatan.e_parking_admin.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsStyle" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.opatan.e_parking_admin.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
 
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.opatan.e_parking_admin.activities.SplashScreenActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreen">
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.opatan.e_parking_admin.activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 

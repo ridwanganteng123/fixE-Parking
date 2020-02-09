@@ -24,7 +24,7 @@
                 android:width="28dp"
                 android:height="28dp"
                 android:top="1dp"
-                android:left="136dp"
+                android:gravity="end"
                 android:drawable="@drawable/ic_arrow_drop_down_black_24dp" />
         </layer-list>
     </item>

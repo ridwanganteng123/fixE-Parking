@@ -1,6 +1,5 @@
 package com.shrikanthravi.e_parking2.data;
 
-
 public class MenuItem {
     String title;
     int imageId;
@@ -9,8 +8,6 @@ public class MenuItem {
         this.title = title;
         this.imageId = imageId;
     }
-
-
 
     public String getTitle() {
         return title;
