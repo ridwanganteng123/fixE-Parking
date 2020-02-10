@@ -37,9 +37,9 @@ public class AdapterHistoryParkir extends RecyclerView.Adapter<AdapterHistoryPar
     @Override
     public void onBindViewHolder(@NonNull AdapterHistoryParkirView holder, int position) {
         final DataHistoryParkir dataHistoryParkir = dataHistoryParkirList.get(position);
-        holder.waktu_masuk.setText(dataHistoryParkir.getWaktu_masuk());
+//        holder.waktu_masuk.setText(dataHistoryParkir.getWaktu_masuk());
         holder.tanggal.setText(dataHistoryParkir.getHari() + ", " + dataHistoryParkir.getTanggal());
-        holder.pemeriksa.setText("Anda Diperiksa Oleh " + dataHistoryParkir.getPemeriksa());
+//        holder.pemeriksa.setText("Anda Diperiksa Oleh " + dataHistoryParkir.getPemeriksa());
     }
 
     @Override

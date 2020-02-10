@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class HistoryFragment extends Fragment {
@@ -62,16 +63,14 @@ public class HistoryFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
 
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child("09-02-2020");
-        databaseReference1.orderByChild("siswaId").equalTo(uid).addValueEventListener(new ValueEventListener() {
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").getRef();
+        databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    waktu = ds.child("waktu_masuk").getValue().toString();
-                    petugasId = ds.child("pemeriksa").getValue().toString();
-                    tanggal = databaseReference1.getKey();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String tanggal = snapshot.getKey();
+                    System.out.println(snapshot.getRef().getKey());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                     Date myDate = null;
                     try {
                         myDate = sdf.parse(tanggal);
@@ -80,22 +79,9 @@ public class HistoryFragment extends Fragment {
                     }
                     sdf.applyPattern("EEEE");
                     hari = sdf.format(myDate);
-
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Petugas").child(petugasId);
-                    databaseReference2.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String petugas = dataSnapshot.child("nama").getValue(String.class).split(" ")[0];
-                            dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, hari, petugas));
-                            shimmerFrameLayout.hideShimmer();
-                            shimmerFrameLayout.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                    dataHistoryParkirList.add(new DataHistoryParkir(tanggal, hari));
+                    shimmerFrameLayout.hideShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                 }
             }
 
