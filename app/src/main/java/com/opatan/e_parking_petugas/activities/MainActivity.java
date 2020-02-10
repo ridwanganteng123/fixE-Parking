@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.opatan.e_parking_petugas.R;
+import com.opatan.e_parking_petugas.dialogs.DialogAboutApp;
 import com.opatan.e_parking_petugas.fragments.DashboardFragment;
 import com.opatan.e_parking_petugas.fragments.HistoryFragment;
 import com.opatan.e_parking_petugas.dialogs.DialogSyaratDanKetentuan;
@@ -64,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
         final BottomNavigationView navView = findViewById(R.id.navView);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         ketentuan = findViewById(R.id.ketentuan);
+
+        ketentuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialogKetentuan();
+            }
+        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -115,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     case 3: {
                         color1 = R.color.Black;
-                        openDialogKetentuan();
+                        openDialog();
                         break;
                     }
                     case 4: {
@@ -178,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerClosed() {
+
                     }
 
                     @Override
@@ -188,6 +198,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void openDialog() {
+        DialogAboutApp dialogAboutApp = new DialogAboutApp();
+        if (dialogAboutApp.getDialog() != null && dialogAboutApp.getDialog().getWindow() != null) {
+            dialogAboutApp.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogAboutApp.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        }
+        dialogAboutApp.show(getSupportFragmentManager(), "Dialog Tambah Data");
+    }
+
     public void openDialogKetentuan() {
         DialogSyaratDanKetentuan exampleDialog = new DialogSyaratDanKetentuan();
         if (exampleDialog.getDialog() != null && exampleDialog.getDialog().getWindow() != null) {

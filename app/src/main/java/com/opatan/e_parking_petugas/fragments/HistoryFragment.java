@@ -30,7 +30,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 public class HistoryFragment extends Fragment {
@@ -42,7 +45,7 @@ public class HistoryFragment extends Fragment {
     private FirebaseUser currentUser;
     private String uid, siswaId, waktu, tanggal, hari;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private DatabaseReference databaseReference1, databaseReference2;
+    private DatabaseReference databaseReference1, databaseReference2, databaseReference3;
     private FragmentTransaction ft;
 
     @Override
@@ -55,7 +58,6 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         shimmerFrameLayout = view.findViewById(R.id.container_shimmer);
         recyclerView = view.findViewById(R.id.recycler_history);
         dataHistoryParkirList = new ArrayList<>();
@@ -63,34 +65,51 @@ public class HistoryFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
 
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child("09-02-2020");
-        Query query = databaseReference1.orderByChild("pemeriksa").equalTo(uid);
-        query.addValueEventListener(new ValueEventListener() {
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").getRef();
+        databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    waktu = ds.child("waktu_masuk").getValue(String.class);
-                    siswaId = ds.child("siswaId").getValue(String.class);
-                    tanggal = databaseReference1.getKey();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    Date myDate = null;
-                    try {
-                        myDate = sdf.parse(tanggal);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    sdf.applyPattern("EEEE");
-                    hari = sdf.format(myDate);
-
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Siswa").child(siswaId);
+                for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String tanggal = snapshot.getRef().getKey();
+                    System.out.println(snapshot);
+                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Siswa").getRef();
                     databaseReference2.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String siswa_txt = dataSnapshot.child("nama").getValue(String.class).split(" ")[0];
-                            dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, siswa_txt, hari));
-                            shimmerFrameLayout.hideShimmer();
-                            shimmerFrameLayout.setVisibility(View.GONE);
+                            for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                System.out.println("ssdfsdfsdf" + snapshot.child(snapshot1.getKey()).child("pemeriksa"));
+                                System.out.println(uid);
+                                snapshot.child(snapshot1.getKey()).child("pemeriksa").getValue();
+                                if(uid.equals(snapshot.child(snapshot1.getKey()).child("pemeriksa").getValue(String.class))){
+                                    DataSnapshot history= snapshot.child(snapshot1.getKey());
+                                    waktu = history.child("waktu_masuk").getValue(String.class);
+                                    siswaId = history.child("siswaId").getValue(String.class);
+                                    databaseReference3 = FirebaseDatabase.getInstance().getReference().child("Siswa").child(siswaId);
+                                    databaseReference3.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                            Date myDate = null;
+                                            try {
+                                                myDate = sdf.parse(tanggal);
+
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            sdf.applyPattern("EEEE");
+                                            hari = sdf.format(myDate);
+                                            dataHistoryParkirList.add(new DataHistoryParkir(tanggal, hari, waktu));
+                                            shimmerFrameLayout.hideShimmer();
+                                            shimmerFrameLayout.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
                         }
 
                         @Override
@@ -98,8 +117,8 @@ public class HistoryFragment extends Fragment {
 
                         }
                     });
-                }
-            }
+                   }
+             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
