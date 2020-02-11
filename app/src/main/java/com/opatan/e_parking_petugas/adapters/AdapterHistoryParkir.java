@@ -37,7 +37,7 @@ public class AdapterHistoryParkir extends RecyclerView.Adapter<AdapterHistoryPar
         final DataHistoryParkir dataHistoryParkir = dataHistoryParkirList.get(position);
         holder.waktu_masuk.setText(dataHistoryParkir.getWaktu_masuk());
         holder.tanggal.setText(dataHistoryParkir.getHari() + ", " + dataHistoryParkir.getTanggal());
-//        holder.siswa.setText("Anda Telah Memeriksa " + dataHistoryParkir.getSiswa());
+        holder.siswa.setText("Anda Telah Memeriksa " + dataHistoryParkir.getSiswa());
     }
 
     @Override

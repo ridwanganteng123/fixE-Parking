@@ -71,7 +71,6 @@ public class HistoryFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
                     final String tanggal = snapshot.getRef().getKey();
-                    System.out.println(snapshot);
                     databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Siswa").getRef();
                     databaseReference2.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -81,33 +80,25 @@ public class HistoryFragment extends Fragment {
                                 System.out.println(uid);
                                 snapshot.child(snapshot1.getKey()).child("pemeriksa").getValue();
                                 if(uid.equals(snapshot.child(snapshot1.getKey()).child("pemeriksa").getValue(String.class))){
-                                    DataSnapshot history= snapshot.child(snapshot1.getKey());
-                                    waktu = history.child("waktu_masuk").getValue(String.class);
+                                    final DataSnapshot history= snapshot.child(snapshot1.getKey());
                                     siswaId = history.child("siswaId").getValue(String.class);
-                                    databaseReference3 = FirebaseDatabase.getInstance().getReference().child("Siswa").child(siswaId);
-                                    databaseReference3.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                                            Date myDate = null;
-                                            try {
-                                                myDate = sdf.parse(tanggal);
+                                    String nama = snapshot1.child("nama").getValue(String.class).split(" ")[0];
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                    Date myDate = null;
+                                    try {
+                                        myDate = sdf.parse(tanggal);
 
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-                                            sdf.applyPattern("EEEE");
-                                            hari = sdf.format(myDate);
-                                            dataHistoryParkirList.add(new DataHistoryParkir(tanggal, hari, waktu));
-                                            shimmerFrameLayout.hideShimmer();
-                                            shimmerFrameLayout.setVisibility(View.GONE);
-                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    waktu = history.child("waktu_masuk").getValue(String.class);
+                                    System.out.println(nama);
+                                    sdf.applyPattern("EEEE");
+                                    hari = sdf.format(myDate);
+                                    dataHistoryParkirList.add(new DataHistoryParkir(tanggal, hari, waktu,nama));
+                                    shimmerFrameLayout.hideShimmer();
+                                    shimmerFrameLayout.setVisibility(View.GONE);
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
                                 }
                             }
                         }

@@ -7,11 +7,11 @@ public class DataHistoryParkir {
     public DataHistoryParkir() {
     }
 
-    public DataHistoryParkir(String tanggal, String hari, String waktu_masuk) {
+    public DataHistoryParkir(String tanggal, String hari, String waktu_masuk, String siswa) {
         this.tanggal = tanggal;
         this.hari = hari;
         this.waktu_masuk = waktu_masuk;
-//        this.siswa = siswa;
+        this.siswa = siswa;
     }
 
     public String getHari() {
@@ -38,12 +38,12 @@ public class DataHistoryParkir {
         this.waktu_masuk = waktu_masuk;
     }
 
-//    public String getSiswa() {
-//        return siswa;
-//    }
-//
-//    public void setSiswa(String siswa) {
-//        this.siswa = siswa;
-//    }
-//
+    public String getSiswa() {
+        return siswa;
+    }
+
+    public void setSiswa(String siswa) {
+        this.siswa = siswa;
+    }
+
 }
