@@ -3,15 +3,25 @@ package com.opatan.e_parking_user.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -40,11 +50,13 @@ import com.shrikanthravi.e_parking2.widget.SNavigationDrawer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NotificationManager mNotificationManager;
     SNavigationDrawer sNavigationDrawer;
     int color1 = 0;
     Class fragmentClass;
@@ -235,6 +247,39 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    @SuppressLint("ResourceAsColor")
+    public void addNotification(String title, String content)
+    {
+        Intent ii = new Intent(MainActivity.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, ii, 0);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.nanangsaripudin);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this, "notify_001")
+                .setSmallIcon(R.drawable.ic_chevron_right_black_24dp)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.ic_arrow_drop_down_black_24dp, "Lihat",
+                        pendingIntent)
+                .setLargeIcon(largeIcon)
+                .setOnlyAlertOnce(true);
+
+        mNotificationManager = (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+
     private void changeFragment() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
@@ -255,6 +300,18 @@ public class MainActivity extends AppCompatActivity {
                             String nama = nama_txt.split(" ")[0];
                             loadFragment(new ParkiredFragment(nama));
                             appBarTitleTV.setText("Dashboard");
+
+                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            int lastTimeStarted = settings.getInt("last_time_started", -1);
+                            Calendar calendar = Calendar.getInstance();
+                            int today = calendar.get(Calendar.DAY_OF_YEAR);
+
+                            if (today != lastTimeStarted) {
+                                addNotification("Anda Sudah Sampai","Selamat Datang di Sekolah");
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putInt("last_time_started", today);
+                                editor.commit();
+                            }
                         } else {
                             loadFragment(new DashboardFragment());
                             appBarTitleTV.setText("Dashboard");

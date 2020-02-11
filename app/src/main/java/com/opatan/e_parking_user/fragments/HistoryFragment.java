@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class HistoryFragment extends Fragment {
@@ -38,9 +39,9 @@ public class HistoryFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdapterHistoryParkir adapterHistoryParkir;
-    DatabaseReference databaseReference1, databaseReference2;
+    DatabaseReference databaseReference1, databaseReference2, databaseReference3;
     private FirebaseUser currentUser;
-    private String uid, petugasId, waktu, tanggal, hari;
+    private String uid, pemeriksaId, waktu, tanggal, hari, siswaId, siswa_txt, petugas_txt;
     private List<DataHistoryParkir> dataHistoryParkirList;
     ShimmerFrameLayout shimmerFrameLayout;
     private FragmentTransaction ft;
@@ -62,33 +63,44 @@ public class HistoryFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
 
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child("09-02-2020");
-        databaseReference1.orderByChild("siswaId").equalTo(uid).addValueEventListener(new ValueEventListener() {
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").getRef();
+        databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    waktu = ds.child("waktu_masuk").getValue().toString();
-                    petugasId = ds.child("pemeriksa").getValue().toString();
-                    tanggal = databaseReference1.getKey();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    Date myDate = null;
-                    try {
-                        myDate = sdf.parse(tanggal);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    sdf.applyPattern("EEEE");
-                    hari = sdf.format(myDate);
-
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Petugas").child(petugasId);
+                for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String tanggal = snapshot.getRef().getKey();
+                    System.out.println("SNAPSHOT : " + snapshot);
+                    System.out.println("TANGGAL : " + tanggal);
+                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Petugas").getRef();
                     databaseReference2.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String petugas = dataSnapshot.child("nama").getValue(String.class).split(" ")[0];
-                            dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, hari, petugas));
-                            shimmerFrameLayout.hideShimmer();
-                            shimmerFrameLayout.setVisibility(View.GONE);
+                            for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                System.out.println("SNAPSHOT1 : " + snapshot1.getKey());
+                                System.out.println("SISWAID : " + snapshot.child(snapshot.getRef().getKey()).child(snapshot1.getKey()));
+                                System.out.println("UID : " + uid);
+                                String siswaId = snapshot.child(snapshot1.getKey()).toString();
+                                if(uid.equals(siswaId)){
+                                    final DataSnapshot history = snapshot.child(snapshot1.getKey());
+                                    waktu = history.child("waktu_masuk").getValue(String.class);
+                                    String nama = snapshot1.child("nama").getValue(String.class).split(" ")[0];
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                    Date myDate = null;
+                                    try {
+                                        myDate = sdf.parse(tanggal);
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    System.out.println(nama);
+                                    sdf.applyPattern("EEEE");
+                                    hari = sdf.format(myDate);
+                                    dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, hari, nama));
+                                    shimmerFrameLayout.hideShimmer();
+                                    shimmerFrameLayout.setVisibility(View.GONE);
+
+                                }
+                            }
                         }
 
                         @Override
@@ -104,13 +116,9 @@ public class HistoryFragment extends Fragment {
 
             }
         });
-
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-        }
-
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapterHistoryParkir);
     }
 }

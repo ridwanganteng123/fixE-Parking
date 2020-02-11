@@ -2,7 +2,7 @@ package com.opatan.e_parking_user.datas.model;
 
 public class DataHistoryParkir {
 
-    private String waktu_masuk, tanggal, pemeriksa, hari;
+    private String waktu_masuk, tanggal, hari, pemeriksa;
 
     public DataHistoryParkir() {
     }

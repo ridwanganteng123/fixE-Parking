@@ -5,8 +5,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,7 +45,6 @@ import java.util.ArrayList;
 
 public class StatistikFragment extends Fragment {
 
-    private NotificationManager mNotificationManager;
     private int[] yData = {100,100,100};
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     private long[] pattern = {500,500,500,500,500,500,500,500,500};
@@ -65,8 +67,6 @@ public class StatistikFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btn = view.findViewById(R.id.btn);
-
         pieChart = view.findViewById(R.id.pieChart);
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(50f);
@@ -85,13 +85,6 @@ public class StatistikFragment extends Fragment {
             @Override
             public void onNothingSelected() {
 
-            }
-        });
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNotification("10 Menit Lagi Menuju Masuk Sekolah", "Segera Masuk Sekolah");
             }
         });
     }
@@ -131,42 +124,6 @@ public class StatistikFragment extends Fragment {
         pieChart.setData(pieData);
         pieChart.invalidate();
 
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void addNotification(String title, String content)
-    {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getContext().getApplicationContext(), "notify_001");
-        Intent ii = new Intent(getContext().getApplicationContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, ii, 0);
-
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.setBigContentTitle(title);
-        bigText.bigText(content);
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.drawable.message_bg);
-        mBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        mBuilder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
-        mBuilder.setContentTitle("Selamat Datang");
-        mBuilder.setContentText("Selamat Datang Kembali");
-        mBuilder.setOnlyAlertOnce(true);
-        mBuilder.setStyle(bigText);
-        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
-        mBuilder.setAutoCancel(true);
-
-        mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            String channelId = "Your_channel_id";
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
-            mNotificationManager.createNotificationChannel(channel);
-            mBuilder.setChannelId(channelId);
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
     }
 
     @Override
