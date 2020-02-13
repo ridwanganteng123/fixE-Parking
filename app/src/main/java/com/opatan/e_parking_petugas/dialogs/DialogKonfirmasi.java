@@ -121,6 +121,7 @@ public class DialogKonfirmasi extends DialogFragment {
 
     public void sendData()
     {
+        String status = "";
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         pemeriksa = currentUser.getUid();
         SimpleDateFormat getDate = new SimpleDateFormat("dd-MM-yyyy");
@@ -132,7 +133,17 @@ public class DialogKonfirmasi extends DialogFragment {
         DatabaseReference ref = database.getReference("ScanHarian").child(date);
 
         String waktu_masuk = getTime.format(date_now);
-        DataScanner dataScanner = new DataScanner(siswaId, waktu_masuk, pemeriksa);
+        int waktu = Integer.parseInt(getTime.format(date_now).split(":")[0]);
+
+        if(waktu <= 07)
+        {
+            status = "hadir";
+        } else
+        {
+            status = "terlambat";
+        }
+
+        DataScanner dataScanner = new DataScanner(siswaId, waktu_masuk, pemeriksa, status);
         ref.child(siswaId).setValue(dataScanner);
     }
 }

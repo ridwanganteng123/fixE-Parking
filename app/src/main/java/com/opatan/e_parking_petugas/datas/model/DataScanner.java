@@ -2,15 +2,24 @@ package com.opatan.e_parking_petugas.datas.model;
 
 public class DataScanner {
 
-    private String siswaId, waktu_masuk, pemeriksa;
+    private String siswaId, waktu_masuk, pemeriksa, status;
 
     public DataScanner() {
     }
 
-    public DataScanner(String siswaId, String waktu_masuk, String pemeriksa) {
+    public DataScanner(String siswaId, String waktu_masuk, String pemeriksa, String status) {
         this.siswaId = siswaId;
         this.waktu_masuk = waktu_masuk;
         this.pemeriksa = pemeriksa;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStstus(String status) {
+        this.status = status;
     }
 
     public String getPemeriksa() {
