@@ -29,6 +29,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +42,7 @@ public class HistoryFragment extends Fragment {
     private AdapterHistoryParkir adapterHistoryParkir;
     DatabaseReference databaseReference1, databaseReference2, databaseReference3;
     private FirebaseUser currentUser;
-    private String uid, pemeriksaId, waktu, tanggal, hari, siswaId, siswa_txt, petugas_txt;
+    private String uid, pemeriksaId, waktu, siswaId, siswa_txt, petugas_txt;
     private List<DataHistoryParkir> dataHistoryParkirList;
     ShimmerFrameLayout shimmerFrameLayout;
     private FragmentTransaction ft;
@@ -69,45 +70,41 @@ public class HistoryFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
                     final String tanggal = snapshot.getRef().getKey();
-                    System.out.println("SNAPSHOT : " + snapshot);
-                    System.out.println("TANGGAL : " + tanggal);
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("Petugas").getRef();
-                    databaseReference2.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                System.out.println("SNAPSHOT1 : " + snapshot1.getKey());
-                                System.out.println("SISWAID : " + snapshot.child(snapshot.getRef().getKey()).child(snapshot1.getKey()));
-                                System.out.println("UID : " + uid);
-                                String siswaId = snapshot.child(snapshot1.getKey()).toString();
-                                if(uid.equals(siswaId)){
-                                    final DataSnapshot history = snapshot.child(snapshot1.getKey());
-                                    waktu = history.child("waktu_masuk").getValue(String.class);
-                                    String nama = snapshot1.child("nama").getValue(String.class).split(" ")[0];
-                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                                    Date myDate = null;
-                                    try {
-                                        myDate = sdf.parse(tanggal);
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    System.out.println(nama);
-                                    sdf.applyPattern("EEEE");
-                                    hari = sdf.format(myDate);
-                                    dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, hari, nama));
-                                    shimmerFrameLayout.hideShimmer();
-                                    shimmerFrameLayout.setVisibility(View.GONE);
-
+                    siswaId = snapshot.child(uid).child("siswaId").getValue(String.class);
+                    pemeriksaId =snapshot.child(uid).child("pemeriksa").getValue(String.class);
+                    if(siswaId != null){
+                        System.out.println("SISWAID : " + siswaId);
+                        System.out.println("WAKTU : " + waktu);
+                        System.out.println("PEMERIKSA : " + pemeriksaId);
+                        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Petugas").child(pemeriksaId).getRef();
+                        databaseReference1.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                System.out.println(dataSnapshot.getValue());
+                                waktu = snapshot.child(uid).child("waktu_masuk").getValue(String.class);
+                                String namaPemeriksa = dataSnapshot.child("nama").getValue(String.class).split(" ")[0];
+                                SimpleDateFormat format1=new SimpleDateFormat("dd-MM-yyyy");
+                                Date dt1= null;
+                                try {
+                                    dt1 = format1.parse(tanggal);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
                                 }
+                                DateFormat format2=new SimpleDateFormat("EEEE");
+                                String finalDay=format2.format(dt1);
+                                dataHistoryParkirList.add(new DataHistoryParkir(waktu, tanggal, finalDay, namaPemeriksa));
+                                shimmerFrameLayout.hideShimmer();
+                                shimmerFrameLayout.setVisibility(View.GONE);
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
+                    System.out.println("UID" + snapshot.getKey());
+
                 }
             }
 

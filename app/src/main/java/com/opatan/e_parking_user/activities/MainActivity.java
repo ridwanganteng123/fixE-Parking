@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startAlarm("aku","1");
         setContentView(R.layout.activity_main);
         appBarTitleTV = findViewById(R.id.appBarTitleTV);
         final BottomNavigationView navView = findViewById(R.id.navView);
@@ -248,6 +251,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceAsColor")
+    public void startAlarm(String title, String content)
+    {
+        Intent ii = new Intent(MainActivity.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, ii, 0);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.nanangsaripudin);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this, "notify_001")
+                .setSmallIcon(R.drawable.ic_chevron_right_black_24dp)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.ic_arrow_drop_down_black_24dp, "Lihat",
+                        pendingIntent)
+                .setLargeIcon(largeIcon);
+
+        mNotificationManager = (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("adadadasd","Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            channel.setDescription("adasdasdadadasd");
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 5);
+        calendar.set(Calendar.MINUTE, 32);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    @SuppressLint("ResourceAsColor")
     public void addNotification(String title, String content)
     {
         Intent ii = new Intent(MainActivity.this, MainActivity.class);
@@ -262,8 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_arrow_drop_down_black_24dp, "Lihat",
                         pendingIntent)
-                .setLargeIcon(largeIcon)
-                .setOnlyAlertOnce(true);
+                .setLargeIcon(largeIcon);
 
         mNotificationManager = (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -278,7 +318,6 @@ public class MainActivity extends AppCompatActivity {
 
         mNotificationManager.notify(0, mBuilder.build());
     }
-
 
     private void changeFragment() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -296,10 +335,17 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshotNama) {
                         if (dataSnapshotParkir.exists())
                         {
-                            String nama_txt = dataSnapshotNama.child("nama").getValue(String.class);
-                            String nama = nama_txt.split(" ")[0];
-                            loadFragment(new ParkiredFragment(nama));
+                            String content = "";
+                            String nama_txt = dataSnapshotNama.child("nama").getValue(String.class).split(" ")[0];
+                            String status = dataSnapshotNama.child("status").getValue(String.class);
+                            loadFragment(new ParkiredFragment(nama_txt));
                             appBarTitleTV.setText("Dashboard");
+                            if(status=="hadir")
+                            {
+                                content = "Anda Datang Tepat Waktu";
+                            } else {
+                                content = "Anda Terlambar";
+                            }
 
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                             int lastTimeStarted = settings.getInt("last_time_started", -1);
@@ -307,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
                             int today = calendar.get(Calendar.DAY_OF_YEAR);
 
                             if (today != lastTimeStarted) {
-                                addNotification("Anda Sudah Sampai","Selamat Datang di Sekolah");
+                                addNotification("Selamat Datang, " + nama_txt, content);
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putInt("last_time_started", today);
                                 editor.commit();

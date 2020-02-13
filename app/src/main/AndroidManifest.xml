@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     
     <application
         android:allowBackup="true"
@@ -55,7 +58,4 @@
             android:name="com.opatan.e_parking_user.activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
-
 </manifest>

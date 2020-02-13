@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,17 +38,32 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_user.R;
 import com.opatan.e_parking_user.activities.MainActivity;
+import com.opatan.e_parking_user.datas.model.DataHistoryParkir;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class StatistikFragment extends Fragment {
 
-    private int[] yData = {100,100,100};
+    private int[] yData;
+    private String uid, siswaId;
+    private FirebaseUser currentUser;
+    public TextView hadir_status, terlambat_status;
+    private DatabaseReference databaseReference1, databaseReference2;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
-    private long[] pattern = {500,500,500,500,500,500,500,500,500};
     PieChart pieChart;
 
     public StatistikFragment() {
@@ -67,6 +83,9 @@ public class StatistikFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        hadir_status = view.findViewById(R.id.hadir_txt);
+        terlambat_status = view.findViewById(R.id.terlambat_txt);
+
         pieChart = view.findViewById(R.id.pieChart);
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(50f);
@@ -75,11 +94,68 @@ public class StatistikFragment extends Fragment {
         pieChart.setCenterText("Statistik");
         pieChart.setDescription(null);
         pieChart.setDrawEntryLabels(true);
-        addDataSet();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = currentUser.getUid();
+
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").getRef();
+        databaseReference1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String tanggal = snapshot.getRef().getKey();
+                    siswaId = snapshot.child(uid).child("siswaId").getValue(String.class);
+                    System.out.println("SISWA ID : " + siswaId);
+                    System.out.println("TANGGAL : " + tanggal);
+
+                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
+                    databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            final String hadirKey = dataSnapshot.child(siswaId).getRef().getKey();
+                            ArrayList<String> hadir_list = new ArrayList<>();
+                            hadir_list.add(hadirKey);
+                            final int jumlahHadir = hadir_list.size();
+
+                            databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
+                            databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    final String terlambatKey = dataSnapshot.child(siswaId).getRef().getKey();
+                                    ArrayList<String> terlambat_list = new ArrayList<>();
+                                    terlambat_list.add(terlambatKey);
+                                    int jumlahTerlambat = terlambat_list.size();
+                                    terlambat_status.setText(String.valueOf(jumlahTerlambat));
+                                    hadir_status.setText(String.valueOf(jumlahHadir));
+                                    yData = new int[]{jumlahHadir, jumlahTerlambat, 0};
+                                    addDataSet();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                Toast.makeText(getContext().getApplicationContext(), xData[2], Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
