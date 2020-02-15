@@ -228,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
         dialogAboutApp.show(getSupportFragmentManager(), "Dialog Tambah Data");
     }
 
-
     public void openDialogKetentuan() {
         DialogSyaratDanKetentuan exampleDialog = new DialogSyaratDanKetentuan();
         if (exampleDialog.getDialog() != null && exampleDialog.getDialog().getWindow() != null) {

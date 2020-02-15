@@ -104,7 +104,6 @@ public class HistoryFragment extends Fragment {
                         });
                     }
                     System.out.println("UID" + snapshot.getKey());
-
                 }
             }
 
