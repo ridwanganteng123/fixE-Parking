@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         exampleDialog.show(getSupportFragmentManager(), "Dialog Ketentuan");
     }
 
+    
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager()
