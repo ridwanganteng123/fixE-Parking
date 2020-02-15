@@ -7,10 +7,10 @@ public class DataHistoryParkir {
     public DataHistoryParkir() {
     }
 
-    public DataHistoryParkir(String waktu_masuk, String tanggal, String hari, String pemeriksa) {
-        this.waktu_masuk = waktu_masuk;
+    public DataHistoryParkir(String tanggal, String hari) {
+//        this.waktu_masuk = waktu_masuk;
         this.tanggal = tanggal;
-        this.pemeriksa = pemeriksa;
+//        this.pemeriksa = pemeriksa;
         this.hari = hari;
     }
 
@@ -30,19 +30,19 @@ public class DataHistoryParkir {
         this.tanggal = tanggal;
     }
 
-    public String getPemeriksa() {
-        return pemeriksa;
-    }
-
-    public void setPemeriksa(String pemeriksa) {
-        this.pemeriksa = pemeriksa;
-    }
-
-    public String getWaktu_masuk() {
-        return waktu_masuk;
-    }
-
-    public void setWaktu_masuk(String waktu_masuk) {
-        this.waktu_masuk = waktu_masuk;
-    }
+//    public String getPemeriksa() {
+//        return pemeriksa;
+//    }
+//
+//    public void setPemeriksa(String pemeriksa) {
+//        this.pemeriksa = pemeriksa;
+//    }
+//
+//    public String getWaktu_masuk() {
+//        return waktu_masuk;
+//    }
+//
+//    public void setWaktu_masuk(String waktu_masuk) {
+//        this.waktu_masuk = waktu_masuk;
+//    }
 }
