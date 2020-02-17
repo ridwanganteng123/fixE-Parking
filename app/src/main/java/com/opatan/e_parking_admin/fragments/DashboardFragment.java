@@ -2,34 +2,51 @@ package com.opatan.e_parking_admin.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_admin.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DashboardFragment extends Fragment {
 
-    private BarChart chart;
-    float barWidth;
-    float barSpace;
-    int groupCount = 6;
-    float groupSpace;
+    private int[] yData;
+    ArrayList<String> hadir_list, terlambat_list;
+    private String uid, siswaId, formattedDate;
+    private ImageButton prev_, next_;
+    private FirebaseUser currentUser;
+    public TextView hadir_status, terlambat_status, tgl_txt;
+    private int jumlahHadir;
+    private DatabaseReference databaseReference1, databaseReference2;
+    private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
+    PieChart pieChart;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -44,88 +61,155 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        barWidth = 0.3f;
-        barSpace = 0f;
-        groupSpace = 0.4f;
+        hadir_status = view.findViewById(R.id.hadir_txt);
+        terlambat_status = view.findViewById(R.id.terlambat_txt);
+        prev_ = view.findViewById(R.id.prev_date);
+        next_ = view.findViewById(R.id.next_date);
+        tgl_txt = view.findViewById(R.id.tgl_txt);
 
-        chart = view.findViewById(R.id.barChart);
-        chart.setDescription(null);
-        chart.setPinchZoom(true);
-        chart.setScaleEnabled(true);
-        chart.setDrawBarShadow(true);
-        chart.setDrawGridBackground(false);
+        pieChart = view.findViewById(R.id.pieChart);
+        pieChart.setRotationEnabled(true);
+        pieChart.setHoleRadius(50f);
+        pieChart.setCenterTextSize(16);
+        pieChart.setUsePercentValues(true);
+        pieChart.setCenterText("Statistik");
+        pieChart.setDescription(null);
+        pieChart.setDrawEntryLabels(true);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = currentUser.getUid();
 
-        ArrayList xVals = new ArrayList();
+        final Calendar c = Calendar.getInstance();
 
-        xVals.add("Senin");
-        xVals.add("Selasa");
-        xVals.add("Rabu");
-        xVals.add("Kamis");
-        xVals.add("Jumat");
+        System.out.println("Current time => " + c.getTime());
 
-        ArrayList hadir = new ArrayList();
-        ArrayList tidak_hadir = new ArrayList();
-        ArrayList terlambat = new ArrayList();
+        final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        formattedDate = df.format(c.getTime());
 
-        hadir.add(new BarEntry(1, (float) 1));
-        terlambat.add(new BarEntry(1, (float) 2));
-        tidak_hadir.add(new BarEntry(1, (float) 3));
-        hadir.add(new BarEntry(2, (float) 3));
-        terlambat.add(new BarEntry(2, (float) 4));
-        tidak_hadir.add(new BarEntry(2, (float) 4));
-        hadir.add(new BarEntry(3, (float) 5));
-        terlambat.add(new BarEntry(3, (float) 6));
-        tidak_hadir.add(new BarEntry(4, (float) 6));
-        hadir.add(new BarEntry(4, (float) 7));
-        terlambat.add(new BarEntry(4, (float) 8));
-        tidak_hadir.add(new BarEntry(1, (float) 3));
-        hadir.add(new BarEntry(5, (float) 9));
-        terlambat.add(new BarEntry(5, (float) 10));
-        tidak_hadir.add(new BarEntry(1, (float) 3));
+        tgl_txt.setText(formattedDate);
 
-        BarDataSet set1, set2, set3;
-        set1 = new BarDataSet(hadir, "Tepat Waktu");
-        set1.setColor(Color.RED);
-        set2 = new BarDataSet(terlambat, "Terlambat");
-        set2.setColor(Color.BLUE);
-        set3 = new BarDataSet(tidak_hadir, "Tidak Masuk");
-        set3.setColor(Color.YELLOW);
-        BarData data = new BarData(set1, set2, set3);
-        data.setValueFormatter(new LargeValueFormatter());
-        chart.setData(data);
-        chart.getBarData().setBarWidth(barWidth);
-        chart.getXAxis().setAxisMinimum(0);
-        chart.getXAxis().setAxisMaximum(0 + chart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
-        chart.groupBars(0, groupSpace, barSpace);
-        chart.getData().setHighlightEnabled(false);
-        chart.invalidate();
+        prev_.setOnClickListener(new View.OnClickListener() {
 
-        Legend l = chart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setYOffset(20f);
-        l.setXOffset(0f);
-        l.setYEntrySpace(0f);
-        l.setTextSize(8f);
+            @Override
+            public void onClick(View v) {
 
-        //X-axis
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setDrawGridLines(false);
-        xAxis.setAxisMaximum(6);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(xVals));
+                c.add(Calendar.DATE, -1);
+                formattedDate = df.format(c.getTime());
 
-        //Y-axis
-        chart.getAxisRight().setEnabled(false);
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setValueFormatter(new LargeValueFormatter());
-        leftAxis.setDrawGridLines(false);
-        leftAxis.setSpaceTop(35f);
-        leftAxis.setAxisMinimum(0f);
+                Log.v("PREVIOUS DATE : ", formattedDate);
+                tgl_txt.setText(formattedDate);
+            }
+        });
+
+        next_.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                c.add(Calendar.DATE, 1);
+                formattedDate = df.format(c.getTime());
+
+                Log.v("NEXT DATE : ", formattedDate);
+                tgl_txt.setText(formattedDate);
+            }
+        });
+
+                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(formattedDate);
+                    databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
+                            {
+                                hadir_list = new ArrayList<>();
+                                final String hadirKey = dataHadir.child("siswaId").getValue().toString();
+                                System.out.println("DATA HADIR : " + hadirKey);
+                                hadir_list.add(hadirKey);
+                                System.out.println("LIST HADIR : " + hadir_list);
+                                jumlahHadir = hadir_list.size();
+                                System.out.println("COUINT HADIR : " + hadir_list.size());
+
+                                databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(formattedDate);
+                                databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot dataTelat : dataSnapshot.getChildren())
+                                        {
+                                            terlambat_list = new ArrayList<>();
+                                            final String terlambatKey = dataTelat.child("siswaId").getValue().toString();
+                                            System.out.println("DATA TERLAMBAT : " + terlambatKey);
+                                            terlambat_list.add(terlambatKey);
+                                            System.out.println("LIST TERLMABAT : " + terlambat_list);
+                                            int jumlahTerlambat = terlambat_list.size();
+                                            System.out.println("COUNT TERLAMBAT : " + terlambat_list.size());
+
+                                            terlambat_status.setText(String.valueOf(jumlahHadir));
+                                            hadir_status.setText(String.valueOf(jumlahTerlambat));
+
+                                            yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
+                                            addDataSet();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+    }
+
+    private void addDataSet() {
+        ArrayList<PieEntry> yEntrys = new ArrayList<>();
+        ArrayList<String> xEntrys = new ArrayList<>();
+
+        for (int y = 0; y < yData.length; y++)
+        {
+            yEntrys.add(new PieEntry(yData[y], y));
+        }
+
+        for (int x =0; x < xData.length; x++)
+        {
+            xEntrys.add(xData[x]);
+        }
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "asdasd");
+        pieDataSet.setSliceSpace(3);
+        pieDataSet.setSelectionShift(3);
+        pieDataSet.setValueTextSize(15);
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(197, 255, 140));
+        colors.add(Color.rgb(255,215,132));
+        colors.add(Color.rgb(255,145,148));
+        pieDataSet.setColors(colors);
+
+        Legend legend = pieChart.getLegend();
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setXEntrySpace(7);
+        legend.setYEntrySpace(5);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueFormatter(new PercentFormatter(pieChart));
+        pieDataSet.setValueFormatter(new PercentFormatter(pieChart));
+        pieChart.setData(pieData);
+        pieChart.invalidate();
+
     }
 }
