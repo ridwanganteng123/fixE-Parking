@@ -69,7 +69,7 @@ public class CustomViewFinderScanner extends AppCompatActivity implements ZXingS
             public void run() {
                 mScannerView.resumeCameraPreview(CustomViewFinderScanner.this);
             }
-        }, 500);
+        }, 5000);
     }
 
     public void openDialogKonfirmasi(String siswaId) {
