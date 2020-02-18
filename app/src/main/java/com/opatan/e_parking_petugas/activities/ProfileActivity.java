@@ -22,8 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
     FirebaseUser currentUser;
-    String uid,nama,nis, no_pol,no_sim,imageUrl;
-    TextView name,nopol_txt,nosim_txt, nis_txt;
+    String uid,nama,nis, email,imageUrl;
+    TextView name,email_txt, nis_txt;
     ImageView img_profile;
     RelativeLayout content_progress, content_profile;
 
@@ -36,11 +36,10 @@ public class ProfileActivity extends AppCompatActivity {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
 
-        name = findViewById(R.id.nama);
-        nopol_txt = findViewById(R.id.nopol_txt);
-        nosim_txt = findViewById(R.id.nosim_txt);
+        name = findViewById(R.id.nama_txt);
         img_profile = findViewById(R.id.img_profile);
         nis_txt = findViewById(R.id.nis_txt);
+        email_txt = findViewById(R.id.email_txt);
         content_profile = findViewById(R.id.content_profil);
         content_progress = findViewById(R.id.content_progressbar);
 
@@ -50,25 +49,24 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Petugas");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println("UID : " + uid);
                 content_profile.setVisibility(View.VISIBLE);
                 content_progress.setVisibility(View.GONE);
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    nis = keyId.child(uid).child("nis").getValue(String.class);
-                    nama = keyId.child(uid).child("nama").getValue(String.class);
-                    no_pol = keyId.child(uid).child("no_pol").getValue(String.class);
-                    no_sim = keyId.child(uid).child("no_sim").getValue(String.class);
-                    imageUrl = keyId.child(uid).child("imageUrl").getValue(String.class);
-                }
-                name.setText(nama);
-                nis_txt.setText(nis);
-
-                nopol_txt.setText(no_pol);
-                nosim_txt.setText(no_sim);
-                Glide.with(ProfileActivity.this).load(imageUrl).into(img_profile);
+                    nis = dataSnapshot.child(uid).child("nis").getValue(String.class);
+                    System.out.println("NIS : " + nis);
+                    email = dataSnapshot.child(uid).child("email").getValue(String.class);
+                    System.out.println("NIS : " + email);
+                    nama = dataSnapshot.child(uid).child("nama").getValue(String.class);
+                    System.out.println("NIS : " + nama);
+                    imageUrl = dataSnapshot.child(uid).child("imageUrl").getValue(String.class);
+                    name.setText(nama);
+                    nis_txt.setText(nis);
+                    email_txt.setText(email);
+                    Glide.with(ProfileActivity.this).load(imageUrl).into(img_profile);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

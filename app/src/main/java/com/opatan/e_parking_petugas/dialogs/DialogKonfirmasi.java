@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.opatan.e_parking_petugas.R;
@@ -34,6 +36,7 @@ public class DialogKonfirmasi extends DialogFragment {
 
     private String siswaId, pemeriksa;
     private TextView nama, kelas, plat1, plat2;
+    private ImageView img_profile;
     private Button tolak, terima;
     private RelativeLayout content_progress;
     private LinearLayout content_dialog;
@@ -75,6 +78,7 @@ public class DialogKonfirmasi extends DialogFragment {
         terima = view.findViewById(R.id.terima);
         content_dialog = view.findViewById(R.id.content_dialog);
         content_progress = view.findViewById(R.id.content_progress);
+        img_profile = view.findViewById(R.id.img_profile);
 
         tolak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,11 +107,13 @@ public class DialogKonfirmasi extends DialogFragment {
                     String kelas_content = ds.child("level").getValue(String.class);
                     String plat1_content = ds.child("no_pol").getValue(String.class);
                     String plat2_content = ds.child("no_sim").getValue(String.class);
+                    String imageUrl = ds.child("imageURL").getValue().toString();
 
                     nama.setText(nama_content);
                     kelas.setText(kelas_content);
                     plat1.setText(plat1_content);
                     plat2.setText(plat2_content);
+                    Glide.with(getContext().getApplicationContext()).load(imageUrl).into(img_profile);
                 }
             @Override
             public void onCancelled(DatabaseError de) {
