@@ -66,7 +66,6 @@ public class DashboardFragment extends Fragment {
         prev_ = view.findViewById(R.id.prev_date);
         next_ = view.findViewById(R.id.next_date);
         tgl_txt = view.findViewById(R.id.tgl_txt);
-
         pieChart = view.findViewById(R.id.pieChart);
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(50f);
@@ -94,9 +93,9 @@ public class DashboardFragment extends Fragment {
 
                 c.add(Calendar.DATE, -1);
                 formattedDate = df.format(c.getTime());
-
                 Log.v("PREVIOUS DATE : ", formattedDate);
                 tgl_txt.setText(formattedDate);
+                getData(formattedDate);
             }
         });
 
@@ -107,53 +106,49 @@ public class DashboardFragment extends Fragment {
 
                 c.add(Calendar.DATE, 1);
                 formattedDate = df.format(c.getTime());
-
                 Log.v("NEXT DATE : ", formattedDate);
                 tgl_txt.setText(formattedDate);
+                getData(formattedDate);
             }
         });
+    }
 
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(formattedDate);
-                    databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
+    private void getData(final String tanggal)
+    {
+        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
+        databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
+                {
+                    hadir_list = new ArrayList<>();
+                    final String hadirKey = dataHadir.child("siswaId").getValue().toString();
+                    System.out.println("DATA HADIR : " + hadirKey);
+                    hadir_list.add(hadirKey);
+                    System.out.println("LIST HADIR : " + hadir_list);
+                    System.out.println("COUINT HADIR : " + hadir_list.size());
+
+                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
+                    databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
+                            for (DataSnapshot dataTelat : dataSnapshot.getChildren())
                             {
-                                hadir_list = new ArrayList<>();
-                                final String hadirKey = dataHadir.child("siswaId").getValue().toString();
-                                System.out.println("DATA HADIR : " + hadirKey);
-                                hadir_list.add(hadirKey);
-                                System.out.println("LIST HADIR : " + hadir_list);
+                                terlambat_list = new ArrayList<>();
+                                final String terlambatKey = dataTelat.child("siswaId").getValue().toString();
+                                System.out.println("NOMOR : " + dataTelat.getChildrenCount());
+                                System.out.println("DATA TERLAMBAT : " + terlambatKey);
+                                terlambat_list.add(terlambatKey);
+                                System.out.println("LIST TERLMABAT : " + terlambat_list);
                                 jumlahHadir = hadir_list.size();
-                                System.out.println("COUINT HADIR : " + hadir_list.size());
+                                int jumlahTerlambat = terlambat_list.size();
+                                System.out.println("COUNT TERLAMBAT : " + terlambat_list.size());
 
-                                databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(formattedDate);
-                                databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot dataTelat : dataSnapshot.getChildren())
-                                        {
-                                            terlambat_list = new ArrayList<>();
-                                            final String terlambatKey = dataTelat.child("siswaId").getValue().toString();
-                                            System.out.println("DATA TERLAMBAT : " + terlambatKey);
-                                            terlambat_list.add(terlambatKey);
-                                            System.out.println("LIST TERLMABAT : " + terlambat_list);
-                                            int jumlahTerlambat = terlambat_list.size();
-                                            System.out.println("COUNT TERLAMBAT : " + terlambat_list.size());
+                                terlambat_status.setText(String.valueOf(jumlahHadir));
+                                hadir_status.setText(String.valueOf(jumlahTerlambat));
 
-                                            terlambat_status.setText(String.valueOf(jumlahHadir));
-                                            hadir_status.setText(String.valueOf(jumlahTerlambat));
-
-                                            yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
-                                            addDataSet();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
+                                addDataSet();
                             }
                         }
 
@@ -162,6 +157,14 @@ public class DashboardFragment extends Fragment {
 
                         }
                     });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -189,7 +192,7 @@ public class DashboardFragment extends Fragment {
         {
             xEntrys.add(xData[x]);
         }
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "asdasd");
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
         pieDataSet.setSliceSpace(3);
         pieDataSet.setSelectionShift(3);
         pieDataSet.setValueTextSize(15);

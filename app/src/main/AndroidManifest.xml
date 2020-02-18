@@ -54,6 +54,7 @@
         </activity>
         <activity
             android:name="com.opatan.e_parking_admin.activities.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
             android:screenOrientation="portrait" />
     </application>
 
