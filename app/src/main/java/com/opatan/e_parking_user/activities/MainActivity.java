@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startAlarm("aku","1");
         setContentView(R.layout.activity_main);
         appBarTitleTV = findViewById(R.id.appBarTitleTV);
         final BottomNavigationView navView = findViewById(R.id.navView);
@@ -247,44 +246,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void startAlarm(String title, String content)
-    {
-        Intent ii = new Intent(MainActivity.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, ii, 0);
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.nanangsaripudin);
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this, "notify_001")
-                .setSmallIcon(R.drawable.ic_chevron_right_black_24dp)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
-                .addAction(R.drawable.ic_arrow_drop_down_black_24dp, "Lihat",
-                        pendingIntent)
-                .setLargeIcon(largeIcon);
-
-        mNotificationManager = (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            NotificationChannel channel = new NotificationChannel("adadadasd","Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
-            mNotificationManager.createNotificationChannel(channel);
-            channel.setDescription("adasdasdadadasd");
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
-        }
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 5);
-        calendar.set(Calendar.MINUTE, 32);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @SuppressLint("ResourceAsColor")
