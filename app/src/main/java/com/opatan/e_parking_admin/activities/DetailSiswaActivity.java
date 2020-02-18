@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -21,8 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_admin.R;
 import com.opatan.e_parking_admin.dialogs.DialogTambahDataSiswa;
+import com.opatan.e_parking_admin.dialogs.DialogUpdateDataSiswa;
 import com.opatan.e_parking_admin.fragments.DaftarSiswaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,7 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
-    private TextView nama, nis;
+    private TextView nama_txt, nis_txt;
     private ImageView gambar;
     private RecyclerView.LayoutManager mlayoutManager;
     private DatabaseReference databaseReference;
@@ -43,7 +48,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
     public static Fragment fragment = null;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    String user;
+    private String user, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, Imageurl, siswaId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +56,23 @@ public class DetailSiswaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_siswa);
 
         bundle = getIntent().getExtras();
-        nama = findViewById(R.id.get_nama);
-        nis = findViewById(R.id.get_nis);
+        nama_txt = findViewById(R.id.get_nama);
+        nis_txt = findViewById(R.id.get_nis);
         gambar = findViewById(R.id.gambar);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("siswa");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Siswa");
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         user = firebaseUser.getUid();
 
+        siswaId = getIntent().getStringExtra("id");
         String image_url = getIntent().getStringExtra("img");
         String nama_val = getIntent().getStringExtra("nama");
         String nis_val = getIntent().getStringExtra("nis");
 
-        nama.setText(nama_val);
-        nis.setText(nis_val);
+        Toast.makeText(DetailSiswaActivity.this,"Detail Siswa", Toast.LENGTH_LONG).show();
+
+        nama_txt.setText(nama_val);
+        nis_txt.setText(nis_val);
         Glide.with(getApplicationContext()).load(image_url).into(gambar);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,58 +98,39 @@ public class DetailSiswaActivity extends AppCompatActivity {
         int id = item.getItemId();
         bundle = getIntent().getExtras();
         if (id == R.id.edit) {
-            openDialog();
-            Toast.makeText(getApplicationContext(), "Edit clicked", Toast.LENGTH_LONG).show();
-            return true;
+                        String nis_val = getIntent().getStringExtra("nis");
+                        String nama_val = getIntent().getStringExtra("nama");
+                        String tgl_lahir = getIntent().getStringExtra("tgl_lahir");
+                        String no_pol = getIntent().getStringExtra("no_pol");
+                        String no_sim = getIntent().getStringExtra("no_sim");
+                        String email = getIntent().getStringExtra("email");
+                        String pwd = getIntent().getStringExtra("pwd");
+                        String img = getIntent().getStringExtra("img");
+                        openDialog(siswaId,nis_val,nama_val,tgl_lahir,no_pol,no_sim,email,pwd,img);
+                        Toast.makeText(DetailSiswaActivity.this,"Edit Data", Toast.LENGTH_LONG).show();
+           return true;
         } else if (id == R.id.hapus) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(DetailSiswaActivity.this);
-            dialog.setTitle("Hapus Data Siswa");
-            dialog.setMessage("Apakah Anda yakin ingin menghapus data siswa");
-            dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    deleteSiswa(bundle.getString("id"));
-                    firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(DetailSiswaActivity.this,"Delete Akun Berhasil",Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(DetailSiswaActivity.this,DaftarSiswaFragment.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(DetailSiswaActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            });
-            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int which) {
-                    dialogInterface.dismiss();
-                }
-            });
-            AlertDialog alertDialog = dialog.create();
-            alertDialog.show();
+            deleteSiswa(bundle.getString("id"));
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
     private void deleteSiswa(String siswaId) {
-        DatabaseReference siswa = FirebaseDatabase.getInstance().getReference().child("siswa").child(siswaId);
-        firebaseUser.delete();
+        DatabaseReference siswa = FirebaseDatabase.getInstance().getReference().child("Siswa").child(siswaId);
         siswa.removeValue();
+//        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
         Toast.makeText(this,"Data Berhasil dihapus",Toast.LENGTH_LONG).show();
     }
-    public void openDialog(){
-        DialogTambahDataSiswa dialogTambahDataSiswa = new DialogTambahDataSiswa();
+    public void openDialog(String siswaId,String nama, String tgl_lahir,String no_pol,String pwd,
+                           String email,String no_sim,String nis,String ImageUrl){
+        DialogUpdateDataSiswa dialogTambahDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl,"update");
         if (dialogTambahDataSiswa.getDialog() != null && dialogTambahDataSiswa.getDialog().getWindow() !=null){
             dialogTambahDataSiswa.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialogTambahDataSiswa.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
+        Bundle bundle = new Bundle();
+        bundle.putString("action","update");
+        dialogTambahDataSiswa.setArguments(bundle);
         dialogTambahDataSiswa.show(getSupportFragmentManager(),"Dialog Update Data");
     }
 }

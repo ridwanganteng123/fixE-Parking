@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -166,60 +167,56 @@ public class DialogTambahDataPetugas extends DialogFragment {
         email = email_txt.getText().toString().trim();
         pwd = pwd_txt.getText().toString().trim();
         level = "Petugas";
-            mAuth.createUserWithEmailAndPassword(email,pwd)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
-                        String imageURL = FilePathUri.toString();
+        if (FilePathUri !=null){
+            StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
+            final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
+            mStorage.getPath().equals(imageFilePath.getPath());
+            imageFilePath.putFile(FilePathUri).addOnSuccessListener(
+                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(final Uri uri) {
+                                  final String imageUrl = uri.toString();
+                                  mAuth.createUserWithEmailAndPassword(email,pwd)
+                                          .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                              @Override
+                                              public void onComplete(@NonNull Task<AuthResult> task) {
+                                                  if (task.isSuccessful()){
+                                                      String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                      DataDaftarPetugas dataDaftarPetugas = new DataDaftarPetugas(id, name, tgl_lahir,pwd,email, nis, level, imageUrl);
+                                                      FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarPetugas).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                          @Override
+                                                          public void onComplete(@NonNull Task<Void> task) {
+                                                              if (task.isSuccessful()) {
+                                                                  Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
+                                                                  dismiss();
+                                                              } else if(TextUtils.isEmpty(name)) {
+                                                                  Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
+                                                              } else if(task.isCanceled()){
 
-                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        DataDaftarPetugas dataDaftarPetugas = new DataDaftarPetugas(id, name, tgl_lahir,pwd,email, nis, level, imageURL);
-                        FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarPetugas).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
-                                    dismiss();
-                                } else if(TextUtils.isEmpty(name)) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
-                                } else if(task.isCanceled()){
-
+                                                              }
+                                                          }
+                                                      });
+                                                  }else{
+                                                      Toast.makeText(getContext().getApplicationContext(),"Data gagal ditambahkan",Toast.LENGTH_LONG).show();
+                                                  }
+                                              }
+                                          });
                                 }
-                            }
-                        });
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext().getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+                        }
+                    });
 
-                        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
-                        final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
-                        imageFilePath.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        UserProfileChangeRequest profleUpdate = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(name)
-                                                .setPhotoUri(uri)
-                                                .build();
+        }
 
-                                        currentUser.updateProfile(profleUpdate)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            dismiss();
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                });
-                            }
-                        });
-                    }else{
-                        Toast.makeText(getContext().getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
     }
 
     private void openGallery() {

@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.opatan.e_parking_admin.R;
 import com.opatan.e_parking_admin.datas.model.DataDaftarPetugas;
 import com.opatan.e_parking_admin.datas.model.DataDaftarSiswa;
@@ -42,6 +45,12 @@ public class AdapterDaftarPetugas extends RecyclerView.Adapter<AdapterDaftarPetu
     @Override
     public int getItemCount() {
         return dataDaftarPetugasList.size();
+    }
+    private void DeletePetugas(String petugasId){
+        DatabaseReference petugas = FirebaseDatabase.getInstance().getReference().child("Petugas").child(petugasId);
+        petugas.removeValue();
+        Toast.makeText(context,"Data berhasil dihapus",Toast.LENGTH_LONG).show();
+
     }
 
     public static class AdapterDaftarPetugasView extends RecyclerView.ViewHolder{

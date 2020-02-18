@@ -71,7 +71,7 @@ public class ActivityFragment extends Fragment {
         dataHistoryParkirList = new ArrayList<>();
         adapterHistoryParkir = new AdapterHistoryParkir(getContext(),dataHistoryParkirList);
 
-        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child("09-02-2020");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child("12-02-2020");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

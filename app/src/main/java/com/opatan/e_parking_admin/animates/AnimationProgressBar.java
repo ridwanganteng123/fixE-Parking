@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.opatan.e_parking_admin.activities.LoginActivity;
+import com.opatan.e_parking_admin.activities.OnBoardingActivity;
 
 public class AnimationProgressBar extends Animation {
 
@@ -32,7 +33,7 @@ public class AnimationProgressBar extends Animation {
         progressBar.setProgress((int)value);
         textView.setText((int)value + "%");
         if (value == 99){
-            context.startActivity(new Intent(context, LoginActivity.class));
+            context.startActivity(new Intent(context, OnBoardingActivity.class));
         }
     }
 }

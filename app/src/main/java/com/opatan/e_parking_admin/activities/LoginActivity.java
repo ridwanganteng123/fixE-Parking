@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
     private Intent DashboardFragment;
+    private TextView forgot;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -35,6 +37,13 @@ public class LoginActivity extends AppCompatActivity {
         DashboardFragment = new Intent(this,com.opatan.e_parking_admin.activities.MainActivity.class);
 
         initializeUI();
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,ForgotActivoty.class));
+
+            }
+        });
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginUserAccount();
             }
         });
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -133,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
         loginBtn = findViewById(R.id.login);
+        forgot = findViewById(R.id.forgotpass);
 
     }
 }

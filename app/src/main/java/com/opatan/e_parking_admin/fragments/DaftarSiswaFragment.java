@@ -106,8 +106,14 @@ public class DaftarSiswaFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
                         intent.putExtra("id", dataDaftarSiswa.getSiswaId());
                         intent.putExtra("nama", dataDaftarSiswa.getNama());
-                        intent.putExtra("nis", dataDaftarSiswa.getNis());
                         intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarSiswa.getTgl_lahir());
+                        intent.putExtra("no_pol", dataDaftarSiswa.getNo_pol());
+                        intent.putExtra("no_sim", dataDaftarSiswa.getNo_sim());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        intent.putExtra("email", dataDaftarSiswa.getEmail());
+                        intent.putExtra("pwd", dataDaftarSiswa.getPwd());
+
                         startActivity(intent);
                     }
                 });
@@ -199,7 +205,9 @@ public class DaftarSiswaFragment extends Fragment {
                         intent.putExtra("nama", dataDaftarSiswa.getNama());
                         intent.putExtra("nis", dataDaftarSiswa.getNis());
                         intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        intent.putExtra("id", dataDaftarSiswa.getSiswaId());
                         startActivity(intent);
+                        System.out.println(intent.putExtra("nama", dataDaftarSiswa.getNama()));
                     }
                 });
             }
@@ -238,6 +246,9 @@ public class DaftarSiswaFragment extends Fragment {
             exampleDialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             exampleDialog.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
+        Bundle bundle = new Bundle();
+        bundle.putString("action","insert");
+        exampleDialog.setArguments(bundle);
         exampleDialog.show(getFragmentManager(), "Dialog Tambah Data");
     }
 }

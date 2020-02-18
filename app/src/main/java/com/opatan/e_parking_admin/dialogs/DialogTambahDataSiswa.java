@@ -31,6 +31,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.opatan.e_parking_admin.R;
 import com.opatan.e_parking_admin.datas.model.DataDaftarSiswa;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,18 +49,19 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DialogTambahDataSiswa extends DialogFragment {
-    private EditText nis_txt,namalengkap_txt ,tgl_lahir_txt ,nopol_txt ,nosim_txt ,pwd_txt ,email_txt;
+    private EditText nis_txt, namalengkap_txt, tgl_lahir_txt, nopol_txt, nosim_txt, pwd_txt, email_txt;
     private ImageView tampil_img;
     private Button btnUpload, btnSubmit, batal;
-    public String name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level;
+    public String siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl;
     private Calendar c;
 
-    static int PReqCode = 1 ;
-    static int REQUESCODE = 1 ;
+    static int PReqCode = 1;
+    static int REQUESCODE = 1;
 
     private FirebaseAuth mAuth;
 
@@ -67,12 +70,17 @@ public class DialogTambahDataSiswa extends DialogFragment {
     String Storage_Path = "profile_siswa/";
 
     String Database_Path = "Siswa";
+    FirebaseUser currentUser;
 
     Uri FilePathUri;
-
+    Bundle bundle;
+    FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     DatabaseReference databaseReference;
     int Image_Request_Code = 7;
+
+    public DialogTambahDataSiswa() {
+    }
 
     @Nullable
     @Override
@@ -89,6 +97,9 @@ public class DialogTambahDataSiswa extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
+
+        bundle = getArguments();
+        final String action = bundle.getString("action");
         databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -144,13 +155,43 @@ public class DialogTambahDataSiswa extends DialogFragment {
                 dismiss();
             }
         });
+        if (action.equals("update")) {
+            nis_txt.setText(bundle.getString("nis"));
+            namalengkap_txt.setText(bundle.getString("nama"));
+            tgl_lahir_txt.setText(bundle.getString("tgl_lahir"));
+            nopol_txt.setText(bundle.getString("no_pol"));
+            nosim_txt.setText(bundle.getString("no_sim"));
+            pwd_txt.setText(bundle.getString("pwd"));
+            email_txt.setText(bundle.getString("email"));
+            level.equals("Siswa");
+            String img_url = bundle.getString("imageURL");
+            Glide.with(getContext()).load(img_url).into(tampil_img);
+            btnUpload.setText(bundle.getString("imageURL"));
+            btnSubmit.setText("update");
+            getDialog().setTitle("Update Siswa");
+        }
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateUserAccount(mAuth.getCurrentUser());
+                if (action.equals("insert")) {
+                    CreateUserAccount(mAuth.getCurrentUser());
+                } else if (action.equals("update")) {
+                    String siswaId = bundle.getString("id");
+                    String name = namalengkap_txt.getText().toString().trim();
+                    String nis = nis_txt.getText().toString().trim();
+                    String tgl_lahir = tgl_lahir_txt.getText().toString().trim();
+                    String email = email_txt.getText().toString().trim();
+                    String no_pol = nopol_txt.getText().toString().trim();
+                    String no_sim = nosim_txt.getText().toString().trim();
+                    String pwd = pwd_txt.getText().toString().trim();
+                    String level = "Siswa";
+
+                    updateSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level);
+                }
+
             }
         });
-        btnUpload.setOnClickListener(new View.OnClickListener(){
+        btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openGallery();
@@ -159,6 +200,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
         builder.setView(view);
         return builder.create();
     }
+
 
     @Override
     public void onStart() {
@@ -176,66 +218,110 @@ public class DialogTambahDataSiswa extends DialogFragment {
         no_sim = nosim_txt.getText().toString().trim();
         pwd = pwd_txt.getText().toString().trim();
         level = "Siswa";
-            mAuth.createUserWithEmailAndPassword(email,pwd)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
-                        String imageURL = FilePathUri.toString();
 
-                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir,no_pol,pwd,email, no_sim, nis, level, imageURL);
-                        FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
-                                    dismiss();
-                                } else if(TextUtils.isEmpty(name)) {
-                                    Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
-                                } else if(task.isCanceled()){
+        if (FilePathUri != null) {
+            final StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
+            final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
+            mStorage.getPath().equals(imageFilePath.getPath());
 
-                                }
-                            }
-                        });
+            imageFilePath.putFile(FilePathUri).addOnSuccessListener(
+                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
-                        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
-                        final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
-                        imageFilePath.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        UserProfileChangeRequest profleUpdate = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(name)
-                                                .setPhotoUri(uri)
-                                                .build();
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(final Uri uri) {
+                                    final String imageURL = uri.toString();
+                                    mAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
 
-                                        currentUser.updateProfile(profleUpdate)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL);
+                                                FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
+                                                            Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
                                                             dismiss();
+                                                        } else if (TextUtils.isEmpty(name)) {
+                                                            Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
+                                                        } else if (task.isCanceled()) {
+
                                                         }
                                                     }
                                                 });
-                                    }
-                                });
-                            }
-                        });
-                    }else{
-                        Toast.makeText(getContext().getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+
+                                            } else {
+                                                Toast.makeText(getContext().getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+
     }
+
+
+    private boolean updateSiswa(String siswaId, final String name, String nis, String
+            tgl_lahir, String email, String no_pol, String no_sim, String pwd, String level) {
+
+        String imageURL = FilePathUri.toString();
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
+        final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
+        imageFilePath.putFile(FilePathUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
+//                        UserProfileChangeRequest profleUpdate = new UserProfileChangeRequest.Builder()
+//                                .setDisplayName(name)
+//                                .setPhotoUri(uri)
+//                                .build();
+//
+//                        currentUser.updateProfile(profleUpdate)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            dismiss();
+//                                        }
+//                                    }
+//                                });
+                    }
+                });
+            }
+        });
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Siswa").child(siswaId);
+        DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, imageURL);
+
+        databaseReference.setValue(dataDaftarSiswa);
+
+        Toast.makeText(getContext(), "Data Berhasil diedit!", Toast.LENGTH_SHORT).show();
+
+        return true;
+    }
+
 
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent,REQUESCODE);
+        startActivityForResult(galleryIntent, REQUESCODE);
     }
 
     private void checkAndRequestForPermission() {
@@ -244,25 +330,22 @@ public class DialogTambahDataSiswa extends DialogFragment {
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) getActivity().getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-                Toast.makeText(getActivity().getApplicationContext(),"Please accept for required permission",Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
+                Toast.makeText(getActivity().getApplicationContext(), "Please accept for required permission", Toast.LENGTH_SHORT).show();
+            } else {
                 ActivityCompat.requestPermissions((Activity) getActivity().getApplicationContext(),
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         PReqCode);
             }
-        }
-        else
+        } else
             openGallery();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUESCODE && data != null ) {
-           FilePathUri = data.getData() ;
-           tampil_img.setImageURI(FilePathUri);
+        if (resultCode == RESULT_OK && requestCode == REQUESCODE && data != null) {
+            FilePathUri = data.getData();
+            tampil_img.setImageURI(FilePathUri);
         }
     }
 
