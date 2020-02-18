@@ -34,16 +34,17 @@ import com.opatan.e_parking_admin.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class DashboardFragment extends Fragment {
 
     private int[] yData;
-    ArrayList<String> hadir_list, terlambat_list;
-    private String uid, siswaId, formattedDate;
+    HashMap<String, String> hadir_list, terlambat_list;
+    private String uid, siswaId, formattedDate, terlambatKey, hadirKey;
     private ImageButton prev_, next_;
     private FirebaseUser currentUser;
     public TextView hadir_status, terlambat_status, tgl_txt;
-    private int jumlahHadir;
+    private int jumlahHadir = 0, jumlahTerlambat = 0;
     private DatabaseReference databaseReference1, databaseReference2;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     PieChart pieChart;
@@ -85,6 +86,7 @@ public class DashboardFragment extends Fragment {
         formattedDate = df.format(c.getTime());
 
         tgl_txt.setText(formattedDate);
+        getData(formattedDate);
 
         prev_.setOnClickListener(new View.OnClickListener() {
 
@@ -121,10 +123,10 @@ public class DashboardFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
                 {
-                    hadir_list = new ArrayList<>();
-                    final String hadirKey = dataHadir.child("siswaId").getValue().toString();
+                    hadir_list = new HashMap<String, String>();
+                    hadirKey = dataHadir.child("siswaId").getValue().toString();
                     System.out.println("DATA HADIR : " + hadirKey);
-                    hadir_list.add(hadirKey);
+                    hadir_list.put(hadirKey, "hadir");
                     System.out.println("LIST HADIR : " + hadir_list);
                     System.out.println("COUINT HADIR : " + hadir_list.size());
 
@@ -134,14 +136,14 @@ public class DashboardFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot dataTelat : dataSnapshot.getChildren())
                             {
-                                terlambat_list = new ArrayList<>();
-                                final String terlambatKey = dataTelat.child("siswaId").getValue().toString();
+                                terlambat_list = new HashMap<String, String>();
+                                terlambatKey = dataTelat.child("siswaId").getValue().toString();
                                 System.out.println("NOMOR : " + dataTelat.getChildrenCount());
                                 System.out.println("DATA TERLAMBAT : " + terlambatKey);
-                                terlambat_list.add(terlambatKey);
+                                terlambat_list.put(terlambatKey, "telat");
                                 System.out.println("LIST TERLMABAT : " + terlambat_list);
                                 jumlahHadir = hadir_list.size();
-                                int jumlahTerlambat = terlambat_list.size();
+                                jumlahTerlambat = terlambat_list.size();
                                 System.out.println("COUNT TERLAMBAT : " + terlambat_list.size());
 
                                 terlambat_status.setText(String.valueOf(jumlahHadir));
