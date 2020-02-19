@@ -80,6 +80,15 @@ public class DialogTambahDataPetugas extends DialogFragment {
         return view;
     }
 
+    private void openDialog()
+    {
+        ProgressDialog progressDialog = new ProgressDialog(getContext().getApplicationContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

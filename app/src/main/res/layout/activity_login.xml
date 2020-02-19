@@ -60,16 +60,30 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#0FEF82"
-        android:textSize="20sp"
-        android:layout_marginRight="25dp"
-        android:textColor="@android:color/white"
-        android:layout_marginLeft="25dp"
-        android:text="Login" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#0FEF82"
+            android:textSize="20sp"
+            android:layout_marginRight="25dp"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="25dp"
+            android:text="Login" />
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
