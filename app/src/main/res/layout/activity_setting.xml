@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="31dp"
-                    android:text="Iman Nurrohman"
+                    android:text="admin@gmail.com"
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
                     app:layout_constraintLeft_toLeftOf="parent"

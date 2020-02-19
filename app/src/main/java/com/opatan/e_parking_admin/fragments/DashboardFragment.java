@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DashboardFragment extends Fragment {
 
@@ -118,48 +119,25 @@ public class DashboardFragment extends Fragment {
     private void getData(final String tanggal)
     {
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
-        databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
+        databaseReference2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int jumlahHadir = 0;
+                int jumlahTerlambat = 0 ;
                 for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
                 {
-                    hadir_list = new HashMap<String, String>();
-                    hadirKey = dataHadir.child("siswaId").getValue().toString();
-                    System.out.println("DATA HADIR : " + hadirKey);
-                    hadir_list.put(hadirKey, "hadir");
-                    System.out.println("LIST HADIR : " + hadir_list);
-                    System.out.println("COUINT HADIR : " + hadir_list.size());
+                    String status = dataHadir.child("status").getValue(String.class);
+                    if(status.equals("hadir")){
+                        jumlahHadir++;
 
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
-                    databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot dataTelat : dataSnapshot.getChildren())
-                            {
-                                terlambat_list = new HashMap<String, String>();
-                                terlambatKey = dataTelat.child("siswaId").getValue().toString();
-                                System.out.println("NOMOR : " + dataTelat.getChildrenCount());
-                                System.out.println("DATA TERLAMBAT : " + terlambatKey);
-                                terlambat_list.put(terlambatKey, "telat");
-                                System.out.println("LIST TERLMABAT : " + terlambat_list);
-                                jumlahHadir = hadir_list.size();
-                                jumlahTerlambat = terlambat_list.size();
-                                System.out.println("COUNT TERLAMBAT : " + terlambat_list.size());
-
-                                terlambat_status.setText(String.valueOf(jumlahHadir));
-                                hadir_status.setText(String.valueOf(jumlahTerlambat));
-
-                                yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
-                                addDataSet();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
+                    }else{
+                        jumlahTerlambat++;
+                    }
+                 }
+                terlambat_status.setText(String.valueOf(jumlahHadir));
+                hadir_status.setText(String.valueOf(jumlahTerlambat));
+                yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
+                addDataSet();
             }
 
             @Override

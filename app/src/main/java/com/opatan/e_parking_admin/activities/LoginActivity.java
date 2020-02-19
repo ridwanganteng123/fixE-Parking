@@ -1,5 +1,6 @@
 package com.opatan.e_parking_admin.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
     private Intent DashboardFragment;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
         DashboardFragment = new Intent(this,com.opatan.e_parking_admin.activities.MainActivity.class);
+        loginBtn = findViewById(R.id.login);
+        progressBar = findViewById(R.id.progress);
 
         initializeUI();
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 loginUserAccount();
             }
         });
@@ -49,6 +53,15 @@ public class LoginActivity extends AppCompatActivity {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
+    }
+
+    private void openDialog()
+    {
+        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Download Loading");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
     }
 
     private void loginUserAccount() {
@@ -72,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            loginBtn.setVisibility(View.VISIBLE);
+                            openDialog();
+                            loginBtn.setEnabled(false);
                             updateUI();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                startActivity(intent);
@@ -83,29 +97,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        //DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
-//        databaseReference.addValueEventListener(new ValueEventListener(){
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                DataDaftarSiswa dataDaftarSiswa = dataSnapshot.getValue(DataDaftarSiswa.class);
-//                int userType = (userProfile.getUsertype());
-//
-//                switch (userType) {
-//                    case 0:
-//                        startActivity(new Intent(Login.this, DoctorActivity.class));
-//                        break;
-//                    case 1:
-//                        startActivity(new Intent(Login.this, MainActivity.class));
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
     }
     public void  updateUI(){

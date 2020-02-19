@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.opatan.e_parking_admin.R;
+import com.opatan.e_parking_admin.activities.LoginActivity;
 import com.opatan.e_parking_admin.datas.model.DataDaftarSiswa;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -113,7 +114,6 @@ public class DialogTambahDataSiswa extends DialogFragment {
         pwd_txt = view.findViewById(R.id.pwd_txt);
         btnSubmit = view.findViewById(R.id.btn_tambah);
         batal = view.findViewById(R.id.batal);
-
         mAuth = FirebaseAuth.getInstance();
 
         tgl_lahir_txt.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +167,15 @@ public class DialogTambahDataSiswa extends DialogFragment {
         }
     }
 
+    private void openDialog()
+    {
+        ProgressDialog progressDialog = new ProgressDialog(getContext().getApplicationContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+
     private void CreateUserAccount(final FirebaseUser currentUser) {
         name = namalengkap_txt.getText().toString().trim();
         nis = nis_txt.getText().toString().trim();
@@ -182,13 +191,13 @@ public class DialogTambahDataSiswa extends DialogFragment {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
                         String imageURL = FilePathUri.toString();
-
                         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir,no_pol,pwd,email, no_sim, nis, level, imageURL);
                         FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    openDialog();
                                     Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
                                     dismiss();
                                 } else if(TextUtils.isEmpty(name)) {

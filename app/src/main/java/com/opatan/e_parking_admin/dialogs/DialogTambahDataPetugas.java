@@ -79,6 +79,15 @@ public class DialogTambahDataPetugas extends DialogFragment {
         return view;
     }
 
+    private void openDialog()
+    {
+        ProgressDialog progressDialog = new ProgressDialog(getContext().getApplicationContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -172,7 +181,6 @@ public class DialogTambahDataPetugas extends DialogFragment {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
                         String imageURL = FilePathUri.toString();
-
                         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         DataDaftarPetugas dataDaftarPetugas = new DataDaftarPetugas(id, name, tgl_lahir,pwd,email, nis, level, imageURL);
                         FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarPetugas).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -181,6 +189,7 @@ public class DialogTambahDataPetugas extends DialogFragment {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
                                     dismiss();
+                                    openDialog();
                                 } else if(TextUtils.isEmpty(name)) {
                                     Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
                                 } else if(task.isCanceled()){

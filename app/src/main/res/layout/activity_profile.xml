@@ -8,20 +8,19 @@
     android:background="#FFFFFF"
     tools:context=".activities.ProfileActivity">
 
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/content_progressbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" >-->
+
+<!--        <ProgressBar-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_height="50dp" />-->
+
+<!--    </RelativeLayout>-->
+
     <RelativeLayout
-        android:id="@+id/content_progressbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ProgressBar
-            android:layout_width="50dp"
-            android:layout_centerInParent="true"
-            android:layout_height="50dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/content_profil"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -94,7 +93,7 @@
                 android:id="@+id/nama"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Iman Nurrohman"
+                android:text="admin@gmail.com"
                 android:textSize="25sp"
                 android:textAllCaps="true"
                 android:textStyle="bold"
@@ -132,46 +131,46 @@
                             android:textSize="18sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="No Polisi"/>
+                            android:text="Admin ID"/>
 
                         <TextView
                             android:id="@+id/nopol_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="D 6969 NA"/>
+                            android:text="6rcbBOCKaqabPDv8iq4rKCihFfG3"/>
 
                         <TextView
                             android:textSize="18sp"
                             android:layout_marginTop="20dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="No Sim"/>
+                            android:text="Role"/>
 
                         <TextView
                             android:id="@+id/nosim_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="123456789"/>
+                            android:text="ADMINISTRATOR"/>
 
                         <TextView
                             android:textSize="18sp"
                             android:layout_marginTop="20dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="NIS"/>
+                            android:text="Sekolah"/>
 
                         <TextView
                             android:id="@+id/nis_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textAllCaps="true"
                             android:textStyle="bold"
-                            android:text="harley Davidson"/>
+                            android:text="SMKN 4 Bandung"/>
 
                     </LinearLayout>
 

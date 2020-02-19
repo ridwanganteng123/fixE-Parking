@@ -26,6 +26,7 @@
         <activity
             android:name="com.opatan.e_parking_admin.activities.ProfileActivity"
             android:screenOrientation="portrait"
+            android:parentActivityName="com.opatan.e_parking_admin.activities.MainActivity"
             android:theme="@style/ProfileStyle" />
         <activity
             android:name="com.opatan.e_parking_admin.activities.OnBoardingActivity"

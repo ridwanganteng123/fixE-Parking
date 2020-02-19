@@ -107,25 +107,6 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid = currentUser.getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    username_txt = keyId.child(uid).child("nama").getValue(String.class);
-                    profil_txt = keyId.child(uid).child("imageUrl").getValue(String.class);
-                }
-                username.setText(username_txt);
-                Glide.with(SettingActivity.this).load(profil_txt).into(profil);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
     public void launchCustomViewFinderScannerActivity(View v) {
         launchActivity(CustomViewFinderScanner.class);

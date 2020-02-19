@@ -77,6 +77,7 @@ public class ActivityFragment extends Fragment {
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataHistoryParkirList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren())
                 {
                     final String tanggal = ds.getRef().getKey();

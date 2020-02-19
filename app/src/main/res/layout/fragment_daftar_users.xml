@@ -27,6 +27,7 @@
                 android:id="@+id/container_shimmer"
                 android:layout_width="match_parent"
                 android:paddingTop="20dp"
+                android:paddingBottom="30dp"
                 android:layout_height="wrap_content"
                 app:shimmer_duration="1000">
 
