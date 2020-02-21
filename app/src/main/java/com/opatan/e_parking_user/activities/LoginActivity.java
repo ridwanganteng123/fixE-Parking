@@ -62,12 +62,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUserAccount() {
-
-
         String email, password, nis;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
-
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Please enter nis...", Toast.LENGTH_LONG).show();
@@ -82,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            loginBtn.setVisibility(View.VISIBLE);
+                            openDialog();
+                            loginBtn.setEnabled(false);
                             updateUI();
                             openDialog();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
