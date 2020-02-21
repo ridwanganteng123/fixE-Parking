@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">#FAFAFA</item>
+        <item name="android:navigationBarColor">#000</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

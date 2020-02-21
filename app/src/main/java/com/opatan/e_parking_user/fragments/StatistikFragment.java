@@ -101,49 +101,24 @@ public class StatistikFragment extends Fragment {
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    final String tanggal = snapshot.getRef().getKey();
-                    siswaId = snapshot.child(uid).child("siswaId").getValue(String.class);
-                    System.out.println("SISWA ID : " + siswaId);
-                    System.out.println("TANGGAL : " + tanggal);
-
-                    databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
-                    databaseReference2.orderByChild("status").equalTo("hadir").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            final String hadirKey = dataSnapshot.child(siswaId).getRef().getKey();
-                            ArrayList<String> hadir_list = new ArrayList<>();
-                            hadir_list.add(hadirKey);
-                            final int jumlahHadir = hadir_list.size();
-
-                            databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
-                            databaseReference2.orderByChild("status").equalTo("terlambat").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    final String terlambatKey = dataSnapshot.child(siswaId).getRef().getKey();
-                                    ArrayList<String> terlambat_list = new ArrayList<>();
-                                    terlambat_list.add(terlambatKey);
-                                    int jumlahTerlambat = terlambat_list.size();
-                                    terlambat_status.setText(String.valueOf(jumlahTerlambat));
-                                    hadir_status.setText(String.valueOf(jumlahHadir));
-                                    yData = new int[]{jumlahHadir, jumlahTerlambat, 0};
-                                    addDataSet();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                int jumlahHadir = 0;
+                int jumlahTerlambat = 0 ;
+                for (DataSnapshot dataHadir : dataSnapshot.getChildren())
+                {
+                    String status = dataHadir.child(uid).child("status").getValue(String.class);
+                    System.out.println("STATUS : " + status);
+                    if(status.equals("hadir")){
+                        jumlahHadir++;
+                    }else{
+                        jumlahTerlambat++;
+                    }
                 }
+                System.out.println("JUMLAH HADIR : " + jumlahHadir);
+                System.out.println("JUMLAH TERLAMBAT : " + jumlahTerlambat);
+                terlambat_status.setText(String.valueOf(jumlahHadir));
+                hadir_status.setText(String.valueOf(jumlahTerlambat));
+                yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
+                addDataSet();
             }
 
             @Override

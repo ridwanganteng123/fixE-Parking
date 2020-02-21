@@ -3,6 +3,7 @@ package com.opatan.e_parking_user.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,6 +45,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void progressBarSplashScreen(){
         AnimationProgressBar animationProgressBar = new AnimationProgressBar(this, textView, progressBar,1f, 100f);
         animationProgressBar.setDuration(5000);
+        startActivity(new Intent(getApplicationContext(),OnBoardingActivity.class));
         progressBar.setAnimation(animationProgressBar);
     }
 }
