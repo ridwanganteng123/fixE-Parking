@@ -39,7 +39,7 @@ public class DialogKonfirmasi extends DialogFragment {
     private ImageView img_profile;
     private Button tolak, terima;
     private RelativeLayout content_progress;
-    private LinearLayout content_dialog;
+    private LinearLayout content_dialog, content_unknown;
     private FirebaseUser currentUser;
 
     public DialogKonfirmasi(String siswaId)
@@ -79,6 +79,7 @@ public class DialogKonfirmasi extends DialogFragment {
         content_dialog = view.findViewById(R.id.content_dialog);
         content_progress = view.findViewById(R.id.content_progress);
         img_profile = view.findViewById(R.id.img_profile);
+        content_unknown = view.findViewById(R.id.content_unknown);
 
         tolak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,19 +102,25 @@ public class DialogKonfirmasi extends DialogFragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot ds) {
-                    content_progress.setVisibility(View.GONE);
-                    content_dialog.setVisibility(View.VISIBLE);
-                    String nama_content = ds.child("nama").getValue(String.class);
-                    String kelas_content = ds.child("level").getValue(String.class);
-                    String plat1_content = ds.child("no_pol").getValue(String.class);
-                    String plat2_content = ds.child("no_sim").getValue(String.class);
-                    String imageUrl = ds.child("imageURL").getValue().toString();
+                    if (ds != null)
+                    {
+                        content_progress.setVisibility(View.GONE);
+                        content_dialog.setVisibility(View.VISIBLE);
+                        String nama_content = ds.child("nama").getValue(String.class);
+                        String kelas_content = ds.child("level").getValue(String.class);
+                        String plat1_content = ds.child("no_pol").getValue(String.class);
+                        String plat2_content = ds.child("no_sim").getValue(String.class);
+                        String imageUrl = ds.child("imageURL").getValue().toString();
 
-                    nama.setText(nama_content);
-                    kelas.setText(kelas_content);
-                    plat1.setText(plat1_content);
-                    plat2.setText(plat2_content);
-                    Glide.with(getContext().getApplicationContext()).load(imageUrl).into(img_profile);
+                        nama.setText(nama_content);
+                        kelas.setText(kelas_content);
+                        plat1.setText(plat1_content);
+                        plat2.setText(plat2_content);
+                        Glide.with(getContext().getApplicationContext()).load(imageUrl).into(img_profile);
+                    } else {
+                        content_progress.setVisibility(View.GONE);
+                        content_unknown.setVisibility(View.VISIBLE);
+                    }
                 }
             @Override
             public void onCancelled(DatabaseError de) {
