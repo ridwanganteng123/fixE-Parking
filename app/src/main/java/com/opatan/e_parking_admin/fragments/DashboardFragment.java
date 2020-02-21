@@ -122,9 +122,9 @@ public class DashboardFragment extends Fragment {
         databaseReference1.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dSiswa) {
-                jumlahTidakHadir = 0;
-                jumlahHadir = 0;
-                jumlahTerlambat = 0;
+                jumlahTidakHadir=0;
+                jumlahHadir=0;
+                jumlahTerlambat=0;
                 for (final DataSnapshot siswaSnapshot : dSiswa.getChildren())
                 {
                    final String siswaId = siswaSnapshot.child("siswaId").getValue().toString();
