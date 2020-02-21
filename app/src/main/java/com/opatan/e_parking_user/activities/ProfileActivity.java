@@ -60,12 +60,13 @@ DatabaseReference databaseReference;
                     nama = keyId.child(uid).child("nama").getValue(String.class);
                     no_pol = keyId.child(uid).child("no_pol").getValue(String.class);
                     no_sim = keyId.child(uid).child("no_sim").getValue(String.class);
-                    imageUrl = keyId.child(uid).child("imageUrl").getValue(String.class);
+                    imageUrl = keyId.child(uid).child("imageURL").getValue(String.class);
                 }
                 name.setText(nama);
                 nis_txt.setText(nis);
                 nopol_txt.setText(no_pol);
                 nosim_txt.setText(no_sim);
+                System.out.println("IMAGE URL : " + imageUrl);
                 Glide.with(ProfileActivity.this).load(imageUrl).into(img_profile);
             }
             @Override
