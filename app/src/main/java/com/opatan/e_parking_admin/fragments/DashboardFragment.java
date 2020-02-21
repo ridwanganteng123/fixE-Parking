@@ -1,5 +1,6 @@
 package com.opatan.e_parking_admin.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_admin.R;
+import com.opatan.e_parking_admin.datas.model.PrefManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class DashboardFragment extends Fragment {
     private DatabaseReference databaseReference1, databaseReference2;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     PieChart pieChart;
+    private PrefManager prefs;
+    Context context;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -58,7 +62,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
-    }
+        }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -78,6 +82,7 @@ public class DashboardFragment extends Fragment {
         pieChart.setDrawEntryLabels(true);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = currentUser.getUid();
+
 
         final Calendar c = Calendar.getInstance();
 

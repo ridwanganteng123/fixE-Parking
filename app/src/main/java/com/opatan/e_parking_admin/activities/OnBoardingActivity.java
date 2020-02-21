@@ -1,50 +1,67 @@
 package com.opatan.e_parking_admin.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.opatan.e_parking_admin.R;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.opatan.e_parking_admin.adapters.AdapterOnboarding;
+import com.opatan.e_parking_admin.datas.model.PrefManager;
+import com.opatan.e_parking_admin.fragments.DashboardFragment;
 
-public class OnBoardingActivity extends AppIntro2{
+import me.relex.circleindicator.CircleIndicator;
+
+public class OnBoardingActivity extends AppCompatActivity {
+    private ViewPager viewPager;
+    private AdapterOnboarding AdapterOnboarding;
+    private PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        prefManager = new PrefManager(this);
+//        if (!prefManager.isFirstTimeLaunch()) {
+//            launchHomeScreen();
+//            finish();
+//        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        setContentView(R.layout.viewpager);
+
+        viewPager = findViewById(R.id.viewPager);
+
+        CircleIndicator indicator = findViewById(R.id.indicator);
+
+        AdapterOnboarding = new AdapterOnboarding(getSupportFragmentManager());
+
+        viewPager.setAdapter(AdapterOnboarding);
+
+        indicator.setViewPager(viewPager);
+
+        View overlay = (View) findViewById(R.id.overlay);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            Window w = getWindow();
-//            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        }
+        overlay.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-        setColorTransitionsEnabled(true);
-
-        addSlide(AppIntroFragment.newInstance("JUDUL PERTAMA", "DESKRIPSI PERTAMA", R.drawable.illustrationonboarding2, ContextCompat.getColor(getApplicationContext(), R.color.onboarding1)));
-        addSlide(AppIntroFragment.newInstance("JUDUL KEDUA", "DESKRIPSI KEDUA", R.drawable.illustrationonboarding, ContextCompat.getColor(getApplicationContext(), R.color.onboarding2)));
-        addSlide(AppIntroFragment.newInstance("JUDUL KETIGA", "DESKRIPSI KETIGA", R.drawable.illustrationonboarding2, ContextCompat.getColor(getApplicationContext(), R.color.onboarding3)));
-
+        AdapterOnboarding.registerDataSetObserver(indicator.getDataSetObserver());
     }
-
-    @Override
-    public void onSkipPressed(Fragment currentFragment) {
-        super.onSkipPressed(currentFragment);
-        addSlide(AppIntroFragment.newInstance("JUDUL KETIGA", "DESKRIPSI KETIGA", R.drawable.illustrationonboarding2, ContextCompat.getColor(getApplicationContext(), R.color.gradient_end_color)));
-    }
-
-    @Override
-    public void onDonePressed(Fragment currentFragment) {
-        super.onDonePressed(currentFragment);
-        startActivity(new Intent(OnBoardingActivity.this,LoginActivity.class));
+    private void launchHomeScreen() {
+        prefManager.setIsFirstTimeLaunc(false);
+        startActivity(new Intent(OnBoardingActivity.this, DashboardFragment.class));
         finish();
     }
 }

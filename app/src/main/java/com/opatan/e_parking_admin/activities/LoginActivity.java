@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.opatan.e_parking_admin.datas.model.PrefManager;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgot;
     private FirebaseAuth firebaseAuth;
     private ProgressBar progressBar;
+    private PrefManager prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         DashboardFragment = new Intent(this,com.opatan.e_parking_admin.activities.MainActivity.class);
         loginBtn = findViewById(R.id.login);
         progressBar = findViewById(R.id.progress);
+
+        prefs = new PrefManager(getApplicationContext());
+        prefs.setIsFirstTimeLaunc(false);
 
         initializeUI();
         forgot.setOnClickListener(new View.OnClickListener() {

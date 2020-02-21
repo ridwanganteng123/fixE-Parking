@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.opatan.e_parking_admin.R;
+import com.opatan.e_parking_admin.datas.model.PrefManager;
 import com.opatan.e_parking_admin.fragments.ActivityFragment;
 import com.opatan.e_parking_admin.fragments.DaftarPetugasFragment;
 import com.opatan.e_parking_admin.fragments.DaftarSiswaFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     SNavigationDrawer sNavigationDrawer;
     int color1 = 0;
     Class fragmentClass;
+    private PrefManager prefs;
     public static Fragment fragment;
     private TextView appBarTitleTV;
     private ImageButton optionMenu, ketentuan;
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull android.view.MenuItem item) {
             appBarTitleTV = findViewById(R.id.appBarTitleTV);
             Fragment fragment = null;
+
+
+
             switch (item.getItemId()) {
                 case R.id.navigation_dashboard:
                     fragment = new DashboardFragment();

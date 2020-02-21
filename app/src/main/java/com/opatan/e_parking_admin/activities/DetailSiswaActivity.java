@@ -39,7 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
-    private TextView nama_txt, nis_txt;
+    private TextView nama_txt, nis_txt,email_txt,no_pol_txt,no_sim_txt;
     private ImageView gambar;
     private RecyclerView.LayoutManager mlayoutManager;
     private DatabaseReference databaseReference;
@@ -58,7 +58,11 @@ public class DetailSiswaActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         nama_txt = findViewById(R.id.get_nama);
         nis_txt = findViewById(R.id.get_nis);
-        gambar = findViewById(R.id.gambar);
+        email_txt = findViewById(R.id.email_txt);
+        email_txt.setFocusable(false);
+        no_pol_txt = findViewById(R.id.nopol_txt);
+        no_sim_txt = findViewById(R.id.nosim_txt);
+         gambar = findViewById(R.id.gambar);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Siswa");
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -68,11 +72,17 @@ public class DetailSiswaActivity extends AppCompatActivity {
         String image_url = getIntent().getStringExtra("img");
         String nama_val = getIntent().getStringExtra("nama");
         String nis_val = getIntent().getStringExtra("nis");
+        String email_val = getIntent().getStringExtra("email");
+        String no_pol = getIntent().getStringExtra("no_pol");
+        String no_sim = getIntent().getStringExtra("no_sim");
 
         Toast.makeText(DetailSiswaActivity.this,"Detail Siswa", Toast.LENGTH_LONG).show();
 
         nama_txt.setText(nama_val);
         nis_txt.setText(nis_val);
+        email_txt.setText(email_val);
+        no_pol_txt.setText(no_pol);
+        no_sim_txt.setText(no_sim);
         Glide.with(getApplicationContext()).load(image_url).into(gambar);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -98,17 +108,17 @@ public class DetailSiswaActivity extends AppCompatActivity {
         int id = item.getItemId();
         bundle = getIntent().getExtras();
         if (id == R.id.edit) {
-                        String nis_val = getIntent().getStringExtra("nis");
-                        String nama_val = getIntent().getStringExtra("nama");
-                        String tgl_lahir = getIntent().getStringExtra("tgl_lahir");
-                        String no_pol = getIntent().getStringExtra("no_pol");
-                        String no_sim = getIntent().getStringExtra("no_sim");
-                        String email = getIntent().getStringExtra("email");
-                        String pwd = getIntent().getStringExtra("pwd");
-                        String img = getIntent().getStringExtra("img");
-                        openDialog(siswaId,nis_val,nama_val,tgl_lahir,no_pol,no_sim,email,pwd,img);
-                        Toast.makeText(DetailSiswaActivity.this,"Edit Data", Toast.LENGTH_LONG).show();
-           return true;
+            String nis_val = getIntent().getStringExtra("nis");
+            String nama_val = getIntent().getStringExtra("nama");
+            String tgl_lahir = getIntent().getStringExtra("tgl_lahir");
+            String no_pol = getIntent().getStringExtra("no_pol");
+            String no_sim = getIntent().getStringExtra("no_sim");
+            String email = getIntent().getStringExtra("email");
+            String pwd = getIntent().getStringExtra("pwd");
+            String img = getIntent().getStringExtra("img");
+            openDialog(siswaId,nis_val,nama_val,tgl_lahir,no_pol,no_sim,email,pwd,img);
+            Toast.makeText(DetailSiswaActivity.this,"Edit Data", Toast.LENGTH_LONG).show();
+            return true;
         } else if (id == R.id.hapus) {
             deleteSiswa(bundle.getString("id"));
             return true;
@@ -121,16 +131,18 @@ public class DetailSiswaActivity extends AppCompatActivity {
 //        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
         Toast.makeText(this,"Data Berhasil dihapus",Toast.LENGTH_LONG).show();
     }
-    public void openDialog(String siswaId,String nama, String tgl_lahir,String no_pol,String pwd,
-                           String email,String no_sim,String nis,String ImageUrl){
-        DialogUpdateDataSiswa dialogTambahDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl,"update");
-        if (dialogTambahDataSiswa.getDialog() != null && dialogTambahDataSiswa.getDialog().getWindow() !=null){
-            dialogTambahDataSiswa.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialogTambahDataSiswa.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    public void openDialog(String siswaId,String nis,String nama, String tgl_lahir,String no_pol,String pwd,
+                           String email,String no_sim,String ImageUrl){
+//        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nis,nama,tgl_lahir,no_pol,pwd,email,no_sim,ImageUrl);
+        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl);
+
+        if (dialogUpdateDataSiswa.getDialog() != null && dialogUpdateDataSiswa.getDialog().getWindow() !=null){
+            dialogUpdateDataSiswa.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogUpdateDataSiswa.getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
         Bundle bundle = new Bundle();
         bundle.putString("action","update");
-        dialogTambahDataSiswa.setArguments(bundle);
-        dialogTambahDataSiswa.show(getSupportFragmentManager(),"Dialog Update Data");
+        dialogUpdateDataSiswa.setArguments(bundle);
+        dialogUpdateDataSiswa.show(getSupportFragmentManager(),"Dialog Update Data");
     }
 }

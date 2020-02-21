@@ -35,6 +35,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -83,7 +84,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
     int Image_Request_Code = 7;
 
     public DialogUpdateDataSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd,
-                                 String email, String no_sim, String nis, String ImageUrl, String update) {
+                                 String email, String no_sim, String nis, String ImageUrl) {
         this.siswaId = siswaId;
         this.name = nama;
         this.tgl_lahir = tgl_lahir;
@@ -130,6 +131,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
         tampil_img = view.findViewById(R.id.tampil_gambar);
         btnUpload = view.findViewById(R.id.btn_upload);
         email_txt = view.findViewById(R.id.email_txt);
+        email_txt.setFocusable(false);
         nopol_txt = view.findViewById(R.id.nopol_txt);
         nosim_txt = view.findViewById(R.id.nosim_txt);
         namalengkap_txt = view.findViewById(R.id.namalengkap_txt);
@@ -137,6 +139,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
         nis_txt = view.findViewById(R.id.nis_txt);
         title = view.findViewById(R.id.title);
         pwd_txt = view.findViewById(R.id.pwd_txt);
+        pwd_txt.setFocusable(false);
         btnSubmit = view.findViewById(R.id.btn_tambah);
         batal = view.findViewById(R.id.batal);
 
@@ -311,6 +314,59 @@ public class DialogUpdateDataSiswa extends DialogFragment {
 //                Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_LONG).show();
 //            }
 //        });
+
+//        if (FilePathUri != null) {
+//            final StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
+//            final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
+//            mStorage.getPath().equals(imageFilePath.getPath());
+//
+//            imageFilePath.putFile(FilePathUri).addOnSuccessListener(
+//                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(final Uri uri) {
+//                                    final String imageURL = uri.toString();
+//                                    mAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                                            if (task.isSuccessful()) {
+//
+//                                                String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//                                                DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL);
+//                                                FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                    @Override
+//                                                    public void onComplete(@NonNull Task<Void> task) {
+//                                                        if (task.isSuccessful()) {
+//                                                            Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
+//                                                            dismiss();
+//                                                        } else if (TextUtils.isEmpty(name)) {
+//                                                            Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
+//                                                        } else if (task.isCanceled()) {
+//
+//                                                        }
+//                                                    }
+//                                                });
+//
+//                                            } else {
+//                                                Toast.makeText(getContext().getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        }
+//                                    });
+//                                }
+//                            });
+//                        }
+//                    })
+//
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(getContext().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//        }
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Database_Path).child(siswaId);
 //        databaseReference = FirebaseDatabase.getInstance().getReference().child(Database_Path).child(id);
