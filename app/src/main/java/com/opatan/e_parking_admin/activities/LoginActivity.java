@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private void openDialog()
     {
         ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setMessage("Download Loading");
+        progressDialog.setMessage("Loading...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
         progressDialog.show();

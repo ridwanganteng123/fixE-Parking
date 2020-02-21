@@ -40,15 +40,16 @@ import java.util.Map;
 public class DashboardFragment extends Fragment {
 
     private int[] yData;
-    HashMap<String, String> hadir_list, terlambat_list;
-    private String uid, siswaId, formattedDate, terlambatKey, hadirKey;
+    private String formattedDate, siswaId, status;
     private ImageButton prev_, next_;
     private FirebaseUser currentUser;
-    public TextView hadir_status, terlambat_status, tgl_txt;
-    private int jumlahHadir = 0, jumlahTerlambat = 0;
+    public TextView hadir_status, terlambat_status, tgl_txt, tidak_hadir_status;
     private DatabaseReference databaseReference1, databaseReference2;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     PieChart pieChart;
+    int jumlahTidakHadir;
+    int jumlahHadir;
+    int jumlahTerlambat;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -65,6 +66,7 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         hadir_status = view.findViewById(R.id.hadir_txt);
         terlambat_status = view.findViewById(R.id.terlambat_txt);
+        tidak_hadir_status = view.findViewById(R.id.tidak_hadir_txt);
         prev_ = view.findViewById(R.id.prev_date);
         next_ = view.findViewById(R.id.next_date);
         tgl_txt = view.findViewById(R.id.tgl_txt);
@@ -76,8 +78,6 @@ public class DashboardFragment extends Fragment {
         pieChart.setCenterText("Statistik");
         pieChart.setDescription(null);
         pieChart.setDrawEntryLabels(true);
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid = currentUser.getUid();
 
         final Calendar c = Calendar.getInstance();
 
@@ -118,31 +118,50 @@ public class DashboardFragment extends Fragment {
 
     private void getData(final String tanggal)
     {
-        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("ScanHarian").child(tanggal);
-        databaseReference2.addValueEventListener(new ValueEventListener() {
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Siswa");
+        databaseReference1.addValueEventListener(new ValueEventListener(){
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int jumlahHadir = 0;
-                int jumlahTerlambat = 0 ;
-                for (final DataSnapshot dataHadir : dataSnapshot.getChildren())
+            public void onDataChange(DataSnapshot dSiswa) {
+                jumlahTidakHadir = 0;
+                jumlahHadir = 0;
+                jumlahTerlambat = 0;
+                for (final DataSnapshot siswaSnapshot : dSiswa.getChildren())
                 {
-                    String status = dataHadir.child("status").getValue(String.class);
-                    if(status.equals("hadir")){
-                        jumlahHadir++;
+                   final String siswaId = siswaSnapshot.child("siswaId").getValue().toString();
+                   final String nama = siswaSnapshot.child("nama").getValue().toString();
+                   DatabaseReference dbRef2 = FirebaseDatabase.getInstance().getReference("ScanHarian").child(tanggal);
+                   dbRef2.addValueEventListener(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(DataSnapshot dPresensi) {
+                           System.out.println("DATA PRESENSI : " + dPresensi);
+                           String status = dPresensi.child(siswaId).child("status").getValue(String.class);
+                           System.out.println("ID : " + siswaId);
+                           System.out.println("NAMA : " + nama);
+                           System.out.println("WAKTU MASUKNYA : " + status);
+                           if(status == null)
+                           {
+                              jumlahTidakHadir++;
+                           } else if (status.equals("hadir")){
+                              jumlahHadir++;
+                           } else if (status.equals("terlambat")){
+                              jumlahTerlambat++;
+                           }
+                           terlambat_status.setText(String.valueOf(jumlahHadir));
+                           hadir_status.setText(String.valueOf(jumlahTerlambat));
+                           tidak_hadir_status.setText(String.valueOf(jumlahTidakHadir));
+                           yData = new int[]{jumlahTerlambat, jumlahHadir, jumlahTidakHadir};
+                           addDataSet();
+                       }
+                       @Override
+                       public void onCancelled(DatabaseError de) { System.out.println("The read failed: " + de.getCode());
+                       }
+                   });
 
-                    }else{
-                        jumlahTerlambat++;
-                    }
-                 }
-                terlambat_status.setText(String.valueOf(jumlahHadir));
-                hadir_status.setText(String.valueOf(jumlahTerlambat));
-                yData = new int[]{jumlahTerlambat, jumlahHadir, 0};
-                addDataSet();
+                }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onCancelled(DatabaseError de) {
+                System.out.println("The read failed: " + de.getCode());
             }
         });
 
