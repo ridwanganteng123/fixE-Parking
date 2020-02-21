@@ -1,5 +1,6 @@
 package com.opatan.e_parking_user.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,13 +52,19 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void openDialog()
+    {
+        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+    }
+
     private void loginUserAccount() {
-
-
         String email, password, nis;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
-
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Please enter nis...", Toast.LENGTH_LONG).show();
@@ -72,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            loginBtn.setVisibility(View.VISIBLE);
+                            openDialog();
+                            loginBtn.setEnabled(false);
                             updateUI();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                startActivity(intent);
@@ -83,33 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-        //DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("siswa").child(nis).child(firebaseAuth.getUid());
-//        databaseReference.addValueEventListener(new ValueEventListener(){
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                DataDaftarSiswa dataDaftarSiswa = dataSnapshot.getValue(DataDaftarSiswa.class);
-//                int userType = (userProfile.getUsertype());
-//
-//                switch (userType) {
-//                    case 0:
-//                        startActivity(new Intent(Login.this, DoctorActivity.class));
-//                        break;
-//                    case 1:
-//                        startActivity(new Intent(Login.this, MainActivity.class));
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
     public void  updateUI(){
-
-
         startActivity(DashboardFragment);
             finish();
     }
