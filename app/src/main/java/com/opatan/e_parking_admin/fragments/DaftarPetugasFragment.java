@@ -1,5 +1,7 @@
 package com.opatan.e_parking_admin.fragments;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,8 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +63,8 @@ public class DaftarPetugasFragment extends Fragment {
     private FabSpeedDial fabSpeedDial;
     private EditText cari_siswa;
     private FragmentTransaction ft;
+    private Context context;
+    Bundle bundle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +117,33 @@ public class DaftarPetugasFragment extends Fragment {
                         intent.putExtra("nama", dataDaftarPetugas.getNama());
                         intent.putExtra("nis", dataDaftarPetugas.getNis());
                         intent.putExtra("img", dataDaftarPetugas.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarPetugas.getTgl_lahir());
+                        intent.putExtra("email", dataDaftarPetugas.getEmail());
+                        intent.putExtra("pwd", dataDaftarPetugas.getPwd());
                         startActivity(intent);
+                    }
+                });
+                adapterDaftarPetugasView.linearLayoutPencet.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        bundle = getArguments();
+                        final Dialog dialog = new Dialog(context);
+                        dialog.setContentView(R.layout.dialog_view);
+                        dialog.setTitle("Pilih Aksi");
+                        dialog.show();
+
+                        Button btnDelete = (Button) dialog.findViewById(R.id.delete);
+
+                        //Apabila tombol delete dipencet
+                        btnDelete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                        return true;
                     }
                 });
             }
@@ -175,6 +207,12 @@ public class DaftarPetugasFragment extends Fragment {
                 }
             }
         });
+    }
+    private Boolean DeletePetugas(String petugasId){
+        DatabaseReference petugas = FirebaseDatabase.getInstance().getReference().child("Petugas").child(petugasId);
+        petugas.removeValue();
+        Toast.makeText(context,"Data berhasil dihapus",Toast.LENGTH_LONG).show();
+        return true;
     }
 
     public void search(String editable)

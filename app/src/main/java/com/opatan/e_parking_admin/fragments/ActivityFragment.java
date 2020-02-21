@@ -52,8 +52,9 @@ public class ActivityFragment extends Fragment {
     private DatabaseReference databaseReference1, databaseReference2, databaseReference3, databaseReference4;
 
     public ActivityFragment() {
-        // Required empty public constructor
+
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

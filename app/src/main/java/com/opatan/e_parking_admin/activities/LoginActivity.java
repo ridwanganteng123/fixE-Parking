@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -22,13 +23,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.opatan.e_parking_admin.datas.model.PrefManager;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTV, passwordTV, nisTv;
     private Button loginBtn;
     private Intent DashboardFragment;
+    private TextView forgot;
     private FirebaseAuth firebaseAuth;
     private ProgressBar progressBar;
+    private PrefManager prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +43,24 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login);
         progressBar = findViewById(R.id.progress);
 
+        prefs = new PrefManager(getApplicationContext());
+        prefs.setIsFirstTimeLaunc(false);
+
         initializeUI();
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,ForgotActivoty.class));
+
+            }
+        });
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginUserAccount();
             }
         });
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -124,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
         loginBtn = findViewById(R.id.login);
+        forgot = findViewById(R.id.forgotpass);
 
     }
 }

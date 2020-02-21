@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/startColor"
+    >
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="335dp"
+            android:src="@drawable/iustrasi1min" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/ubuntub"
+            android:gravity="center"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#FFF"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="MUDAHKAN PARKIR ANDA" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/ubuntul"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="11sp"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:text="Aplikasi ini menjadikan parkir anda lebih efisien dan cepat"
+            />
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

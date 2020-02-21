@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:id="@+id/overlay"
+    android:layout_height="match_parent"
+    tools:context=".activities.OnBoardingActivity">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clipToPadding="false">
+
+        </androidx.viewpager.widget.ViewPager>
+
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            app:ci_drawable="@drawable/ic_brightness_1_black_24dp"
+            app:ci_drawable_unselected="@drawable/ic_radio_button_unchecked_black_24dp"
+            app:ci_height="5dp"
+            app:ci_width="5dp" />
+    </FrameLayout>
+</LinearLayout>

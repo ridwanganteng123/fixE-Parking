@@ -41,6 +41,7 @@
             android:name="com.opatan.e_parking_admin.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/loginStyle" />
+        <activity android:name=".activities.ForgotActivoty"/>
 
         <activity
             android:name="com.opatan.e_parking_admin.activities.SplashScreenActivity"
