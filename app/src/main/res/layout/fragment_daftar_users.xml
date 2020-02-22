@@ -112,6 +112,7 @@
                     android:orientation="horizontal" >
 
                     <Spinner
+                        android:id="@+id/spinner_gender"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -122,6 +123,7 @@
                         android:entries="@array/gender"/>
 
                     <Spinner
+                        android:id="@+id/spinner_kelas"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="3.5dp"

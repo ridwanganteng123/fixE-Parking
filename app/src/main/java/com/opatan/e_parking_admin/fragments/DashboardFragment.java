@@ -1,6 +1,7 @@
 package com.opatan.e_parking_admin.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_admin.R;
+import com.opatan.e_parking_admin.activities.DetailSiswaActivity;
+import com.opatan.e_parking_admin.activities.DetailStatistik;
+import com.opatan.e_parking_admin.activities.ProfileActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,21 +103,21 @@ public class DashboardFragment extends Fragment {
         hadirLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
             }
         });
 
         telatLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
             }
         });
 
         tMasukLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
             }
         });
 

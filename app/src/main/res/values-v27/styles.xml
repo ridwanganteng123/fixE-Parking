@@ -106,4 +106,21 @@
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
+    <style name="detailStatistik" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:subtitleTextColor">#000000</item>
+        <item name="actionButtonStyle">@style/backButton</item>
+        <item name="drawerArrowStyle">@style/warnaBackArrow</item>
+        <item name="android:titleTextColor">#000000</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="toolbarNavigationButtonStyle">@style/backButton</item>
+    </style>
+
+
 </resources>

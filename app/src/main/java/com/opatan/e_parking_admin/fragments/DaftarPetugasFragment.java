@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,7 @@ public class DaftarPetugasFragment extends Fragment {
     private ShimmerFrameLayout shimmerFrameLayout;
     private FabSpeedDial fabSpeedDial;
     private EditText cari_siswa;
+    private Spinner spinnerGender, spinnerKelas;
     private FragmentTransaction ft;
     private Context context;
     Bundle bundle;
@@ -89,6 +91,8 @@ public class DaftarPetugasFragment extends Fragment {
         frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
         slidingUpPanelLayout = view.findViewById(R.id.sliding_up_panel_layout);
         cari_siswa = view.findViewById(R.id.cari_siswa);
+        spinnerGender = view.findViewById(R.id.spinner_gender);
+        spinnerKelas = view.findViewById(R.id.spinner_kelas);
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
@@ -210,6 +214,9 @@ public class DaftarPetugasFragment extends Fragment {
                 }
             }
         });
+
+
+
     }
     private Boolean DeletePetugas(String petugasId){
         DatabaseReference petugas = FirebaseDatabase.getInstance().getReference().child("Petugas").child(petugasId);
@@ -221,6 +228,48 @@ public class DaftarPetugasFragment extends Fragment {
     public void search(String editable)
     {
         Query firebaseSearchQuery = databaseReference.orderByChild("nama").startAt(editable).endAt(editable+"\uf8ff");
+        options = new FirebaseRecyclerOptions.Builder<DataDaftarPetugas>().setQuery(firebaseSearchQuery, DataDaftarPetugas.class).build();
+        adapter = new FirebaseRecyclerAdapter<DataDaftarPetugas, AdapterDaftarPetugas.AdapterDaftarPetugasView>(options) {
+            @NonNull
+            @Override
+            public AdapterDaftarPetugas.AdapterDaftarPetugasView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new AdapterDaftarPetugas.AdapterDaftarPetugasView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterDaftarPetugas.AdapterDaftarPetugasView adapterDaftarPetugasView, int i, @NonNull final DataDaftarPetugas dataDaftarPetugas) {
+                adapterDaftarPetugasView.nama.setText(dataDaftarPetugas.getNama());
+                adapterDaftarPetugasView.nis.setText(dataDaftarPetugas.getNis());
+                String imageUri = dataDaftarPetugas.getImageURL();
+                Glide.with(getContext()).load(imageUri).into(adapterDaftarPetugasView.profile);
+
+                adapterDaftarPetugasView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("id", dataDaftarPetugas.getPetugasId());
+                        intent.putExtra("nama", dataDaftarPetugas.getNama());
+                        intent.putExtra("nis", dataDaftarPetugas.getNis());
+                        intent.putExtra("img", dataDaftarPetugas.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarPetugas.getTgl_lahir());
+                        intent.putExtra("email", dataDaftarPetugas.getEmail());
+                        intent.putExtra("pwd", dataDaftarPetugas.getPwd());
+                        intent.putExtra("level", dataDaftarPetugas.getLevel());
+                        intent.putExtra("kelas", dataDaftarPetugas.getKelas());
+                        intent.putExtra("gender", dataDaftarPetugas.getGender());
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+        adapter.startListening();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void dropdownSearch(String key, String value)
+    {
+        Query firebaseSearchQuery = databaseReference.orderByChild(key).equalTo(value);
         options = new FirebaseRecyclerOptions.Builder<DataDaftarPetugas>().setQuery(firebaseSearchQuery, DataDaftarPetugas.class).build();
         adapter = new FirebaseRecyclerAdapter<DataDaftarPetugas, AdapterDaftarPetugas.AdapterDaftarPetugasView>(options) {
             @NonNull

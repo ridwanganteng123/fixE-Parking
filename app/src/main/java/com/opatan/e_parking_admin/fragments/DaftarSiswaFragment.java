@@ -19,13 +19,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.opatan.e_parking_admin.activities.DetailSiswaActivity;
+import com.opatan.e_parking_admin.adapters.AdapterDaftarPetugas;
 import com.opatan.e_parking_admin.adapters.AdapterDaftarSiswa;
 import com.opatan.e_parking_admin.R;
+import com.opatan.e_parking_admin.datas.model.DataDaftarPetugas;
 import com.opatan.e_parking_admin.datas.model.DataDaftarSiswa;
 import com.opatan.e_parking_admin.dialogs.DialogTambahDataSiswa;
 
@@ -50,10 +55,12 @@ public class DaftarSiswaFragment extends Fragment {
     private ArrayList<DataDaftarSiswa> dataDaftarSiswaList;
     private FrameLayout frameLayout_data_siswa;
     private SlidingUpPanelLayout slidingUpPanelLayout;
+    private Spinner spinnerGender, spinnerKelas;
     private FirebaseRecyclerOptions<DataDaftarSiswa> options;
     private FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView> adapter;
     private DatabaseReference databaseReference;
     private ShimmerFrameLayout shimmerFrameLayout;
+
     private FabSpeedDial fabSpeedDial;
     private EditText cari_siswa;
     private FragmentTransaction ft;
@@ -80,6 +87,8 @@ public class DaftarSiswaFragment extends Fragment {
         fabSpeedDial = view.findViewById(R.id.fab_speed_dial);
         frameLayout_data_siswa = view.findViewById(R.id.frameLayout_data_siswa);
         slidingUpPanelLayout = view.findViewById(R.id.sliding_up_panel_layout);
+        spinnerGender = view.findViewById(R.id.spinner_gender);
+        spinnerKelas = view.findViewById(R.id.spinner_kelas);
         cari_siswa = view.findViewById(R.id.cari_siswa);
 
         if (recyclerView != null) {
@@ -180,7 +189,42 @@ public class DaftarSiswaFragment extends Fragment {
                 }
             }
         });
+
+        final int[] iGenderSelection = {spinnerGender.getSelectedItemPosition()};
+        final int[] iKelasSelection = {spinnerKelas.getSelectedItemPosition()};
+
+        spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (iGenderSelection[0] != i){
+                    String item = spinnerGender.getSelectedItem().toString();
+                    searchSpinner("gender",item);
+                }
+                iGenderSelection[0] = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        spinnerKelas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (iKelasSelection[0] != i) {
+                    String item = spinnerKelas.getSelectedItem().toString();
+                    searchSpinner("kelas", item);
+                }
+                iKelasSelection[0] = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                
+            }
+        });
     }
+
 
     public void search(String editable)
     {
@@ -227,6 +271,53 @@ public class DaftarSiswaFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
+
+    public void searchSpinner(String key, String value)
+    {
+        Query firebaseSearchQuery = databaseReference.orderByChild(key).equalTo(value);
+        options = new FirebaseRecyclerOptions.Builder<DataDaftarSiswa>().setQuery(firebaseSearchQuery, DataDaftarSiswa.class).build();
+        adapter = new FirebaseRecyclerAdapter<DataDaftarSiswa, AdapterDaftarSiswa.AdapterDaftarSiswaView>(options) {
+            @NonNull
+            @Override
+            public AdapterDaftarSiswa.AdapterDaftarSiswaView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new AdapterDaftarSiswa.AdapterDaftarSiswaView(LayoutInflater.from(getActivity()).inflate(R.layout.format_data_siswa_recycler, null));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull AdapterDaftarSiswa.AdapterDaftarSiswaView adapterDaftarSiswaView, int i, @NonNull final DataDaftarSiswa dataDaftarSiswa) {
+                adapterDaftarSiswaView.nama.setText(dataDaftarSiswa.getNama());
+                adapterDaftarSiswaView.nis.setText(dataDaftarSiswa.getNis());
+                String imageUri = dataDaftarSiswa.getImageURL();
+                Glide.with(getContext()).load(imageUri).into(adapterDaftarSiswaView.profile);
+
+                adapterDaftarSiswaView.linearLayoutPencet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("id", dataDaftarSiswa.getSiswaId());
+                        intent.putExtra("nama", dataDaftarSiswa.getNama());
+                        intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarSiswa.getTgl_lahir());
+                        intent.putExtra("no_pol", dataDaftarSiswa.getNo_pol());
+                        intent.putExtra("no_sim", dataDaftarSiswa.getNo_sim());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        intent.putExtra("email", dataDaftarSiswa.getEmail());
+                        intent.putExtra("pwd", dataDaftarSiswa.getPwd());
+                        intent.putExtra("level", dataDaftarSiswa.getLevel());
+                        intent.putExtra("kelas", dataDaftarSiswa.getKelas());
+                        intent.putExtra("gender", dataDaftarSiswa.getGender());
+                        startActivity(intent);
+                        startActivity(intent);
+                        System.out.println(intent.putExtra("nama", dataDaftarSiswa.getNama()));
+                    }
+                });
+            }
+        };
+        adapter.startListening();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
 
     @Override
     public void onResume() {
