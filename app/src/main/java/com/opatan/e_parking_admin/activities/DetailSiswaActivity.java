@@ -35,7 +35,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
     public static Fragment fragment = null;
     TabLayout tabLayout;
     private String siswaId;
-    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, image_url, level_val;
+    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, image_url, level_val, kelas_val, gender_val;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,8 @@ public class DetailSiswaActivity extends AppCompatActivity {
         no_sim_val = getIntent().getStringExtra("no_sim");
         tgl_lahir_val = getIntent().getStringExtra("tgl_lahir");
         level_val = getIntent().getStringExtra("level");
+        kelas_val = getIntent().getStringExtra("kelas");
+        gender_val = getIntent().getStringExtra("gender");
 
         if (no_pol_val == null && no_sim_val == null)
         {
@@ -73,7 +75,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
-        loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val));
+        loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val, kelas_val, gender_val));
 
         tabLayout.addTab(tabLayout.newTab().setText("Biodata"));
         tabLayout.addTab(tabLayout.newTab().setText("Statistik"));
@@ -82,7 +84,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tabLayout.getSelectedTabPosition() == 0){
-                    loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val));
+                    loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val, kelas_val, gender_val));
                 }else if(tabLayout.getSelectedTabPosition() == 1){
                     loadFragment(new StatistikDetailFragment());
                 }
@@ -149,7 +151,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
     public void openDialog(String siswaId, String nis, String nama, String tgl_lahir,String no_pol,String pwd,
                            String email,String no_sim,String ImageUrl){
 //        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nis,nama,tgl_lahir,no_pol,pwd,email,no_sim,ImageUrl);
-        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl);
+        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl, "sdfsfdsf","sdfsdfsdf");
 
         if (dialogUpdateDataSiswa.getDialog() != null && dialogUpdateDataSiswa.getDialog().getWindow() !=null){
             dialogUpdateDataSiswa.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

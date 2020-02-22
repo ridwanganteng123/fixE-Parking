@@ -1,7 +1,6 @@
 package com.opatan.e_parking_admin.activities;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,10 +16,10 @@ import com.opatan.e_parking_admin.R;
 
 public class BiodataDetailFragment extends Fragment {
 
-    private TextView nama_txt, nis_txt,email_txt,no_pol_txt,no_sim_txt, tgl_lahir_txt, level_txt;
-    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, level_val;
+    private TextView nama_txt, nis_txt,email_txt,no_pol_txt,no_sim_txt, tgl_lahir_txt, level_txt, kelas_txt, gender_txt;
+    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, level_val, kelas_val, gender_val;
 
-    public BiodataDetailFragment(String nama_val, String nis_val, String email_val, String no_pol_val, String no_sim_val, String tgl_lahir_val, String level_val) {
+    public BiodataDetailFragment(String nama_val, String nis_val, String email_val, String no_pol_val, String no_sim_val, String tgl_lahir_val, String level_val, String kelas_val, String gender_val) {
         this.nama_val = nama_val;
         this.nis_val = nis_val;
         this.email_val = email_val;
@@ -28,6 +27,8 @@ public class BiodataDetailFragment extends Fragment {
         this.no_sim_val = no_sim_val;
         this.tgl_lahir_val = tgl_lahir_val;
         this.level_val = level_val;
+        this.gender_val = gender_val;
+        this.kelas_val = kelas_val;
     }
 
     @Override
@@ -52,6 +53,8 @@ public class BiodataDetailFragment extends Fragment {
         no_pol_txt = view.findViewById(R.id.nopol_txt);
         no_sim_txt = view.findViewById(R.id.nosim_txt);
         level_txt = view.findViewById(R.id.level_txt);
+        kelas_txt = view.findViewById(R.id.kelas_txt);
+        gender_txt = view.findViewById(R.id.gender_txt);
 
         nama_txt.setText(nama_val);
         nis_txt.setText(nis_val);
@@ -60,6 +63,8 @@ public class BiodataDetailFragment extends Fragment {
         no_sim_txt.setText(no_sim_val);
         tgl_lahir_txt.setText(tgl_lahir_val);
         level_txt.setText(level_val);
+        gender_txt.setText(gender_val);
+        kelas_txt.setText(kelas_val);
     }
 
     @Override

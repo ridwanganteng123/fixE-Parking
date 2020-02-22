@@ -121,6 +121,8 @@ public class DaftarPetugasFragment extends Fragment {
                         intent.putExtra("email", dataDaftarPetugas.getEmail());
                         intent.putExtra("pwd", dataDaftarPetugas.getPwd());
                         intent.putExtra("level", dataDaftarPetugas.getLevel());
+                        intent.putExtra("kelas", dataDaftarPetugas.getKelas());
+                        intent.putExtra("gender", dataDaftarPetugas.getGender());
                         startActivity(intent);
                     }
                 });
@@ -134,7 +136,7 @@ public class DaftarPetugasFragment extends Fragment {
                         dialog.setTitle("Pilih Aksi");
                         dialog.show();
 
-                        Button btnDelete = (Button) dialog.findViewById(R.id.delete);
+                        Button btnDelete = dialog.findViewById(R.id.delete);
 
                         //Apabila tombol delete dipencet
                         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -238,9 +240,16 @@ public class DaftarPetugasFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
+                        intent.putExtra("id", dataDaftarPetugas.getPetugasId());
                         intent.putExtra("nama", dataDaftarPetugas.getNama());
                         intent.putExtra("nis", dataDaftarPetugas.getNis());
                         intent.putExtra("img", dataDaftarPetugas.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarPetugas.getTgl_lahir());
+                        intent.putExtra("email", dataDaftarPetugas.getEmail());
+                        intent.putExtra("pwd", dataDaftarPetugas.getPwd());
+                        intent.putExtra("level", dataDaftarPetugas.getLevel());
+                        intent.putExtra("kelas", dataDaftarPetugas.getKelas());
+                        intent.putExtra("gender", dataDaftarPetugas.getGender());
                         startActivity(intent);
                     }
                 });

@@ -59,7 +59,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
     private EditText nis_txt, namalengkap_txt, tgl_lahir_txt, nopol_txt, nosim_txt, pwd_txt, email_txt;
     private ImageView tampil_img;
     private Button btnUpload, btnSubmit, batal;
-    public String siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl;
+    public String siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl, kelas, gender;
     private Calendar c;
     private TextView title;
 
@@ -84,7 +84,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
     int Image_Request_Code = 7;
 
     public DialogUpdateDataSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd,
-                                 String email, String no_sim, String nis, String ImageUrl) {
+                                 String email, String no_sim, String nis, String ImageUrl, String kelas, String gender) {
         this.siswaId = siswaId;
         this.name = nama;
         this.tgl_lahir = tgl_lahir;
@@ -94,7 +94,8 @@ public class DialogUpdateDataSiswa extends DialogFragment {
         this.no_sim = no_sim;
         this.nis = nis;
         this.Imageurl = ImageUrl;
-
+        this.kelas = kelas;
+        this.gender = gender;
     }
 
     @Nullable
@@ -253,7 +254,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
                             String imageURL = filePathUri.toString();
 
                             String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL);
+                            DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL, "asdasd", "asdasd");
                             FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -371,7 +372,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
 //        databaseReference = FirebaseDatabase.getInstance().getReference().child(Database_Path).child(id);
 
 //        DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl);
-        DataDaftarSiswa dataDaftarSiswaTmp = new DataDaftarSiswa(siswaId,name,tgl_lahir,no_pol,pwd,email,no_sim,nis,level,Imageurl);
+        DataDaftarSiswa dataDaftarSiswaTmp = new DataDaftarSiswa(siswaId,name,tgl_lahir,no_pol,pwd,email,no_sim,nis,level,Imageurl,"asdsad","asdasdsad");
         databaseReference.setValue(dataDaftarSiswaTmp).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

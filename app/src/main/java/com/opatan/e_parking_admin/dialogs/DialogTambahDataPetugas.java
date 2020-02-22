@@ -53,10 +53,11 @@ import java.util.Calendar;
 import static android.app.Activity.RESULT_OK;
 
 public class DialogTambahDataPetugas extends DialogFragment {
+    private Spinner kelas_txt, gender_txt;
     private EditText nis_txt, namalengkap_txt, tgl_lahir_txt, email_txt, pwd_txt;
     private ImageView tampil_img;
     private Button btnUpload,btnSubmit ,batal ;
-    public String name, nis, tgl_lahir, email, pwd, level;
+    private String name, nis, tgl_lahir, email, pwd, level, kelas_val, gender_val;
     private Calendar c;
     static int PReqCode = 1 ;
     static int REQUESCODE = 1 ;
@@ -80,15 +81,6 @@ public class DialogTambahDataPetugas extends DialogFragment {
         return view;
     }
 
-    private void openDialog()
-    {
-        ProgressDialog progressDialog = new ProgressDialog(getContext().getApplicationContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -103,6 +95,8 @@ public class DialogTambahDataPetugas extends DialogFragment {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
 
+        mAuth = FirebaseAuth.getInstance();
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.format_dialog_tambah_data_petugas, null);
 
@@ -115,8 +109,10 @@ public class DialogTambahDataPetugas extends DialogFragment {
         tgl_lahir_txt = view.findViewById(R.id.tgl_lahir_txt);
         btnSubmit = view.findViewById(R.id.btn_tambah);
         batal = view.findViewById(R.id.batal);
+        gender_txt = view.findViewById(R.id.gender_txt);
+        kelas_txt = view.findViewById(R.id.kelas_txt);
 
-        mAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(getActivity());
 
         tgl_lahir_txt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +145,10 @@ public class DialogTambahDataPetugas extends DialogFragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Loading ...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 CreateUserAccount(mAuth.getCurrentUser());
             }
         });
@@ -165,8 +165,6 @@ public class DialogTambahDataPetugas extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() != null) {
-        }
     }
 
     private void CreateUserAccount(final FirebaseUser currentUser) {
@@ -176,6 +174,9 @@ public class DialogTambahDataPetugas extends DialogFragment {
         email = email_txt.getText().toString().trim();
         pwd = pwd_txt.getText().toString().trim();
         level = "Petugas";
+        kelas_val = kelas_txt.getSelectedItem().toString();
+        gender_val = gender_txt.getSelectedItem().toString();
+
         if (FilePathUri !=null){
             StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
             final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
@@ -194,21 +195,24 @@ public class DialogTambahDataPetugas extends DialogFragment {
                                               public void onComplete(@NonNull Task<AuthResult> task) {
                                                   if (task.isSuccessful()){
                                                       String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                      DataDaftarPetugas dataDaftarPetugas = new DataDaftarPetugas(id, name, tgl_lahir,pwd,email, nis, level, imageUrl);
+                                                      DataDaftarPetugas dataDaftarPetugas = new DataDaftarPetugas(id, name, tgl_lahir,pwd,email, nis, level, imageUrl, kelas_val, gender_val);
                                                       FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarPetugas).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                           @Override
                                                           public void onComplete(@NonNull Task<Void> task) {
                                                               if (task.isSuccessful()) {
+                                                                  progressDialog.dismiss();
                                                                   Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
                                                                   dismiss();
                                                               } else if(TextUtils.isEmpty(name)) {
+                                                                  progressDialog.dismiss();
                                                                   Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
                                                               } else if(task.isCanceled()){
-
+                                                                  progressDialog.dismiss();
                                                               }
                                                           }
                                                       });
                                                   }else{
+                                                      progressDialog.dismiss();
                                                       Toast.makeText(getContext().getApplicationContext(),"Data gagal ditambahkan",Toast.LENGTH_LONG).show();
                                                   }
                                               }

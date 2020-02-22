@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,17 +38,15 @@ import com.opatan.e_parking_admin.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DashboardFragment extends Fragment {
 
     private int[] yData;
-    private String formattedDate, siswaId, status;
+    private String formattedDate;
     private ImageButton prev_, next_;
-    private FirebaseUser currentUser;
-    public TextView hadir_status, terlambat_status, tgl_txt, tidak_hadir_status;
-    private DatabaseReference databaseReference1, databaseReference2;
+    private LinearLayout hadirLayout, telatLayout, tMasukLayout;
+    private TextView hadir_status, terlambat_status, tgl_txt, tidak_hadir_status;
+    private DatabaseReference databaseReference1;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     private Calendar calendar;
     PieChart pieChart;
@@ -74,6 +74,10 @@ public class DashboardFragment extends Fragment {
         next_ = view.findViewById(R.id.next_date);
         tgl_txt = view.findViewById(R.id.tgl_txt);
         pieChart = view.findViewById(R.id.pieChart);
+        hadirLayout = view.findViewById(R.id.hadir_judul);
+        telatLayout = view.findViewById(R.id.terlambar_judul);
+        tMasukLayout = view.findViewById(R.id.tidak_hadir_judul);
+
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(50f);
         pieChart.setCenterTextSize(16);
@@ -91,6 +95,27 @@ public class DashboardFragment extends Fragment {
 
         tgl_txt.setText(formattedDate);
         getData(formattedDate);
+
+        hadirLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext().getApplicationContext(), "1", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        telatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext().getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tMasukLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext().getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         tgl_txt.setOnClickListener(new View.OnClickListener() {
             @Override

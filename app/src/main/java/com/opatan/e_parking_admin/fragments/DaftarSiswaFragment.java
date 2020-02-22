@@ -114,6 +114,8 @@ public class DaftarSiswaFragment extends Fragment {
                         intent.putExtra("email", dataDaftarSiswa.getEmail());
                         intent.putExtra("pwd", dataDaftarSiswa.getPwd());
                         intent.putExtra("level", dataDaftarSiswa.getLevel());
+                        intent.putExtra("kelas", dataDaftarSiswa.getKelas());
+                        intent.putExtra("gender", dataDaftarSiswa.getGender());
                         startActivity(intent);
                     }
                 });
@@ -202,10 +204,19 @@ public class DaftarSiswaFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
-                        intent.putExtra("nama", dataDaftarSiswa.getNama());
-                        intent.putExtra("nis", dataDaftarSiswa.getNis());
-                        intent.putExtra("img", dataDaftarSiswa.getImageURL());
                         intent.putExtra("id", dataDaftarSiswa.getSiswaId());
+                        intent.putExtra("nama", dataDaftarSiswa.getNama());
+                        intent.putExtra("img", dataDaftarSiswa.getImageURL());
+                        intent.putExtra("tgl_lahir", dataDaftarSiswa.getTgl_lahir());
+                        intent.putExtra("no_pol", dataDaftarSiswa.getNo_pol());
+                        intent.putExtra("no_sim", dataDaftarSiswa.getNo_sim());
+                        intent.putExtra("nis", dataDaftarSiswa.getNis());
+                        intent.putExtra("email", dataDaftarSiswa.getEmail());
+                        intent.putExtra("pwd", dataDaftarSiswa.getPwd());
+                        intent.putExtra("level", dataDaftarSiswa.getLevel());
+                        intent.putExtra("kelas", dataDaftarSiswa.getKelas());
+                        intent.putExtra("gender", dataDaftarSiswa.getGender());
+                        startActivity(intent);
                         startActivity(intent);
                         System.out.println(intent.putExtra("nama", dataDaftarSiswa.getNama()));
                     }

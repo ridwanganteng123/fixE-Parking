@@ -2,13 +2,13 @@ package com.opatan.e_parking_admin.datas.model;
 
 public class DataDaftarSiswa {
 
-    private String nama, siswaId, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL;
+    private String nama, siswaId, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL, kelas, gender;
 
     public DataDaftarSiswa() {
 
     }
 
-    public DataDaftarSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd, String email, String no_sim, String nis, String level, String imageURL) {
+    public DataDaftarSiswa(String siswaId, String nama, String tgl_lahir, String no_pol, String pwd, String email, String no_sim, String nis, String level, String imageURL, String kelas, String gender) {
         this.siswaId = siswaId;
         this.nama = nama;
         this.tgl_lahir = tgl_lahir;
@@ -19,6 +19,24 @@ public class DataDaftarSiswa {
         this.nis = nis;
         this.level = level;
         this.imageURL = imageURL;
+        this.kelas = kelas;
+        this.gender = gender;
+    }
+
+    public String getKelas() {
+        return kelas;
+    }
+
+    public void setKelas(String kelas) {
+        this.kelas = kelas;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getImageURL() {

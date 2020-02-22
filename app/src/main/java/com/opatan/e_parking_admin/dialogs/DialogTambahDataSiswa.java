@@ -50,6 +50,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -58,7 +59,9 @@ public class DialogTambahDataSiswa extends DialogFragment {
     private EditText nis_txt, namalengkap_txt, tgl_lahir_txt, nopol_txt, nosim_txt, pwd_txt, email_txt;
     private ImageView tampil_img;
     private Button btnUpload, btnSubmit, batal;
-    public String siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl;
+    private Spinner gender, kelas;
+    public String siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, Imageurl, kelas_val, gender_val;
+    private ProgressDialog mProgressDialog;
     private Calendar c;
 
     static int PReqCode = 1;
@@ -66,12 +69,8 @@ public class DialogTambahDataSiswa extends DialogFragment {
 
     private FirebaseAuth mAuth;
 
-    public ProgressDialog progressDialog;
-
     String Storage_Path = "profile_siswa/";
-
     String Database_Path = "Siswa";
-    FirebaseUser currentUser;
 
     Uri FilePathUri;
     Bundle bundle;
@@ -81,6 +80,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
     int Image_Request_Code = 7;
 
     public DialogTambahDataSiswa() {
+
     }
 
     @Nullable
@@ -101,7 +101,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
         final String action = bundle.getString("action");
         databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
         storageReference = FirebaseStorage.getInstance().getReference();
-
+        mProgressDialog = new ProgressDialog(getActivity());
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (getDialog() != null && getDialog().getWindow() != null) {
@@ -123,6 +123,9 @@ public class DialogTambahDataSiswa extends DialogFragment {
         pwd_txt = view.findViewById(R.id.pwd_txt);
         btnSubmit = view.findViewById(R.id.btn_tambah);
         batal = view.findViewById(R.id.batal);
+        gender = view.findViewById(R.id.gender_txt);
+        kelas = view.findViewById(R.id.kelas_txt);
+
         mAuth = FirebaseAuth.getInstance();
 
         tgl_lahir_txt.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +170,16 @@ public class DialogTambahDataSiswa extends DialogFragment {
             btnSubmit.setText("update");
             getDialog().setTitle("Update Siswa");
         }
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (action.equals("insert")) {
-                    CreateUserAccount(mAuth.getCurrentUser());
-                    openDialog();
+                    mProgressDialog.setMessage("Loading ...");
+                    mProgressDialog.setCanceledOnTouchOutside(false);
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+                    CreateUserAccount();
                 } else if (action.equals("update")) {
                     String siswaId = bundle.getString("id");
                     String name = namalengkap_txt.getText().toString().trim();
@@ -198,7 +205,6 @@ public class DialogTambahDataSiswa extends DialogFragment {
         return builder.create();
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -206,16 +212,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
         }
     }
 
-    private void openDialog()
-    {
-        ProgressDialog progressDialog = new ProgressDialog(getContext().getApplicationContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
-    }
-
-    private void CreateUserAccount(final FirebaseUser currentUser) {
+    private void CreateUserAccount() {
         name = namalengkap_txt.getText().toString().trim();
         nis = nis_txt.getText().toString().trim();
         tgl_lahir = tgl_lahir_txt.getText().toString().trim();
@@ -223,7 +220,10 @@ public class DialogTambahDataSiswa extends DialogFragment {
         no_pol = nopol_txt.getText().toString().trim();
         no_sim = nosim_txt.getText().toString().trim();
         pwd = pwd_txt.getText().toString().trim();
+        kelas_val = kelas.getSelectedItem().toString();
+        gender_val = gender.getSelectedItem().toString();
         level = "Siswa";
+
         if (FilePathUri != null) {
             final StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(Storage_Path);
             final StorageReference imageFilePath = mStorage.child(FilePathUri.getLastPathSegment());
@@ -242,25 +242,27 @@ public class DialogTambahDataSiswa extends DialogFragment {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
-
                                                 String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL);
+                                                DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(id, name, tgl_lahir, no_pol, pwd, email, no_sim, nis, level, imageURL, kelas_val, gender_val);
                                                 FirebaseDatabase.getInstance().getReference(Database_Path).child(id).setValue(dataDaftarSiswa).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            Toast.makeText(getContext().getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Data Berhasil Ditambah", Toast.LENGTH_LONG).show();
                                                             dismiss();
+                                                            mProgressDialog.dismiss();
                                                         } else if (TextUtils.isEmpty(name)) {
-                                                            Toast.makeText(getContext().getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Isi Seluruh Field", Toast.LENGTH_LONG).show();
+                                                            mProgressDialog.dismiss();
                                                         } else if (task.isCanceled()) {
-
+                                                            mProgressDialog.dismiss();
                                                         }
                                                     }
                                                 });
 
                                             } else {
-                                                Toast.makeText(getContext().getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Objects.requireNonNull(getContext()).getApplicationContext(), "Data Gagal Ditambahkan", Toast.LENGTH_LONG).show();
+                                                mProgressDialog.dismiss();
                                             }
                                         }
                                     });
@@ -313,7 +315,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
         });
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Siswa").child(siswaId);
-        DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, imageURL);
+        DataDaftarSiswa dataDaftarSiswa = new DataDaftarSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level, imageURL, kelas_val, gender_val);
 
         databaseReference.setValue(dataDaftarSiswa);
 
