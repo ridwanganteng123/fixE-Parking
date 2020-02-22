@@ -104,8 +104,7 @@ public class DialogUpdateDataSiswa extends DialogFragment {
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            getDialog().setTitle("Update Akun");
-
+            getDialog().setTitle(" ");
         }
         return view;
     }

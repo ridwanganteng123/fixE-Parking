@@ -1,54 +1,41 @@
 package com.opatan.e_parking_admin.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
-import android.content.Intent;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.material.tabs.TabLayout;
 import com.opatan.e_parking_admin.R;
-import com.opatan.e_parking_admin.dialogs.DialogTambahDataSiswa;
 import com.opatan.e_parking_admin.dialogs.DialogUpdateDataSiswa;
-import com.opatan.e_parking_admin.fragments.DaftarSiswaFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.opatan.e_parking_admin.fragments.ActivityFragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.opatan.e_parking_admin.fragments.DashboardFragment;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
-    private TextView nama_txt, nis_txt,email_txt,no_pol_txt,no_sim_txt;
     private ImageView gambar;
-    private RecyclerView.LayoutManager mlayoutManager;
-    private DatabaseReference databaseReference;
-    String Database_Path = "siswa";
     Bundle bundle;
     public static Fragment fragment = null;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    private String user, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, Imageurl, siswaId;
+    TabLayout tabLayout;
+    private String siswaId;
+    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, image_url, level_val;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,51 +43,79 @@ public class DetailSiswaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_siswa);
 
         bundle = getIntent().getExtras();
-        nama_txt = findViewById(R.id.get_nama);
-        nis_txt = findViewById(R.id.get_nis);
-        email_txt = findViewById(R.id.email_txt);
-        email_txt.setFocusable(false);
-        no_pol_txt = findViewById(R.id.nopol_txt);
-        no_sim_txt = findViewById(R.id.nosim_txt);
-         gambar = findViewById(R.id.gambar);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Siswa");
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        user = firebaseUser.getUid();
+        gambar = findViewById(R.id.gambar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        tabLayout = findViewById(R.id.tab_layout);
 
         siswaId = getIntent().getStringExtra("id");
-        String image_url = getIntent().getStringExtra("img");
-        String nama_val = getIntent().getStringExtra("nama");
-        String nis_val = getIntent().getStringExtra("nis");
-        String email_val = getIntent().getStringExtra("email");
-        String no_pol = getIntent().getStringExtra("no_pol");
-        String no_sim = getIntent().getStringExtra("no_sim");
+        image_url = getIntent().getStringExtra("img");
+        nama_val = getIntent().getStringExtra("nama");
+        nis_val = getIntent().getStringExtra("nis");
+        email_val = getIntent().getStringExtra("email");
+        no_pol_val = getIntent().getStringExtra("no_pol");
+        no_sim_val = getIntent().getStringExtra("no_sim");
+        tgl_lahir_val = getIntent().getStringExtra("tgl_lahir");
+        level_val = getIntent().getStringExtra("level");
 
-        Toast.makeText(DetailSiswaActivity.this,"Detail Siswa", Toast.LENGTH_LONG).show();
+        if (no_pol_val == null && no_sim_val == null)
+        {
+            no_sim_val = "-";
+            no_pol_val = "-";
+        }
 
-        nama_txt.setText(nama_val);
-        nis_txt.setText(nis_val);
-        email_txt.setText(email_val);
-        no_pol_txt.setText(no_pol);
-        no_sim_txt.setText(no_sim);
         Glide.with(getApplicationContext()).load(image_url).into(gambar);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(nama_val);
-
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
 
+        loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val));
+
+        tabLayout.addTab(tabLayout.newTab().setText("Biodata"));
+        tabLayout.addTab(tabLayout.newTab().setText("Statistik"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tabLayout.getSelectedTabPosition() == 0){
+                    loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val));
+                }else if(tabLayout.getSelectedTabPosition() == 1){
+                    loadFragment(new StatistikDetailFragment());
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(R.id.frameLayout, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -131,7 +146,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
 //        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
         Toast.makeText(this,"Data Berhasil dihapus",Toast.LENGTH_LONG).show();
     }
-    public void openDialog(String siswaId,String nis,String nama, String tgl_lahir,String no_pol,String pwd,
+    public void openDialog(String siswaId, String nis, String nama, String tgl_lahir,String no_pol,String pwd,
                            String email,String no_sim,String ImageUrl){
 //        DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nis,nama,tgl_lahir,no_pol,pwd,email,no_sim,ImageUrl);
         DialogUpdateDataSiswa dialogUpdateDataSiswa = new DialogUpdateDataSiswa(siswaId,nama,tgl_lahir,no_pol,pwd,email,no_sim,nis,ImageUrl);
@@ -145,4 +160,33 @@ public class DetailSiswaActivity extends AppCompatActivity {
         dialogUpdateDataSiswa.setArguments(bundle);
         dialogUpdateDataSiswa.show(getSupportFragmentManager(),"Dialog Update Data");
     }
+
+    class MyAdapter extends FragmentPagerAdapter {
+        Context context;
+        int totalTabs;
+
+        public MyAdapter(Context c, FragmentManager fm, int totalTabs) {
+            super(fm);
+            context = c;
+            this.totalTabs = totalTabs;
+        }
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    DashboardFragment dashboardFragment = new DashboardFragment();
+                    return dashboardFragment;
+                case 1:
+                    ActivityFragment activityFragment = new ActivityFragment();
+                    return activityFragment;
+                default:
+                    return null;
+            }
+        }
+        @Override
+        public int getCount() {
+            return totalTabs;
+        }
+    }
+
 }

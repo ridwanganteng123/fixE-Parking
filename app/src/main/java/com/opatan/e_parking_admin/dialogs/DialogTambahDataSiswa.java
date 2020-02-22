@@ -97,8 +97,6 @@ public class DialogTambahDataSiswa extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-
         bundle = getArguments();
         final String action = bundle.getString("action");
         databaseReference = FirebaseDatabase.getInstance().getReference(Database_Path);
@@ -131,7 +129,6 @@ public class DialogTambahDataSiswa extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (v == tgl_lahir_txt) {
-
                     c = Calendar.getInstance();
                     int mYear = c.get(Calendar.YEAR);
                     int mMonth = c.get(Calendar.MONTH);
@@ -175,6 +172,7 @@ public class DialogTambahDataSiswa extends DialogFragment {
             public void onClick(View view) {
                 if (action.equals("insert")) {
                     CreateUserAccount(mAuth.getCurrentUser());
+                    openDialog();
                 } else if (action.equals("update")) {
                     String siswaId = bundle.getString("id");
                     String name = namalengkap_txt.getText().toString().trim();
@@ -185,7 +183,6 @@ public class DialogTambahDataSiswa extends DialogFragment {
                     String no_sim = nosim_txt.getText().toString().trim();
                     String pwd = pwd_txt.getText().toString().trim();
                     String level = "Siswa";
-
                     updateSiswa(siswaId, name, nis, tgl_lahir, email, no_pol, no_sim, pwd, level);
                 }
 

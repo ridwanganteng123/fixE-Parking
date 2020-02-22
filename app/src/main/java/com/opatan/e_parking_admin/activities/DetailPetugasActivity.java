@@ -58,10 +58,6 @@ public class DetailPetugasActivity extends AppCompatActivity {
         String nis_val = getIntent().getStringExtra("nis");
         String email_val = getIntent().getStringExtra("email");
 
-
-
-        Toast.makeText(DetailPetugasActivity.this,"Detail Petugas", Toast.LENGTH_LONG).show();
-
         nama_txt.setText(nama_val);
         nis_txt.setText(nis_val);
         email_txt.setText(email_val);

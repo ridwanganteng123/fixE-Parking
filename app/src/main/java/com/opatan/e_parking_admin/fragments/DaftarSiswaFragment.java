@@ -113,7 +113,7 @@ public class DaftarSiswaFragment extends Fragment {
                         intent.putExtra("nis", dataDaftarSiswa.getNis());
                         intent.putExtra("email", dataDaftarSiswa.getEmail());
                         intent.putExtra("pwd", dataDaftarSiswa.getPwd());
-
+                        intent.putExtra("level", dataDaftarSiswa.getLevel());
                         startActivity(intent);
                     }
                 });

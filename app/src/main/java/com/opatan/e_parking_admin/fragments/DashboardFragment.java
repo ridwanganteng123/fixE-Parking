@@ -1,11 +1,13 @@
 package com.opatan.e_parking_admin.fragments;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class DashboardFragment extends Fragment {
     public TextView hadir_status, terlambat_status, tgl_txt, tidak_hadir_status;
     private DatabaseReference databaseReference1, databaseReference2;
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
+    private Calendar calendar;
     PieChart pieChart;
     int jumlahTidakHadir;
     int jumlahHadir;
@@ -88,6 +91,30 @@ public class DashboardFragment extends Fragment {
 
         tgl_txt.setText(formattedDate);
         getData(formattedDate);
+
+        tgl_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == tgl_txt) {
+                    calendar = Calendar.getInstance();
+                    int mYear = calendar.get(Calendar.YEAR);
+                    int mMonth = calendar.get(Calendar.MONTH);
+                    int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year,
+                                                      int monthOfYear, int dayOfMonth) {
+                                    String tanggal = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                    tgl_txt.setText(tanggal);
+                                    getData(tanggal);
+                                }
+                            }, mYear, mMonth, mDay);
+                    datePickerDialog.show();
+                 }
+            }
+        });
 
         prev_.setOnClickListener(new View.OnClickListener() {
 

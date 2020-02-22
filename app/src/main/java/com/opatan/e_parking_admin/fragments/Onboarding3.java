@@ -18,7 +18,7 @@ import com.opatan.e_parking_admin.activities.LoginActivity;
 import com.opatan.e_parking_admin.datas.model.PrefManager;
 
 public class Onboarding3 extends Fragment {
-TextView btn_finish;
+Button btn_finish;
 Context context;
 private PrefManager prefs;
 

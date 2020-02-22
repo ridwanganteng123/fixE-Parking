@@ -9,7 +9,7 @@
 
 <com.google.android.material.appbar.AppBarLayout android:id="@+id/appbar"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="380dp"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -59,105 +59,31 @@ app:layout_behavior="@string/appbar_scrolling_view_behavior">
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="5dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true" >
-
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="25dp"
-                android:paddingTop="25dp"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/get_nama"
-                    android:textSize="11pt"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_height="wrap_content"
-                    android:text="Nama Siswa" />
-
-                <TextView
-                    android:id="@+id/get_nis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:textSize="8pt"
-                    android:text="Kelas" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="18dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginHorizontal="5dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true" >
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <LinearLayout
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_gravity="center_horizontal"
+                app:tabGravity="fill"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" >
+                android:layout_height="wrap_content"
+                app:tabMode="fixed" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingHorizontal="25dp"
-                    android:paddingVertical="25dp"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/email_txt"
-                        android:textSize="9pt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Email Anda" />
-
-                    <TextView
-                        android:id="@+id/nopol_txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="9pt"
-                        android:text="No Polisi" />
-
-                    <TextView
-                        android:id="@+id/nosim_txt"
-                        android:textSize="9pt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="No Sim" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
-</RelativeLayout>
-</androidx.core.widget.NestedScrollView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -120,6 +120,7 @@ public class DaftarPetugasFragment extends Fragment {
                         intent.putExtra("tgl_lahir", dataDaftarPetugas.getTgl_lahir());
                         intent.putExtra("email", dataDaftarPetugas.getEmail());
                         intent.putExtra("pwd", dataDaftarPetugas.getPwd());
+                        intent.putExtra("level", dataDaftarPetugas.getLevel());
                         startActivity(intent);
                     }
                 });
