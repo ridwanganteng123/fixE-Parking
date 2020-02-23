@@ -62,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
                     System.out.println("NIS : " + email);
                     nama = dataSnapshot.child(uid).child("nama").getValue(String.class);
                     System.out.println("NIS : " + nama);
-                    imageUrl = dataSnapshot.child(uid).child("imageUrl").getValue(String.class);
+                    imageUrl = dataSnapshot.child(uid).child("imageURL").getValue(String.class);
                     name.setText(nama);
                     nis_txt.setText(nis);
                     email_txt.setText(email);

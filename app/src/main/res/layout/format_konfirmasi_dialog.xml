@@ -57,7 +57,7 @@
                     android:id="@+id/img_profile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
                     android:background="@drawable/background_foto_profil"
                     android:src="@drawable/nanangsaripudin"/>
 
