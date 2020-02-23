@@ -27,11 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private Intent DashboardFragment;
     FirebaseAuth firebaseAuth;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mProgressDialog = new ProgressDialog(LoginActivity.this);
         firebaseAuth = FirebaseAuth.getInstance();
         DashboardFragment = new Intent(this,com.opatan.e_parking_user.activities.MainActivity.class);
 
@@ -39,7 +41,10 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mProgressDialog.setMessage("Loading ...");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.show();
                 loginUserAccount();
             }
         });
@@ -50,15 +55,6 @@ public class LoginActivity extends AppCompatActivity {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
-    }
-
-    private void openDialog()
-    {
-        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
     }
 
     private void loginUserAccount() {
@@ -79,14 +75,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            openDialog();
+                            mProgressDialog.dismiss();
                             loginBtn.setEnabled(false);
                             updateUI();
-                            openDialog();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                startActivity(intent);
                         }
                         else {
+                            mProgressDialog.dismiss();
                             showMessage(task.getException().getMessage());
                             loginBtn.setVisibility(View.VISIBLE);
                         }

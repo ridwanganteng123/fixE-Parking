@@ -78,7 +78,7 @@
                 android:layout_height="146dp"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/about_us_format_bawah" />
+                android:src="@drawable/about_app" />
 
         </RelativeLayout>
 

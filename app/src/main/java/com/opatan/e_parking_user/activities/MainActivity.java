@@ -253,10 +253,10 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent ii = new Intent(MainActivity.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, ii, 0);
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.nanangsaripudin);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.icon_notif);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this, "notify_001")
-                .setSmallIcon(R.drawable.ic_chevron_right_black_24dp)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 content = "Anda Datang Tepat Waktu";
                             } else {
-                                content = "Anda Terlambar";
+                                content = "Anda Terlambat";
                             }
 
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);

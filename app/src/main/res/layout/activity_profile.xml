@@ -74,7 +74,6 @@
                     android:id="@+id/img_profile"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
-                    android:layout_margin="7dp"
                     android:background="@drawable/background_foto_profil"
                     android:layout_height="match_parent"
                     android:src="@drawable/nanangsaripudin"/>

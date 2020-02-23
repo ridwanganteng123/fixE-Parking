@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class SettingActivity extends AppCompatActivity {
     String uid, username_txt, profil_txt, nis_txt;
     TextView username, nis;
     ImageView profil;
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,33 @@ public class SettingActivity extends AppCompatActivity {
         LinearLayout detailSiswa = findViewById(R.id.detail_siswa);
         LinearLayout logout = findViewById(R.id.signout);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        profil = findViewById(R.id.foto);
+        profil = findViewById(R.id.profil);
         username = findViewById(R.id.username);
         nis = findViewById(R.id.nis);
+        relativeLayout = findViewById(R.id.content_progressbar);
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Siswa").child(uid);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                relativeLayout.setVisibility(View.GONE);
+                username_txt = dataSnapshot.child("nama").getValue().toString();
+                nis_txt = dataSnapshot.child("nis").getValue().toString();
+                profil_txt = dataSnapshot.child("imageURL").getValue().toString();
+
+                nis.setText(nis_txt);
+                username.setText(username_txt);
+                Glide.with(SettingActivity.this).load(profil_txt).into(profil);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,28 +127,6 @@ public class SettingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        uid = currentUser.getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    username_txt = keyId.child(uid).child("nama").getValue(String.class);
-                    profil_txt = keyId.child(uid).child("imageUrl").getValue(String.class);
-                    nis_txt = keyId.child(uid).child("nis").getValue(String.class);
-                }
-                username.setText(username_txt);
-                nis.setText(nis_txt);
-                Glide.with(SettingActivity.this).load(profil_txt).into(profil);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
 }
 
