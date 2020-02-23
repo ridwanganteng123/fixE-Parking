@@ -125,6 +125,7 @@ public class DaftarSiswaFragment extends Fragment {
                         intent.putExtra("level", dataDaftarSiswa.getLevel());
                         intent.putExtra("kelas", dataDaftarSiswa.getKelas());
                         intent.putExtra("gender", dataDaftarSiswa.getGender());
+                        intent.putExtra("role", dataDaftarSiswa.getLevel());
                         startActivity(intent);
                     }
                 });
@@ -260,6 +261,7 @@ public class DaftarSiswaFragment extends Fragment {
                         intent.putExtra("level", dataDaftarSiswa.getLevel());
                         intent.putExtra("kelas", dataDaftarSiswa.getKelas());
                         intent.putExtra("gender", dataDaftarSiswa.getGender());
+                        intent.putExtra("role", dataDaftarSiswa.getLevel());
                         startActivity(intent);
                         startActivity(intent);
                         System.out.println(intent.putExtra("nama", dataDaftarSiswa.getNama()));

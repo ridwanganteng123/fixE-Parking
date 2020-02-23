@@ -1,40 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/circularProgressbar"
-            style="?android:attr/progressBarStyleHorizontal"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="50"
-            android:layout_centerInParent="true"
-            android:progressDrawable="@drawable/circular"
-            android:secondaryProgress="100"
-            />
+            android:layout_height="wrap_content" >
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"/>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/container_shimmer"
+                android:layout_width="match_parent"
+                android:paddingVertical="20dp"
+                android:layout_height="match_parent"
+                app:shimmer_duration="1000">
 
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:gravity="center"
-            android:text="25%"
-            android:layout_centerInParent="true"
-            android:textSize="18pt" />
+                <LinearLayout
+                    android:id="@+id/linearPencet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
 
-    </RelativeLayout>
+                        <include layout="@layout/format_shimmer_data_siswa" />
+                        <include layout="@layout/format_shimmer_data_siswa" />
+                        <include layout="@layout/format_shimmer_data_siswa" />
+                        <include layout="@layout/format_shimmer_data_siswa" />
+                        <include layout="@layout/format_shimmer_data_siswa" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+        </ScrollView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ProgressBar
+                    android:id="@+id/circularProgressbar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:indeterminate="false"
+                    android:layout_marginVertical="30dp"
+                    android:max="100"
+                    android:progress="50"
+                    android:layout_centerInParent="true"
+                    android:progressDrawable="@drawable/circular"
+                    android:secondaryProgress="100"
+                    />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/tv"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:gravity="center"
+                    android:text="0%"
+                    android:layout_centerInParent="true"
+                    android:textSize="18pt" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/content_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Tidak Ada Data" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_statistik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

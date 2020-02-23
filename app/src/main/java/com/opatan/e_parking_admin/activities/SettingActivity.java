@@ -34,9 +34,6 @@ import com.google.firebase.database.ValueEventListener;
 public class SettingActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
     private Class<?> mClss;
-    DatabaseReference databaseReference;
-    FirebaseUser currentUser;
-    String uid, username_txt, profil_txt;
     TextView username;
     ImageView profil;
 

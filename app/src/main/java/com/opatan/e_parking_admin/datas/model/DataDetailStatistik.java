@@ -1,15 +1,24 @@
 package com.opatan.e_parking_admin.datas.model;
 
-public class DataHistoryParkir {
+import java.util.ArrayList;
 
-    private String waktu_masuk, tanggal, siswa, hari, petugas;
+public class DataDetailStatistik {
 
-    public DataHistoryParkir(String waktu_masuk, String tanggal, String siswa, String hari, String petugas) {
+    private String waktu_masuk, siswa , petugas, imageUrl;
+
+    public DataDetailStatistik(String waktu_masuk , String siswa, String petugas, String imageUrl) {
         this.waktu_masuk = waktu_masuk;
-        this.tanggal = tanggal;
         this.siswa = siswa;
-        this.hari = hari;
         this.petugas = petugas;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getWaktu_masuk() {
@@ -20,20 +29,12 @@ public class DataHistoryParkir {
         this.waktu_masuk = waktu_masuk;
     }
 
-    public String getTanggal() {
-        return tanggal;
-    }
-
     public String getPetugas() {
         return petugas;
     }
 
     public void setPetugas(String petugas) {
         this.petugas = petugas;
-    }
-
-    public void setTanggal(String tanggal) {
-        this.tanggal = tanggal;
     }
 
     public String getSiswa() {
@@ -44,11 +45,4 @@ public class DataHistoryParkir {
         this.siswa = siswa;
     }
 
-    public String getHari() {
-        return hari;
-    }
-
-    public void setHari(String hari) {
-        this.hari = hari;
-    }
 }

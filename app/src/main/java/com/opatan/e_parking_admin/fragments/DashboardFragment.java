@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +28,13 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_admin.R;
-import com.opatan.e_parking_admin.activities.DetailSiswaActivity;
-import com.opatan.e_parking_admin.activities.DetailStatistik;
-import com.opatan.e_parking_admin.activities.ProfileActivity;
+import com.opatan.e_parking_admin.activities.DetailStatistikActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,9 +51,7 @@ public class DashboardFragment extends Fragment {
     private String[] xData = {"Tepat Waktu","Terlambat","Tidak Masuk"};
     private Calendar calendar;
     PieChart pieChart;
-    int jumlahTidakHadir;
-    int jumlahHadir;
-    int jumlahTerlambat;
+    private int jumlahTidakHadir, jumlahHadir,jumlahTerlambat;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -103,21 +98,39 @@ public class DashboardFragment extends Fragment {
         hadirLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
+                Intent intent = new Intent(getContext().getApplicationContext(), DetailStatistikActivity.class);
+                int jumlah_siswa = jumlahHadir+jumlahTerlambat+jumlahTidakHadir;
+                intent.putExtra("persentase", hitungPersen(jumlah_siswa, jumlahHadir));
+                intent.putExtra("judul", "Persentase Kehadiran");
+                intent.putExtra("code", "hadir");
+                intent.putExtra("tanggal", formattedDate);
+                startActivity(intent);
             }
         });
 
         telatLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
+                Intent intent = new Intent(getContext().getApplicationContext(), DetailStatistikActivity.class);
+                int jumlah_siswa = jumlahHadir+jumlahTerlambat+jumlahTidakHadir;
+                intent.putExtra("persentase", hitungPersen(jumlah_siswa, jumlahTerlambat));
+                intent.putExtra("judul", "Persentase Keterlambatan");
+                intent.putExtra("code", "terlambat");
+                intent.putExtra("tanggal", formattedDate);
+                startActivity(intent);
             }
         });
 
         tMasukLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext().getApplicationContext(), DetailStatistik.class));
+                Intent intent = new Intent(getContext().getApplicationContext(), DetailStatistikActivity.class);
+                int jumlah_siswa = jumlahHadir+jumlahTerlambat+jumlahTidakHadir;
+                intent.putExtra("persentase", hitungPersen(jumlah_siswa, jumlahTidakHadir));
+                intent.putExtra("judul", "Persentase Ketidakhadiran");
+                intent.putExtra("code", "null");
+                intent.putExtra("tanggal", formattedDate);
+                startActivity(intent);
             }
         });
 
@@ -146,7 +159,6 @@ public class DashboardFragment extends Fragment {
         });
 
         prev_.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -162,7 +174,6 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
                 c.add(Calendar.DATE, 1);
                 formattedDate = df.format(c.getTime());
                 Log.v("NEXT DATE : ", formattedDate);
@@ -194,18 +205,17 @@ public class DashboardFragment extends Fragment {
                            System.out.println("ID : " + siswaId);
                            System.out.println("NAMA : " + nama);
                            System.out.println("WAKTU MASUKNYA : " + status);
-                           if(status == null)
-                           {
+                           if(status == null){
                               jumlahTidakHadir++;
                            } else if (status.equals("hadir")){
                               jumlahHadir++;
                            } else if (status.equals("terlambat")){
                               jumlahTerlambat++;
                            }
-                           terlambat_status.setText(String.valueOf(jumlahHadir));
-                           hadir_status.setText(String.valueOf(jumlahTerlambat));
+                           terlambat_status.setText(String.valueOf(jumlahTerlambat));
+                           hadir_status.setText(String.valueOf(jumlahHadir));
                            tidak_hadir_status.setText(String.valueOf(jumlahTidakHadir));
-                           yData = new int[]{jumlahTerlambat, jumlahHadir, jumlahTidakHadir};
+                           yData = new int[]{jumlahHadir, jumlahTerlambat, jumlahTidakHadir};
                            addDataSet();
                        }
                        @Override
@@ -232,6 +242,13 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+    }
+
+    private int hitungPersen(int jumlahSiswa, int nilaiTertentu)
+    {
+        double hasil = (double) nilaiTertentu / (double) jumlahSiswa * 100;
+        int hasil_main = (int) hasil;
+        return hasil_main;
     }
 
     private void addDataSet() {

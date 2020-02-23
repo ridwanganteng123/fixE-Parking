@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -127,6 +128,7 @@ public class DaftarPetugasFragment extends Fragment {
                         intent.putExtra("level", dataDaftarPetugas.getLevel());
                         intent.putExtra("kelas", dataDaftarPetugas.getKelas());
                         intent.putExtra("gender", dataDaftarPetugas.getGender());
+                        intent.putExtra("role", dataDaftarPetugas.getLevel());
                         startActivity(intent);
                     }
                 });
@@ -215,7 +217,39 @@ public class DaftarPetugasFragment extends Fragment {
             }
         });
 
+        final int[] iGenderSelection = {spinnerGender.getSelectedItemPosition()};
+        final int[] iKelasSelection = {spinnerKelas.getSelectedItemPosition()};
 
+        spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (iGenderSelection[0] != i){
+                    String item = spinnerGender.getSelectedItem().toString();
+                    searchSpinner("gender",item);
+                }
+                iGenderSelection[0] = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        spinnerKelas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (iKelasSelection[0] != i) {
+                    String item = spinnerKelas.getSelectedItem().toString();
+                    searchSpinner("kelas", item);
+                }
+                iKelasSelection[0] = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
     private Boolean DeletePetugas(String petugasId){
@@ -257,6 +291,7 @@ public class DaftarPetugasFragment extends Fragment {
                         intent.putExtra("level", dataDaftarPetugas.getLevel());
                         intent.putExtra("kelas", dataDaftarPetugas.getKelas());
                         intent.putExtra("gender", dataDaftarPetugas.getGender());
+                        intent.putExtra("role", dataDaftarPetugas.getLevel());
                         startActivity(intent);
                     }
                 });
@@ -267,7 +302,7 @@ public class DaftarPetugasFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    public void dropdownSearch(String key, String value)
+    public void searchSpinner(String key, String value)
     {
         Query firebaseSearchQuery = databaseReference.orderByChild(key).equalTo(value);
         options = new FirebaseRecyclerOptions.Builder<DataDaftarPetugas>().setQuery(firebaseSearchQuery, DataDaftarPetugas.class).build();
@@ -291,15 +326,18 @@ public class DaftarPetugasFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), DetailSiswaActivity.class);
                         intent.putExtra("id", dataDaftarPetugas.getPetugasId());
                         intent.putExtra("nama", dataDaftarPetugas.getNama());
-                        intent.putExtra("nis", dataDaftarPetugas.getNis());
                         intent.putExtra("img", dataDaftarPetugas.getImageURL());
                         intent.putExtra("tgl_lahir", dataDaftarPetugas.getTgl_lahir());
+                        intent.putExtra("nis", dataDaftarPetugas.getNis());
                         intent.putExtra("email", dataDaftarPetugas.getEmail());
                         intent.putExtra("pwd", dataDaftarPetugas.getPwd());
                         intent.putExtra("level", dataDaftarPetugas.getLevel());
                         intent.putExtra("kelas", dataDaftarPetugas.getKelas());
                         intent.putExtra("gender", dataDaftarPetugas.getGender());
+                        intent.putExtra("role", dataDaftarPetugas.getLevel());
                         startActivity(intent);
+                        startActivity(intent);
+                        System.out.println(intent.putExtra("nama", dataDaftarPetugas.getNama()));
                     }
                 });
             }
@@ -308,6 +346,7 @@ public class DaftarPetugasFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
+
 
     @Override
     public void onResume() {

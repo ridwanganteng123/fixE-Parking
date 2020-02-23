@@ -22,11 +22,11 @@ import com.opatan.e_parking_admin.R;
 import com.opatan.e_parking_admin.dialogs.DialogUpdateDataSiswa;
 import com.opatan.e_parking_admin.fragments.ActivityFragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.opatan.e_parking_admin.fragments.BiodataDetailFragment;
 import com.opatan.e_parking_admin.fragments.DashboardFragment;
+import com.opatan.e_parking_admin.fragments.StatistikDetailFragment;
 
 public class DetailSiswaActivity extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
     public static Fragment fragment = null;
     TabLayout tabLayout;
     private String siswaId;
-    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, image_url, level_val, kelas_val, gender_val;
+    private String nama_val, nis_val,email_val,no_pol_val,no_sim_val, tgl_lahir_val, image_url, level_val, kelas_val, gender_val, role_val;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
 
         siswaId = getIntent().getStringExtra("id");
+        role_val = getIntent().getStringExtra("role");
         image_url = getIntent().getStringExtra("img");
         nama_val = getIntent().getStringExtra("nama");
         nis_val = getIntent().getStringExtra("nis");
@@ -86,7 +87,7 @@ public class DetailSiswaActivity extends AppCompatActivity {
                 if(tabLayout.getSelectedTabPosition() == 0){
                     loadFragment(new BiodataDetailFragment(nama_val, nis_val, email_val, no_pol_val, no_sim_val, tgl_lahir_val, level_val, kelas_val, gender_val));
                 }else if(tabLayout.getSelectedTabPosition() == 1){
-                    loadFragment(new StatistikDetailFragment());
+                    loadFragment(new StatistikDetailFragment(siswaId, role_val));
                 }
             }
 
@@ -190,5 +191,4 @@ public class DetailSiswaActivity extends AppCompatActivity {
             return totalTabs;
         }
     }
-
 }

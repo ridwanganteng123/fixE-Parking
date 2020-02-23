@@ -1,4 +1,4 @@
-package com.opatan.e_parking_admin.activities;
+package com.opatan.e_parking_admin.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
