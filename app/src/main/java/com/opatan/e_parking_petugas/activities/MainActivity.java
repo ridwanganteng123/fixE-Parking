@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.opatan.e_parking_petugas.R;
 import com.opatan.e_parking_petugas.dialogs.DialogAboutApp;
+import com.opatan.e_parking_petugas.fragments.ActivityFragment;
 import com.opatan.e_parking_petugas.fragments.DashboardFragment;
 import com.opatan.e_parking_petugas.fragments.HistoryFragment;
 import com.opatan.e_parking_petugas.dialogs.DialogSyaratDanKetentuan;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_history:
                     fragment = new HistoryFragment();
                     appBarTitleTV.setText("History");
+                    break;
+                case R.id.navigation_activity:
+                    fragment = new ActivityFragment();
+                    appBarTitleTV.setText("Aktivitas");
                     break;
             }
             return loadFragment(fragment);

@@ -31,6 +31,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.firebase:firebase-iid@[17.0.4]'
     testImplementation 'junit:junit:4.13'
     implementation 'com.jaeger.statusbarutil:library:1.4.0'

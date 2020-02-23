@@ -7,32 +7,76 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opatan.e_parking_petugas.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
     private Class<?> mClss;
+    DatabaseReference databaseReference;
+    String uid, username_txt, profil_txt, nis_txt;
+    TextView username, nis;
+    ImageView profil;
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        profil = findViewById(R.id.profil);
+        username = findViewById(R.id.username);
+        nis = findViewById(R.id.nis);
+        relativeLayout = findViewById(R.id.content_progressbar);
+
         LinearLayout login = findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        });
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Petugas").child(uid);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                relativeLayout.setVisibility(View.GONE);
+                username_txt = dataSnapshot.child("nama").getValue().toString();
+                nis_txt = dataSnapshot.child("nis").getValue().toString();
+                profil_txt = dataSnapshot.child("imageURL").getValue().toString();
+
+                nis.setText(nis_txt);
+                username.setText(username_txt);
+                Glide.with(SettingActivity.this).load(profil_txt).into(profil);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
