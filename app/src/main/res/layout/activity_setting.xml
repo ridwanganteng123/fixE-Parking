@@ -39,10 +39,11 @@
 
             <ImageView
                 android:id="@+id/profil"
+                android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:scaleType="centerCrop"
-                android:layout_height="match_parent"
-                android:src="@drawable/nanangsaripudin" />
+                android:src="@drawable/nanangsaripudin"
+                android:contentDescription="TODO" />
 
         </androidx.cardview.widget.CardView>
 
